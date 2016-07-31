@@ -2,6 +2,10 @@
 
 #include "sensorInstantiator.h"
 
+#ifdef WIRINGPI
+#include <wiringPi.h>
+#endif
+
 sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
 {
     QString filePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator()).append("sensors.ini");
@@ -48,7 +52,7 @@ QList<sensor> sensorInstantiator::loadSensors()
             // Make link with the wiringPi
             if(!initializeWired)
             {
-#ifndef NO_WIRING_PI
+#ifdef WIRINGPI
                 // Call for winringPi initialization function
                 int wiringPiSetupGpio (void) ;
                 // Call for wiringPiISR() interrupt initalization function
@@ -62,7 +66,7 @@ QList<sensor> sensorInstantiator::loadSensors()
                 // privileges to work.
                 //
                 //
-                int wiringPiISR (int pin, int edgeType,  void (*function)(void)) ;
+                //int wiringPiISR (int pin, int edgeType,  void (*function)(void)) ;
 #endif
                 initializeWired = true;
             }

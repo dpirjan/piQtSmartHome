@@ -26,12 +26,11 @@ HEADERS += \
     actuatorInstantiator.h \
     databaseManagerInterface.h
 
-ARCH = $$QMAKE_HOST.arch
-equals(ARCH, "x86_64") {
-    message("PC 64 bit")
-    DEFINES += NO_WIRING_PI
-}
-equals(ARCH, "x86") {
-    message("PC 32 bit")
-    DEFINES += NO_WIRING_PI
+SPEC = $${QMAKESPEC}
+message("QMAKESPEC: $${SPEC}")
+
+contains(SPEC, "raspberry") {
+        message("Adding define for wiringPi")
+        defines += WIRINGPI
+        LIBS += -lwiringPi
 }

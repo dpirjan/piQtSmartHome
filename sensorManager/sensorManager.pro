@@ -29,8 +29,17 @@ HEADERS += \
 SPEC = $${QMAKESPEC}
 message("QMAKESPEC: $${SPEC}")
 
-contains(SPEC, "raspberry") {
-        message("Adding define for wiringPi")
-        defines += WIRINGPI
+SYSROOT = $$[QT_SYSROOT]
+message("QMAKESYSROOT: $${SYSROOT}")
+
+isEmpty(SYSROOT) {
+        message("SYSROOT empty, assuming compiling for host")
+}
+
+!isEmpty(SYSROOT) {
+        message("SYSROOT not empty, assuming compiling for target")
+        message("Adding define for wiringPi based on sysroot")
+        DEFINES += WIRINGPI
         LIBS += -lwiringPi
+        message("$${LIBS}")
 }

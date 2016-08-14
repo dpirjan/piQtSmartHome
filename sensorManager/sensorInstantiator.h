@@ -4,27 +4,38 @@
 #include <QObject>
 #include <QSettings>
 
-#include "sensor.h"
+#include "wiredSensor.h"
+#include "wirelessSensor.h"
 
 using namespace piHome;
 
 class sensorInstantiator : public QObject
 {
     Q_OBJECT
-public:
+
     explicit sensorInstantiator(QObject *parent = 0);
     virtual ~sensorInstantiator();
+    Q_DISABLE_COPY(sensorInstantiator)
 
-signals:
+    void loadSensors();
+
+public:
+    static sensorInstantiator &instance()
+    {
+        static sensorInstantiator obj;
+        return obj;
+    }
 
 public slots:
     void saveSensors(); // only for debugging will be removed in the future
-    QList<sensor> loadSensors();
+    QList<wiredSensor> getWiredSensors() const;
+    QList<wirelessSensor> getWirelessSensors() const;
 
 private:
     QSettings *m_settings;
 
-    QList<sensor> m_sensorList;
+    QList<wiredSensor> m_wiredSensorList;
+    QList<wirelessSensor> m_wirelessSensorList;
 };
 
 #endif // SENSORINSTANTIATOR_H

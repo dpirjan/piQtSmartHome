@@ -3,10 +3,46 @@
 
 #include <QObject>
 
+#include "common.h"
+#include "sensor.h"
+
+using namespace piHome;
+
+class sensorInstantiator;
+
 class wiredSensor : public sensor
 {
 public:
-    wiredSensor();
+    explicit wiredSensor(const SystemType&,
+                         const SensorType&,
+                         const QString&,
+                         const QString&,
+                         const QString&,
+                         const QString&,
+                         const int&);
+    wiredSensor(const wiredSensor &);
+    wiredSensor& operator=(const wiredSensor&);
+    virtual ~wiredSensor();
+
+    friend class sensorInstantiator;
+
+    QString getWiredEdge() const;
+    int getWiredTimeout() const;
+
+    void debugSensor() const;
+
+protected:
+    void setWiredEdge(const QString&);
+    void setWiredTimeout(const int&);
+
+private:
+    QString m_wiredEdge;
+    int m_wiredTimeout;
+
+    template<class T> friend class QList;
+
+public slots:
+    void interrupt(void);
 };
 
 #endif // WIREDSENSOR_H

@@ -11,20 +11,26 @@ INCLUDEPATH += ../databaseManager/databaseManagerInfo
 LIBS += -L../databaseManager/databaseManagerInfo -ldatabaseManagerInfo
 
 SOURCES += \
-    sensor.cpp \
     actuator.cpp \
-    sensorInstantiator.cpp \
+    sensor.cpp \
+    wiredSensor.cpp \
+    wirelessSensor.cpp
     actuatorInstantiator.cpp \
+    sensorInstantiator.cpp \
     databaseManagerInterface.cpp \
-    sensorManagerService.cpp
+    sensorManagerService.cpp \
+
 
 HEADERS += \
-    sensor.h \
-    actuator.h \
     common.h \
-    sensorInstantiator.h \
+    actuator.h \
+    sensor.h \
+    wiredSensor.h \
+    wirelessSensor.h \
     actuatorInstantiator.h \
+    sensorInstantiator.h \
     databaseManagerInterface.h
+
 
 SPEC = $${QMAKESPEC}
 message("QMAKESPEC: $${SPEC}")

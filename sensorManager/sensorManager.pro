@@ -14,11 +14,11 @@ SOURCES += \
     actuator.cpp \
     sensor.cpp \
     wiredSensor.cpp \
-    wirelessSensor.cpp
+    wirelessSensor.cpp \
     actuatorInstantiator.cpp \
     sensorInstantiator.cpp \
     databaseManagerInterface.cpp \
-    sensorManagerService.cpp \
+    sensorManagerService.cpp
 
 
 HEADERS += \
@@ -44,7 +44,6 @@ isEmpty(SYSROOT) {
 
 !isEmpty(SYSROOT) {
         message("SYSROOT not empty, assuming compiling for target")
-        message("Adding define for wiringPi based on sysroot")
         DEFINES += WIRINGPI
         LIBS += -lwiringPi
         message("$${LIBS}")

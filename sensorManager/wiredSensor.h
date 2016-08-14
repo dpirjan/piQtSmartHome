@@ -31,6 +31,8 @@ public:
 
     void debugSensor() const;
 
+    static void interruptHandler(void*);
+
 protected:
     void setWiredEdge(const QString&);
     void setWiredTimeout(const int&);
@@ -42,7 +44,7 @@ private:
     template<class T> friend class QList;
 
 public slots:
-    void interrupt(void);
+    void interrupt();
 };
 
 #endif // WIREDSENSOR_H

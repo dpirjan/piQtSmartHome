@@ -29,7 +29,7 @@ public:
     void debugSensor() const;
 
 public slots:
-    virtual void interrupt(void) = 0;
+    virtual void interrupt() = 0;
 
 private:
     SystemType m_system;

@@ -4,6 +4,7 @@
 
 #ifdef WIRINGPI
 #include <wiringPi.h>
+#include <errno.h>
 #endif
 
 sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
@@ -80,7 +81,7 @@ void sensorInstantiator::loadSensors()
             //
             //
 
-            if(wiringPiISR(pin, edgeType, &tmp.interrupt()) < 0)
+            if(wiringPiISR(pin, edgeType, &wiredSensor::interruptHandler, &tmp) < 0)
                 qDebug() << "Unable to setup ISR on " << pin << " : " << strerror(errno);
 #endif
 

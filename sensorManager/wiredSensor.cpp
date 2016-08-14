@@ -13,6 +13,7 @@ wiredSensor::wiredSensor(const SystemType &system,
     , m_wiredEdge(edge)
     , m_wiredTimeout(timeout)
 {
+    qDebug() << "wiredSensor ctor: " << this;
 }
 
 wiredSensor::wiredSensor(const wiredSensor &obj) : sensor(obj)
@@ -60,6 +61,13 @@ void wiredSensor::setWiredEdge(const QString &edge)
 void wiredSensor::setWiredTimeout(const int &timeout)
 {
     m_wiredTimeout = timeout;
+}
+
+void wiredSensor::interruptHandler(void *userData)
+{
+    wiredSensor *sensor = reinterpret_cast<wiredSensor *>(userData);
+    qDebug() << "interruptHandler: " << sensor;
+    sensor->interrupt();
 }
 
 void wiredSensor::interrupt()

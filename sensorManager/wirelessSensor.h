@@ -36,7 +36,7 @@ private:
     template<class T> friend class QList;
 
 public slots:
-    void interrupt(void);
+    void interrupt();
 };
 
 #endif // WIRELESSSENSOR_H

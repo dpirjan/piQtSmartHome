@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS = databaseManagerInfo \
-        databaseManagerService
+          databaseManagerService \
+          mailManagerService
 
 databaseManagerService.depends = databaseManagerInfo

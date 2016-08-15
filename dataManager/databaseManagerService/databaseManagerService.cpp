@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    app.setOrganizationName("piHome1");
+    app.setOrganizationName("piHome");
     app.setApplicationName("databaseManager");
 
     qDebug() << "Database Manager";

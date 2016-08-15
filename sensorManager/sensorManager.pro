@@ -7,8 +7,8 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-INCLUDEPATH += ../databaseManager/databaseManagerInfo
-LIBS += -L../databaseManager/databaseManagerInfo -ldatabaseManagerInfo
+INCLUDEPATH += ../dataManager/databaseManagerInfo
+LIBS += -L../dataManager/databaseManagerInfo -ldatabaseManagerInfo
 
 SOURCES += \
     actuator.cpp \

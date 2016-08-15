@@ -1,8 +1,8 @@
 TEMPLATE = subdirs
 
-SUBDIRS = databaseManager \
+SUBDIRS = dataManager \
           sensorManager \
           settingsManager
 
-databaseManager.depends = settingsManager
-sensorManager.depends = databaseManager
+dataManager.depends = settingsManager
+sensorManager.depends = dataManager

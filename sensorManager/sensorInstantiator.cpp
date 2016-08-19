@@ -1,4 +1,5 @@
 #include <QDir>
+#include <QSettings>
 
 #include "sensorInstantiator.h"
 
@@ -17,7 +18,7 @@ sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
 
 sensorInstantiator::~sensorInstantiator()
 {
-    m_settings->~QSettings();
+    delete m_settings;
 }
 
 void sensorInstantiator::loadSensors()

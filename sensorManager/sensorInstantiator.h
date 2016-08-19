@@ -2,12 +2,13 @@
 #define SENSORINSTANTIATOR_H
 
 #include <QObject>
-#include <QSettings>
 
 #include "wiredSensor.h"
 #include "wirelessSensor.h"
 
 using namespace piHome;
+
+class QSettings;
 
 class sensorInstantiator : public QObject
 {

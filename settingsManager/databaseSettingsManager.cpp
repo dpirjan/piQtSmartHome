@@ -18,7 +18,7 @@ databaseSettingsManager::databaseSettingsManager(QObject *parent) : QObject(pare
 
 databaseSettingsManager::~databaseSettingsManager()
 {
-    m_settings->~QSettings();
+    delete m_settings;
 }
 
 bool databaseSettingsManager::connectService()

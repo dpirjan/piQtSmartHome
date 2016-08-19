@@ -10,7 +10,7 @@ actuatorInstantiator::actuatorInstantiator(QObject *parent) : QObject(parent)
 
 actuatorInstantiator::~actuatorInstantiator()
 {
-    m_settings->~QSettings();
+    delete m_settings;
 }
 
 void actuator::debugActuator() const

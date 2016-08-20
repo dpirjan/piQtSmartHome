@@ -18,7 +18,8 @@ SOURCES += \
     actuatorInstantiator.cpp \
     sensorInstantiator.cpp \
     databaseManagerInterface.cpp \
-    sensorManagerService.cpp
+    sensorManagerService.cpp \
+    mailManagerInterface.cpp
 
 
 HEADERS += \
@@ -29,7 +30,8 @@ HEADERS += \
     wirelessSensor.h \
     actuatorInstantiator.h \
     sensorInstantiator.h \
-    databaseManagerInterface.h
+    databaseManagerInterface.h \
+    mailManagerInterface.h
 
 
 SPEC = $${QMAKESPEC}

@@ -2,6 +2,7 @@
 #include <QSettings>
 
 #include "sensorInstantiator.h"
+#include "mailManagerInterface.h"
 
 #ifdef WIRINGPI
 #include <wiringPi.h>
@@ -18,6 +19,11 @@ sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
 
 sensorInstantiator::~sensorInstantiator()
 {
+    if(m_sendMail)
+    {
+        if(!mailManagerInterface::instance().disconnectFromServer())
+            qDebug() << "Error occured while disconnecting from the smtp server ...";
+    }
     delete m_settings;
 }
 
@@ -26,13 +32,30 @@ void sensorInstantiator::loadSensors()
     int numSensors = -1;
     QString wiredEdge;
     int wiredTimeout = -1, wirelessTimeout = -1;
+    bool smtpInitialized = true;
 #ifdef WIRINGPI
     bool wiringPiInitialized = false;
 #endif
 
     m_settings->beginGroup("GenericSettings");
     numSensors = m_settings->value("NumberOfSensors").toInt();
+    m_sendMail = m_settings->value("SendMailOnAlarm").toBool();
     m_settings->endGroup();
+
+    if(m_sendMail)
+    {
+        if(!mailManagerInterface::instance().connectToServer())
+        {
+            qDebug() << "Cannot connect to smtp server!";
+            smtpInitialized = false;
+        }
+        if(!mailManagerInterface::instance().loginToServer())
+        {
+            qDebug() << "Cannot authenticate to smtp server!";
+            smtpInitialized = false;
+        }
+    }
+
     m_settings->beginGroup("WiredSettings");
     wiredEdge = m_settings->value("Edge").toString();
     wiredTimeout = m_settings->value("Timeout").toInt();
@@ -57,6 +80,9 @@ void sensorInstantiator::loadSensors()
                             m_settings->value("Address").toString(),
                             wiredEdge,
                             wiredTimeout);
+
+            tmp.setSendMail(m_sendMail & smtpInitialized);
+
 #ifdef WIRINGPI
             if(!wiringPiInitialized)
             {
@@ -96,6 +122,9 @@ void sensorInstantiator::loadSensors()
                                m_settings->value("Node").toString(),
                                m_settings->value("Address").toString(),
                                wirelessTimeout);
+
+            tmp.setSendMail(m_sendMail & smtpInitialized);
+
             m_wirelessSensorList.append(tmp);
         }
 
@@ -118,6 +147,7 @@ void sensorInstantiator::saveSensors()
     m_settings->clear();
     m_settings->beginGroup("GenericSettings");
     m_settings->setValue("NumberOfSensors", 13);
+    m_settings->setValue("SendMailOnAlarm", true);
     m_settings->endGroup();
     m_settings->beginGroup("WiredSettings");
     m_settings->setValue("Edge", "FALLING");

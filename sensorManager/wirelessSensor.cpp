@@ -1,8 +1,11 @@
+#include <QElapsedTimer>
+
 #include "sensor.h"
 #include "wirelessSensor.h"
 #include "homeAlarmInfo.h"
 #include "smartHomeInfo.h"
 #include "databaseManagerInterface.h"
+#include "mailManagerInterface.h"
 
 wirelessSensor::wirelessSensor(const SystemType &system,
                                const SensorType &type,
@@ -67,6 +70,14 @@ void wirelessSensor::interrupt()
         // database containing the events.
         HomeAlarmInfo event(getZone(),getNode(),sensorTypeToString(getSensorType()));
         databaseManagerInterface::instance().insertHomeAlarmEntry(event);
+        if(getSendMail())
+        {
+            QString subject = "Alarm Notification piHome";
+            QString message = "Alarm from Zone: " + getZone() +
+                    " Node: " + getNode() +
+                    " Sensor: " + sensorTypeToString(getSensorType());
+            mailManagerInterface::instance().sendMail(subject,message);
+        }
     }
     qDebug() << "wirelessInterrupt() took " << timer.elapsed() << "ms";
 }

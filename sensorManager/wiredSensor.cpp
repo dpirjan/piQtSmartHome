@@ -1,6 +1,9 @@
+#include <QElapsedTimer>
+
 #include "wiredSensor.h"
 #include "homeAlarmInfo.h"
 #include "databaseManagerInterface.h"
+#include "mailManagerInterface.h"
 
 wiredSensor::wiredSensor(const SystemType &system,
                          const SensorType &type,
@@ -78,5 +81,14 @@ void wiredSensor::interrupt()
     // database containing the events.
     HomeAlarmInfo event(getZone(),getNode(),sensorTypeToString(getSensorType()));
     databaseManagerInterface::instance().insertHomeAlarmEntry(event);
+    if(getSendMail())
+    {
+        QString subject = "Alarm Notification piHome";
+        QString message = "Alarm from Zone: " + getZone() +
+                " Node: " + getNode() +
+                " Sensor: " + sensorTypeToString(getSensorType());
+        mailManagerInterface::instance().sendMail(subject,message);
+    }
+
     qDebug() << "wiredInterrupt() took " << timer.elapsed() << "ms";
 }

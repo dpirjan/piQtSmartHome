@@ -12,6 +12,7 @@ sensor::sensor(const SystemType &system,
     , m_address(address)
 {
     m_value = QString("");
+    m_sendMail = false;
 }
 
 sensor::sensor(const sensor &obj)
@@ -22,6 +23,7 @@ sensor::sensor(const sensor &obj)
     m_node = obj.getNode();
     m_address = obj.getAddress();
     m_value = obj.getValue();
+    m_sendMail = obj.getSendMail();
 }
 
 sensor& sensor::operator=(const sensor &other)
@@ -32,6 +34,7 @@ sensor& sensor::operator=(const sensor &other)
     m_node = other.getNode();
     m_address = other.getAddress();
     m_value = other.getValue();
+    m_sendMail = other.getSendMail();
 
     return *this;
 }
@@ -49,6 +52,7 @@ void sensor::debugSensor() const
     qDebug() << m_node;
     qDebug() << m_address;
     qDebug() << m_value;
+    qDebug() << m_sendMail;
 }
 
 SystemType sensor::getSystemType() const
@@ -81,10 +85,19 @@ QString sensor::getValue() const
     return m_value;
 }
 
+bool sensor::getSendMail() const
+{
+    return m_sendMail;
+}
 
 void sensor::setValue(const QString &value)
 {
     m_value = value;
+}
+
+void sensor::setSendMail(const bool &sendMail)
+{
+    m_sendMail = sendMail;
 }
 
 //void sensor::setNode(const QString &node)

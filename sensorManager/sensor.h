@@ -23,8 +23,10 @@ public:
     QString getNode() const;
     QString getAddress() const;
     QString getValue() const;
+    bool getSendMail() const;
 
-    void setValue(const QString &value);
+    void setValue(const QString&);
+    void setSendMail(const bool&);
 
     void debugSensor() const;
 
@@ -38,6 +40,8 @@ private:
     QString m_node;
     QString m_address;
     QString m_value;
+
+    bool m_sendMail;
 };
 
 #endif // SENSOR_H

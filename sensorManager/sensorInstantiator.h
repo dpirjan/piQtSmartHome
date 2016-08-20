@@ -35,6 +35,8 @@ public slots:
 private:
     QSettings *m_settings;
 
+    bool m_sendMail;
+
     QList<wiredSensor> m_wiredSensorList;
     QList<wirelessSensor> m_wirelessSensorList;
 };

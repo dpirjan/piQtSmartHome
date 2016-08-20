@@ -1,24 +1,45 @@
 #include <stdio.h>
 
 #include <QCoreApplication>
+
 #include <QDebug>
+
+#include <QDBusConnection>
+#include <QDBusError>
+
+#include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
 
-#include <QtDBus>
+#include <QSettings>
+#include <QDir>
 
 #include "databaseManager.h"
 
-DatabaseManager::DatabaseManager(const QString &path,
-                                 const bool &firstTime,
-                                 QObject *parent) : QObject(parent)
+DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent)
 {
-    qDebug() << "Constructor DatabaseManager(" << path << ", " << firstTime << ")";
-    if(firstTime)
-        createDatabaseAndTable(path);
+    qDebug() << "Constructor DatabaseManager";
+
+    QString settingsPath = QDir::homePath().
+            append(QDir::separator()).
+            append(".piHome").
+            append(QDir::separator()).
+            append("settingsManager.ini");
+    m_settings = new QSettings(settingsPath, QSettings::NativeFormat);
+
+    loadDatabaseSettings();
+
+    QString dbPath = m_databaseFilePath;
+    if(dbPath.endsWith(QDir::separator()))
+        dbPath.append(m_databaseFileName);
     else
-        connectToDatabase(path);
+        dbPath.append(QDir::separator()).append(m_databaseFileName);
+
+    if(!QFile::exists(dbPath))
+        createDatabaseAndTable();
+    else
+        connectToDatabase();
 }
 
 DatabaseManager::~DatabaseManager()
@@ -26,6 +47,25 @@ DatabaseManager::~DatabaseManager()
     qDebug() << "Destructor DatabaseManager";
     if(m_db.isOpen())
         m_db.close();
+}
+
+void DatabaseManager::loadDatabaseSettings()
+{
+    m_settings->beginGroup("DatabaseSettings");
+    m_databaseFilePath = m_settings->value("databasePath").toString();
+    m_databaseFileName = m_settings->value("databaseName").toString();
+    m_settings->endGroup();
+}
+
+void DatabaseManager::saveDatatabaseSettings()
+{
+    m_databaseFileName = "database.sqlite";
+    m_databaseFilePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator());
+
+    m_settings->beginGroup("DatabaseSettings");
+    m_settings->setValue("databasePath", m_databaseFilePath);
+    m_settings->setValue("databaseName", m_databaseFileName);
+    m_settings->endGroup();
 }
 
 bool DatabaseManager::connectService()
@@ -50,16 +90,23 @@ bool DatabaseManager::connectService()
     return ret;
 }
 
-bool DatabaseManager::connectToDatabase(const QString &path)
+bool DatabaseManager::connectToDatabase()
 {
     bool ret = true;
+
+    QString dbPath = m_databaseFilePath;
+    if(dbPath.endsWith(QDir::separator()))
+        dbPath.append(m_databaseFileName);
+    else
+        dbPath.append(QDir::separator()).append(m_databaseFileName);
+
     m_db = QSqlDatabase::addDatabase("QSQLITE");
-    m_db.setDatabaseName(path);
+    m_db.setDatabaseName(dbPath);
 
     QSqlQuery query;
     if(!this->m_db.open())
     {
-        qDebug() << "Connect to database " << path << " failed! "
+        qDebug() << "Connect to database " << dbPath << " failed! "
                  << query.lastError().text();
 
         ret = false;
@@ -67,12 +114,13 @@ bool DatabaseManager::connectToDatabase(const QString &path)
     return ret;
 }
 
-bool DatabaseManager::createDatabaseAndTable(const QString &path)
+bool DatabaseManager::createDatabaseAndTable()
 {
     bool ret = true;
+
     if(!m_db.isOpen())
     {
-        ret = connectToDatabase(path);
+        ret = connectToDatabase();
         if(!ret)
             return ret;
     }

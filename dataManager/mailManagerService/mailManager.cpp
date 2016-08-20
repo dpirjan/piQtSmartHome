@@ -1,3 +1,6 @@
+#include <QDBusConnection>
+#include <QDBusError>
+
 #include <QSslSocket>
 #include <QTextStream>
 #include <QDir>
@@ -14,8 +17,12 @@
 
 mailManager::mailManager(QObject *parent) : QObject(parent)
 {
-    QString filePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator()).append("smtp.ini");
-    m_settings = new QSettings(filePath, QSettings::NativeFormat);
+    QString settingsPath = QDir::homePath().
+            append(QDir::separator()).
+            append(".piHome").
+            append(QDir::separator()).
+            append("smtp.ini");
+    m_settings = new QSettings(settingsPath, QSettings::NativeFormat);
 
     loadServerCredentials();
     loadSendMailDetails();
@@ -32,10 +39,28 @@ mailManager::mailManager(QObject *parent) : QObject(parent)
 
 mailManager::~mailManager()
 {
-    qDebug() << "mailManager destructor";
     delete textStream;
     delete socket;
     delete m_settings;
+}
+
+bool mailManager::connectService()
+{
+    bool ret = true;
+
+    if (!QDBusConnection::sessionBus().registerService(MAIL_MANAGER_SERVICE_NAME))
+    {
+        qDebug() << QDBusConnection::sessionBus().lastError().message();
+        ret = false;
+    }
+
+    QDBusConnection::sessionBus().registerObject(MAIL_MANAGER_SERVICE_PATH,
+                                                 this,
+                                                 QDBusConnection::ExportScriptableContents);
+
+    qDebug() << "Registered the mail manager service to session bus";
+
+    return ret;
 }
 
 void mailManager::stateChanged(QAbstractSocket::SocketState socketState)
@@ -383,8 +408,5 @@ void mailManager::loadSendMailDetails()
     recipients = m_settings->value("NumberOfRecipients").toInt();
     for(int count = 1; count <= recipients; count++)
         m_recipients.append(m_settings->value(QString("Recipient_").append(QString::number(count))).toString());
-
-    qDebug() << m_sender;
-    qDebug() << m_recipients;
     m_settings->endGroup();
 }

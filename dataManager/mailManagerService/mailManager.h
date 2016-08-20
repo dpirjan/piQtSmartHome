@@ -9,10 +9,14 @@ class QSslSocket;
 class QTcpSocket;
 class QSettings;
 
+#define MAIL_MANAGER_SERVICE_NAME "org.raspberrypi.piHome.MailManager"
+#define MAIL_MANAGER_SERVICE_PATH "/"
+#define MAIL_MANAGER_SERVICE_INT  "org.raspberrypi.piHome.MailManager.MailOperations"
+
 class mailManager : public QObject
 {
     Q_OBJECT
-
+    Q_CLASSINFO("D-Bus Interface", MAIL_MANAGER_SERVICE_INT)
     /*
      * Basic algorithm for sending email through smtp:
      *      1. Connecting to the server and waiting for greeting message
@@ -72,14 +76,18 @@ public:
         return obj;
     }
 
-    bool connectToServer();
-    bool loginToServer();
-    bool sendMail(const QString&,
-                  const QString&);
-    bool disconnectFromServer();
-
     void saveServerCredentials();
     void saveSendMailDetails();
+
+    bool connectService();
+
+public slots:
+    Q_SCRIPTABLE bool connectToServer();
+    Q_SCRIPTABLE bool loginToServer();
+    Q_SCRIPTABLE bool sendMail(const QString&,
+                  const QString&);
+    Q_SCRIPTABLE bool disconnectFromServer();
+
 
 private:
     explicit mailManager(QObject *parent = 0);

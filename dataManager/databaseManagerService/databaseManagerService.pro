@@ -10,9 +10,7 @@ TEMPLATE = app
 INCLUDEPATH += ../databaseManagerInfo
 LIBS += -L../databaseManagerInfo -ldatabaseManagerInfo
 
-HEADERS += databaseManager.h \
-    settingsManagerInterface.h
+HEADERS += databaseManager.h
 
 SOURCES += databaseManager.cpp \
-    settingsManagerInterface.cpp \
     databaseManagerService.cpp

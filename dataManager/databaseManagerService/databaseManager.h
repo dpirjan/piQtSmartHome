@@ -11,18 +11,20 @@
 #define DATABASE_MANAGER_SERVICE_PATH "/"
 #define DATABASE_MANAGER_SERVICE_INT  "org.raspberrypi.piHome.DatabaseManager.DatabaseOperations"
 
+class QSettings;
+
 class DatabaseManager : public QObject
 {
     Q_OBJECT
     Q_CLASSINFO("D-Bus Interface", DATABASE_MANAGER_SERVICE_INT)
 
 public:
-    explicit DatabaseManager(const QString&,
-                             const bool&,
-                             QObject *parent = 0);
+    explicit DatabaseManager(QObject *parent = 0);
     virtual ~DatabaseManager();
 
     bool connectService();
+
+    void loadDatabaseSettings();
 
 public slots:
     Q_SCRIPTABLE bool insertHomeAlarmEntry(const HomeAlarmInfo&);
@@ -31,10 +33,16 @@ public slots:
     Q_SCRIPTABLE QList<SmartHomeInfo> getAllSmartHomeEntries();
 
 private:
-    bool connectToDatabase(const QString&);
-    bool createDatabaseAndTable(const QString&);
+    bool connectToDatabase();
+    bool createDatabaseAndTable();
+
+    void saveDatatabaseSettings();
 
     QSqlDatabase m_db;
+    QSettings *m_settings;
+
+    QString m_databaseFilePath;
+    QString m_databaseFileName;
 };
 
 #endif // DATABASEMANAGER_H

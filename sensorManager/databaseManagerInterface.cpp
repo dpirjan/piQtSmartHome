@@ -1,4 +1,13 @@
+#include <QDebug>
+#include <QDBusConnection>
+#include <QDBusInterface>
+#include <QDBusReply>
+
 #include "databaseManagerInterface.h"
+
+#define DATABASE_MANAGER_SERVICE_NAME "org.raspberrypi.piHome.DatabaseManager"
+#define DATABASE_MANAGER_SERVICE_PATH "/"
+#define DATABASE_MANAGER_SERVICE_INT  "org.raspberrypi.piHome.DatabaseManager.DatabaseOperations"
 
 databaseManagerInterface::databaseManagerInterface(QObject *parent) : QObject(parent)
 {

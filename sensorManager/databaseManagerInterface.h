@@ -2,15 +2,11 @@
 #define DATABASEMANAGERINTERFACE_H
 
 #include <QObject>
-#include <QDBusInterface>
-#include <QtDBus>
 
 #include "homeAlarmInfo.h"
 #include "smartHomeInfo.h"
 
-#define DATABASE_MANAGER_SERVICE_NAME "org.raspberrypi.piHome.DatabaseManager"
-#define DATABASE_MANAGER_SERVICE_PATH "/"
-#define DATABASE_MANAGER_SERVICE_INT  "org.raspberrypi.piHome.DatabaseManager.DatabaseOperations"
+class QDBusInterface;
 
 class databaseManagerInterface : public QObject
 {

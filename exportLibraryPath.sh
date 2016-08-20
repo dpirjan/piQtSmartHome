@@ -1,7 +1,7 @@
 #!/bin/sh
 
 CONF="/etc/ld.so.conf.d/piHome.conf"
-EXPORT="$PWD/databaseManager/databaseManagerInfo"
+EXPORT="$PWD/dataManager/databaseManagerInfo"
 
 if [ -f ${CONF} ];
 then
@@ -13,4 +13,3 @@ else
 	sudo ldconfig
 	sudo rm ${CONF}
 fi;
-

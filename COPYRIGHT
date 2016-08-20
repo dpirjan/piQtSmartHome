@@ -19,8 +19,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE."
 
+* Neither my name or the other contributors names should not be used for to
+promote products based on or derived from this software package without
+specific prior written permission.
+* Neither me or the other contributors of this project don't take any
+responsibility for the damage made by this software on persons or hardware while
+handled(properly or not). You chose to use it on your own risk.
+
 The above copyright applies to the entire project besides the sympleCrypt class
-used in the settingsManager module whose copyright is the following:
+used in the mailManager module whose copyright is the following:
 
 
 "Copyright (c) 2011, Andre Somers

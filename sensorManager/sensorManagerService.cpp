@@ -11,6 +11,14 @@ int main(int argc, char *argv[])
     app.setApplicationName("sensorManager");
     qDebug() << "Sensor Manager";
 
+    bool firstTimeSensors = sensorInstantiator::firstRunInitSensors();
+    bool firstTimeActuators = actuatorInstantiator::firstRunInitActuators();
+    if(firstTimeActuators || firstTimeSensors)
+    {
+        qDebug() << "Application started for the first time, initializing, then quit.";
+        qDebug() << "Please customize your configuration and then start again the application.";
+        return 0;
+    }
 
 //    sensorInstantiator::instance().saveSensors();
     QList<wiredSensor> wiredSensorList = sensorInstantiator::instance().getWiredSensors();
@@ -43,7 +51,5 @@ int main(int argc, char *argv[])
     wrlSensor.interrupt();
     wrlSensor.interrupt();
 
-    int ret = app.exec();
-
-    return ret;
+    return app.exec();
 }

@@ -25,7 +25,7 @@ void actuator::debugActuator() const
     qDebug() << m_value;
 }
 
-QList<actuator> actuatorInstantiator::loadActuators()
+QList<actuator> actuatorInstantiator::loadActuators() const
 {
     int numActuators = -1;
     QList<actuator> list;
@@ -53,58 +53,79 @@ QList<actuator> actuatorInstantiator::loadActuators()
     return list;
 }
 
-void actuatorInstantiator::saveActuators()
+bool actuatorInstantiator::firstRunInitActuators()
 {
-    m_settings->clear();
-    m_settings->beginGroup("GenericSettings");
-    m_settings->setValue("NumberOfActuators", 6);
-    m_settings->endGroup();
-    m_settings->beginGroup("Actuator1");
-    m_settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-    m_settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Siren));
-    m_settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-    m_settings->setValue("Zone", "Hall");
-    m_settings->setValue("Node", "Door");
-    m_settings->setValue("Address", "SPI_0");
-    m_settings->endGroup();
-    m_settings->beginGroup("Actuator2");
-    m_settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-    m_settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Buzzer));
-    m_settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-    m_settings->setValue("Zone", "Kitchen");
-    m_settings->setValue("Node", "Box1");
-    m_settings->setValue("Address", "SPI_0");
-    m_settings->endGroup();
-    m_settings->beginGroup("Actuator3");
-    m_settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-    m_settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Relay));
-    m_settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-    m_settings->setValue("Zone", "Kitchen");
-    m_settings->setValue("Node", "Box1");
-    m_settings->setValue("Address", "SPI_0");
-    m_settings->endGroup();
-    m_settings->beginGroup("Actuator4");
-    m_settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-    m_settings->setValue("ActuatorType", actuatorTypeToString(Actuator_DoorBell));
-    m_settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-    m_settings->setValue("Zone", "Hall");
-    m_settings->setValue("Node", "Door");
-    m_settings->setValue("Address", "SPI_0");
-    m_settings->endGroup();
-    m_settings->beginGroup("Actuator5");
-    m_settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-    m_settings->setValue("ActuatorType", actuatorTypeToString(Actuator_IR));
-    m_settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-    m_settings->setValue("Zone", "Hall");
-    m_settings->setValue("Node", "Box2");
-    m_settings->setValue("Address", "SPI_0");
-    m_settings->endGroup();
-    m_settings->beginGroup("Actuator6");
-    m_settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-    m_settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Pump));
-    m_settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-    m_settings->setValue("Zone", "Balcony");
-    m_settings->setValue("Node", "Box1");
-    m_settings->setValue("Address", "SPI_0");
-    m_settings->endGroup();
+    bool returnCode = false;
+
+    QString settingsPath = QDir::homePath().
+            append(QDir::separator()).
+            append(".piHome").
+            append(QDir::separator()).
+            append("actuators.ini");
+
+    qDebug() << "firstRunInitActuators()" << settingsPath << " " << QFile(settingsPath).exists();
+
+    if(!QFile(settingsPath).exists())
+    {
+        returnCode = true;
+
+        QSettings *settings = new QSettings(settingsPath, QSettings::NativeFormat);
+
+        settings->clear();
+        settings->beginGroup("GenericSettings");
+        settings->setValue("NumberOfActuators", 6);
+        settings->endGroup();
+        settings->beginGroup("Actuator1");
+        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Siren));
+        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings->setValue("Zone", "Hall");
+        settings->setValue("Node", "Door");
+        settings->setValue("Address", "SPI_0");
+        settings->endGroup();
+        settings->beginGroup("Actuator2");
+        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Buzzer));
+        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings->setValue("Zone", "Kitchen");
+        settings->setValue("Node", "Box1");
+        settings->setValue("Address", "SPI_0");
+        settings->endGroup();
+        settings->beginGroup("Actuator3");
+        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Relay));
+        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings->setValue("Zone", "Kitchen");
+        settings->setValue("Node", "Box1");
+        settings->setValue("Address", "SPI_0");
+        settings->endGroup();
+        settings->beginGroup("Actuator4");
+        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_DoorBell));
+        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings->setValue("Zone", "Hall");
+        settings->setValue("Node", "Door");
+        settings->setValue("Address", "SPI_0");
+        settings->endGroup();
+        settings->beginGroup("Actuator5");
+        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_IR));
+        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings->setValue("Zone", "Hall");
+        settings->setValue("Node", "Box2");
+        settings->setValue("Address", "SPI_0");
+        settings->endGroup();
+        settings->beginGroup("Actuator6");
+        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Pump));
+        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings->setValue("Zone", "Balcony");
+        settings->setValue("Node", "Box1");
+        settings->setValue("Address", "SPI_0");
+        settings->endGroup();
+
+        delete settings;
+    }
+
+    return returnCode;
 }

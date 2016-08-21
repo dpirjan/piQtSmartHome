@@ -49,22 +49,42 @@ DatabaseManager::~DatabaseManager()
         m_db.close();
 }
 
+bool DatabaseManager::firstRunConfiguration()
+{
+    bool returnCode = false;
+
+    QString settingsPath = QDir::homePath().
+            append(QDir::separator()).
+            append(".piHome").
+            append(QDir::separator()).
+            append("settingsManager.ini");
+
+    if(!QFile(settingsPath).exists())
+    {
+        returnCode = true;
+        QSettings *settings = new QSettings(settingsPath, QSettings::NativeFormat);
+
+        QString databaseFileName = "database.sqlite";
+        QString databaseFilePath = QDir::homePath().append(QDir::separator());
+        databaseFilePath.append(".piHome").append(QDir::separator());
+
+        settings->clear();
+        settings->beginGroup("DatabaseSettings");
+        settings->setValue("databasePath", databaseFilePath);
+        settings->setValue("databaseName", databaseFileName);
+        settings->endGroup();
+
+        delete settings;
+    }
+
+    return returnCode;
+}
+
 void DatabaseManager::loadDatabaseSettings()
 {
     m_settings->beginGroup("DatabaseSettings");
     m_databaseFilePath = m_settings->value("databasePath").toString();
     m_databaseFileName = m_settings->value("databaseName").toString();
-    m_settings->endGroup();
-}
-
-void DatabaseManager::saveDatatabaseSettings()
-{
-    m_databaseFileName = "database.sqlite";
-    m_databaseFilePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator());
-
-    m_settings->beginGroup("DatabaseSettings");
-    m_settings->setValue("databasePath", m_databaseFilePath);
-    m_settings->setValue("databaseName", m_databaseFileName);
     m_settings->endGroup();
 }
 

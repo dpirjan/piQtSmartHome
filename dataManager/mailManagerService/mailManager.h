@@ -76,8 +76,7 @@ public:
         return obj;
     }
 
-    void saveServerCredentials();
-    void saveSendMailDetails();
+    static bool firstRunConfiguration();
 
     bool connectService();
 

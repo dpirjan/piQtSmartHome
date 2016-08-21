@@ -23,9 +23,10 @@ public:
         return obj;
     }
 
+    static bool firstRunInitActuators();
+
 public slots:
-    void saveActuators(); // only for debugging will be removed in the future
-    QList<actuator> loadActuators();
+    QList<actuator> loadActuators() const;
 
 private:
     QSettings *m_settings;

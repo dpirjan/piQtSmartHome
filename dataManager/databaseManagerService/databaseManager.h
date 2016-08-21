@@ -24,7 +24,7 @@ public:
 
     bool connectService();
 
-    void loadDatabaseSettings();
+    static bool firstRunConfiguration();
 
 public slots:
     Q_SCRIPTABLE bool insertHomeAlarmEntry(const HomeAlarmInfo&);
@@ -33,10 +33,10 @@ public slots:
     Q_SCRIPTABLE QList<SmartHomeInfo> getAllSmartHomeEntries();
 
 private:
+    void loadDatabaseSettings();
+
     bool connectToDatabase();
     bool createDatabaseAndTable();
-
-    void saveDatatabaseSettings();
 
     QSqlDatabase m_db;
     QSettings *m_settings;

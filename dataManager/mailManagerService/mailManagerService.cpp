@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QFile>
+#include <QTimer>
 
 #include "mailManager.h"
 
@@ -13,6 +14,13 @@ int main(int argc, char *argv[])
     app.setApplicationName("mailManager");
 
     qDebug() << "Mail Manager";
+
+    if(mailManager::firstRunConfiguration())
+    {
+        qDebug() << "Application started for the first time, initializing, then quit.";
+        qDebug() << "Please customize your configuration and then start again the application.";
+        return 0;
+    }
 
 //    //Used for testing
 //    mailManager::instance().saveServerCredentials();
@@ -34,7 +42,5 @@ int main(int argc, char *argv[])
 //    if(!mailManager::instance().disconnectFromServer())
 //        qDebug() << "Cannot disconnect from server";
 
-    int ret = app.exec();
-
-    return ret;
+    return app.exec();
 }

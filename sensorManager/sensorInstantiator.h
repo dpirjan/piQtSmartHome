@@ -27,8 +27,9 @@ public:
         return obj;
     }
 
+    static bool firstRunInitSensors();
+
 public slots:
-    void saveSensors(); // only for debugging will be removed in the future
     QList<wiredSensor> getWiredSensors() const;
     QList<wirelessSensor> getWirelessSensors() const;
 

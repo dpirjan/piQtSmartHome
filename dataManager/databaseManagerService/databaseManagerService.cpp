@@ -14,6 +14,13 @@ int main(int argc, char *argv[])
 
     qDebug() << "Database Manager";
 
+    if(DatabaseManager::firstRunConfiguration())
+    {
+        qDebug() << "Application started for the first time, initializing, then quit.";
+        qDebug() << "Please customize your configuration and then start again the application.";
+        return 0;
+    }
+
     DatabaseManager dm;
 
     if(!dm.connectService())
@@ -29,7 +36,5 @@ int main(int argc, char *argv[])
 //    HomeAlarmInfo entry3("Bedroom", "Node1", "Sensor17");
 //    dm.insertHomeAlarmEntry(entry3);
 
-    int ret = app.exec();
-
-    return ret;
+    return app.exec();
 }

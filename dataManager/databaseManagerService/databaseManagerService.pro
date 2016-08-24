@@ -14,3 +14,6 @@ HEADERS += databaseManager.h
 
 SOURCES += databaseManager.cpp \
     databaseManagerService.cpp
+
+target.path = /usr/share/pismarthome
+INSTALLS += target

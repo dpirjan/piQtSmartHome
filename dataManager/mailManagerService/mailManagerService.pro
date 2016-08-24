@@ -12,3 +12,6 @@ SOURCES += mailManagerService.cpp \
 
 HEADERS += \
     mailManager.h
+
+target.path = /usr/share/pismarthome
+INSTALLS += target

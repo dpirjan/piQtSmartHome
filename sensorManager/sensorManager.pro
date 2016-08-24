@@ -50,3 +50,6 @@ isEmpty(SYSROOT) {
         LIBS += -lwiringPi
         message("$${LIBS}")
 }
+
+target.path = /usr/share/pismarthome
+INSTALLS += target

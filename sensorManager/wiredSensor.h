@@ -18,6 +18,7 @@ public:
                          const QString&,
                          const QString&,
                          const QString&,
+                         const bool&,
                          const QString&,
                          const int&);
     wiredSensor(const wiredSensor &);
@@ -43,8 +44,11 @@ private:
 
     template<class T> friend class QList;
 
-public slots:
     void interrupt();
+
+//#ifdef WIRINGPI
+    static bool wiringPiInitialized;
+//#endif
 };
 
 #endif // WIREDSENSOR_H

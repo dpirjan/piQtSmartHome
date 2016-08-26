@@ -5,24 +5,71 @@
 #include "databaseManagerInterface.h"
 #include "mailManagerInterface.h"
 
+#ifdef WIRINGPI
+#include <wiringPi.h>
+#include <errno.h>
+
+extern "C"
+{
+    int wiringPiSetupGpio(void);
+    int wiringPiISR (int, int, void (*function)(void*), void*);
+};
+
+bool wiredSensor::wiringPiInitialized = false;
+#endif
+
 wiredSensor::wiredSensor(const SystemType &system,
                          const SensorType &type,
                          const QString &zone,
                          const QString &node,
                          const QString &address,
+                         const bool &sendMail,
                          const QString &edge,
                          const int &timeout)
-    : sensor(system, type, zone, node, address)
+    : sensor(system, type, zone, node, address, sendMail)
     , m_wiredEdge(edge)
     , m_wiredTimeout(timeout)
 {
-    qDebug() << "wiredSensor ctor: " << this;
+    qDebug() << "wiredSensor ctor: " << this << " GPIO: " << address;
+
+#ifdef WIRINGPI
+            if(!wiredSensor::wiringPiInitialized)
+            {
+
+                // Call for winringPiSetupGpio to initialize wiringPi using Broadcom pin numbers
+                if(wiringPiSetupGpio() < 0)
+                    qDebug() << "Unable to setup wiringPi: " << strerror(errno);
+                wiredSensor::wiringPiInitialized = true;
+            }
+
+            int pin = StringToGPIO(address);
+            int edgeType = StringToEdge(edge);
+
+            // Call for wiringPiISR() interrupt initalization function
+            // the edgeType can be: INT_EDGE_FALLING, INT_EDGE_RISING,
+            // INT_EDGE_BOTH or INT_EDGE_SETUP
+            //
+            // The pin number is supplied in the current mode – native
+            // wiringPi, BCM_GPIO, physical or Sys modes.
+            //
+            // This function will work in any mode, and does not need root
+            // privileges to work.
+            //
+            //
+
+            if(wiringPiISR(pin, edgeType, &wiredSensor::interruptHandler, this) < 0)
+                qDebug() << "Unable to setup ISR on " << pin << " : " << strerror(errno);
+            else
+                qDebug() << "Setup interrupt on " << this << " was successfull!";
+#endif
 }
 
 wiredSensor::wiredSensor(const wiredSensor &obj) : sensor(obj)
 {
     m_wiredEdge = obj.getWiredEdge();
     m_wiredTimeout = obj.getWiredTimeout();
+
+    qDebug() << "wiredSensor cpy ctor: " << this << " GPIO: " << obj.getAddress();
 }
 
 wiredSensor& wiredSensor::operator =(const wiredSensor &other)
@@ -30,6 +77,8 @@ wiredSensor& wiredSensor::operator =(const wiredSensor &other)
     sensor::operator = (other);
     m_wiredEdge = other.getWiredEdge();
     m_wiredTimeout = other.getWiredTimeout();
+
+    qDebug() << "wiredSensor = " << this << " GPIO: " << other.getAddress();
 
     return *this;
 }
@@ -68,13 +117,20 @@ void wiredSensor::setWiredTimeout(const int &timeout)
 
 void wiredSensor::interruptHandler(void *userData)
 {
+    qDebug() << "interruptHandler: " << userData;
     wiredSensor *sensor = reinterpret_cast<wiredSensor *>(userData);
-    qDebug() << "interruptHandler: " << sensor;
-    sensor->interrupt();
+    if(sensor)
+    {
+        qDebug() << "interruptHandler: " << sensor << " GPIO " << sensor->getAddress();
+        sensor->interrupt();
+    }
+    else
+        qDebug() << "interruptHandler: WrongData - " << userData;
 }
 
 void wiredSensor::interrupt()
 {
+    qDebug() << "Wired interrupt: " << this << "GPIO: " << getAddress();
     QElapsedTimer timer;
     timer.start();
     // Will create a homeAlarmInfo class instance and insert it in the
@@ -86,7 +142,8 @@ void wiredSensor::interrupt()
         QString subject = "Alarm Notification piHome";
         QString message = "Alarm from Zone: " + getZone() +
                 " Node: " + getNode() +
-                " Sensor: " + sensorTypeToString(getSensorType());
+                " Sensor: " + sensorTypeToString(getSensorType()) +
+                " GPIO: " + getAddress();
         mailManagerInterface::instance().sendMail(subject,message);
     }
 

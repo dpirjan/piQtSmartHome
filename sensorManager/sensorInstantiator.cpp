@@ -4,11 +4,6 @@
 #include "sensorInstantiator.h"
 #include "mailManagerInterface.h"
 
-#ifdef WIRINGPI
-#include <wiringPi.h>
-#include <errno.h>
-#endif
-
 sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
 {
     QString filePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator()).append("sensors.ini");
@@ -24,7 +19,14 @@ sensorInstantiator::~sensorInstantiator()
         if(!mailManagerInterface::instance().disconnectFromServer())
             qDebug() << "Error occured while disconnecting from the smtp server ...";
     }
+
     delete m_settings;
+
+    for(int count=0; count<m_wiredSensorList.count(); count++)
+        delete m_wiredSensorList.takeAt(count);
+
+    for(int count=0; count<m_wirelessSensorList.count(); count++)
+        delete m_wirelessSensorList.takeAt(count);
 }
 
 void sensorInstantiator::loadSensors()
@@ -33,9 +35,6 @@ void sensorInstantiator::loadSensors()
     QString wiredEdge;
     int wiredTimeout = -1, wirelessTimeout = -1;
     bool smtpInitialized = true;
-#ifdef WIRINGPI
-    bool wiringPiInitialized = false;
-#endif
 
     m_settings->beginGroup("GenericSettings");
     numSensors = m_settings->value("NumberOfSensors").toInt();
@@ -73,58 +72,27 @@ void sensorInstantiator::loadSensors()
         HardwareType hw = StringToHardwareType(m_settings->value("HardwareType").toString());
         if(hw == Wired)
         {
-            wiredSensor tmp(StringToSystemType(m_settings->value("SystemType").toString()),
-                            StringToSensorType(m_settings->value("SensorType").toString()),
-                            m_settings->value("Zone").toString(),
-                            m_settings->value("Node").toString(),
-                            m_settings->value("Address").toString(),
-                            wiredEdge,
-                            wiredTimeout);
-
-            tmp.setSendMail(m_sendMail & smtpInitialized);
-
-#ifdef WIRINGPI
-            if(!wiringPiInitialized)
-            {
-
-                // Call for winringPiSetupGpio to initialize wiringPi using Broadcom pin numbers
-                if(wiringPiSetupGpio() < 0)
-                    qDebug() << "Unable to setup wiringPi: " << strerror(errno);
-                wiringPiInitialized = true;
-            }
-
-            int pin = StringToGPIO(tmp.getAddress());
-            int edgeType = StringToEdge(tmp.getWiredEdge());
-
-            // Call for wiringPiISR() interrupt initalization function
-            // the edgeType can be: INT_EDGE_FALLING, INT_EDGE_RISING,
-            // INT_EDGE_BOTH or INT_EDGE_SETUP
-            //
-            // The pin number is supplied in the current mode – native
-            // wiringPi, BCM_GPIO, physical or Sys modes.
-            //
-            // This function will work in any mode, and does not need root
-            // privileges to work.
-            //
-            //
-
-            if(wiringPiISR(pin, edgeType, &wiredSensor::interruptHandler, &tmp) < 0)
-                qDebug() << "Unable to setup ISR on " << pin << " : " << strerror(errno);
-#endif
-
+            wiredSensor *tmp = new wiredSensor(
+                        StringToSystemType(m_settings->value("SystemType").toString()),
+                        StringToSensorType(m_settings->value("SensorType").toString()),
+                        m_settings->value("Zone").toString(),
+                        m_settings->value("Node").toString(),
+                        m_settings->value("Address").toString(),
+                        m_sendMail & smtpInitialized,
+                        wiredEdge,
+                        wiredTimeout);
             m_wiredSensorList.append(tmp);
         }
         else
         {
-            wirelessSensor tmp(StringToSystemType(m_settings->value("SystemType").toString()),
-                               StringToSensorType(m_settings->value("SensorType").toString()),
-                               m_settings->value("Zone").toString(),
-                               m_settings->value("Node").toString(),
-                               m_settings->value("Address").toString(),
-                               wirelessTimeout);
-
-            tmp.setSendMail(m_sendMail & smtpInitialized);
-
+            wirelessSensor *tmp = new wirelessSensor(
+                        StringToSystemType(m_settings->value("SystemType").toString()),
+                        StringToSensorType(m_settings->value("SensorType").toString()),
+                        m_settings->value("Zone").toString(),
+                        m_settings->value("Node").toString(),
+                        m_settings->value("Address").toString(),
+                        m_sendMail & smtpInitialized,
+                        wirelessTimeout);
             m_wirelessSensorList.append(tmp);
         }
 
@@ -132,12 +100,12 @@ void sensorInstantiator::loadSensors()
     }
 }
 
-QList<wiredSensor> sensorInstantiator::getWiredSensors() const
+QList<wiredSensor *> sensorInstantiator::getWiredSensors() const
 {
     return m_wiredSensorList;
 }
 
-QList<wirelessSensor> sensorInstantiator::getWirelessSensors() const
+QList<wirelessSensor *> sensorInstantiator::getWirelessSensors() const
 {
     return m_wirelessSensorList;
 }

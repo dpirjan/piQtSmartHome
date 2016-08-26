@@ -30,16 +30,16 @@ public:
     static bool firstRunInitSensors();
 
 public slots:
-    QList<wiredSensor> getWiredSensors() const;
-    QList<wirelessSensor> getWirelessSensors() const;
+    QList<wiredSensor *> getWiredSensors() const;
+    QList<wirelessSensor *> getWirelessSensors() const;
 
 private:
     QSettings *m_settings;
 
     bool m_sendMail;
 
-    QList<wiredSensor> m_wiredSensorList;
-    QList<wirelessSensor> m_wirelessSensorList;
+    QList<wiredSensor *> m_wiredSensorList;
+    QList<wirelessSensor *> m_wirelessSensorList;
 };
 
 #endif // SENSORINSTANTIATOR_H

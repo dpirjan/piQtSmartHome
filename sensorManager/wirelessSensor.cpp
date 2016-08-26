@@ -12,10 +12,10 @@ wirelessSensor::wirelessSensor(const SystemType &system,
                                const QString &zone,
                                const QString &node,
                                const QString &address,
+                               const bool &sendMail,
                                const int &timeout)
-    : sensor(system, type, zone, node, address)
+    : sensor(system, type, zone, node, address, sendMail)
     , m_wirelessTimeout(timeout)
-
 {
 }
 

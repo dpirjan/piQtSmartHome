@@ -12,7 +12,8 @@ public:
                     const SensorType&,
                     const QString&,
                     const QString&,
-                    const QString&);
+                    const QString&,
+                    const bool&);
     sensor(const sensor&);
     sensor& operator=(const sensor&);
     virtual ~sensor();
@@ -26,12 +27,8 @@ public:
     bool getSendMail() const;
 
     void setValue(const QString&);
-    void setSendMail(const bool&);
 
     void debugSensor() const;
-
-public slots:
-    virtual void interrupt() = 0;
 
 private:
     SystemType m_system;

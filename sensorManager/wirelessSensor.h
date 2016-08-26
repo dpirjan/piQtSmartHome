@@ -16,6 +16,7 @@ public:
                             const QString&,
                             const QString&,
                             const QString&,
+                            const bool&,
                             const int&);
     wirelessSensor(const wirelessSensor &);
     wirelessSensor& operator=(const wirelessSensor &);

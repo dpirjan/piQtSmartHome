@@ -21,35 +21,33 @@ int main(int argc, char *argv[])
     }
 
 //    sensorInstantiator::instance().saveSensors();
-    QList<wiredSensor> wiredSensorList = sensorInstantiator::instance().getWiredSensors();
+    QList<wiredSensor *> wiredSensorList = sensorInstantiator::instance().getWiredSensors();
     int numSensors = wiredSensorList.count();
     qDebug() << "Wired Sensors: " << numSensors;
-    for (int i = 0; i < numSensors; i++)
-        wiredSensorList.at(i).debugSensor();
+//    for (int i = 0; i < numSensors; i++)
+//        wiredSensorList.at(i)->debugSensor();
 
-    QList<wirelessSensor> wirelessSensorList = sensorInstantiator::instance().getWirelessSensors();
+    QList<wirelessSensor*> wirelessSensorList = sensorInstantiator::instance().getWirelessSensors();
     numSensors = wirelessSensorList.count();
     qDebug() << "Wireless Sensors: " << numSensors;
-    for (int i = 0; i < numSensors; i++)
-        wirelessSensorList.at(i).debugSensor();
+//    for (int i = 0; i < numSensors; i++)
+//        wirelessSensorList.at(i)->debugSensor();
 
     qDebug() << "==============================================";
 //    actuatorInstantiator::instance().saveActuators();
     QList<actuator> actuatorList = actuatorInstantiator::instance().loadActuators();
     int numActuators = actuatorList.count();
     qDebug() << "Actuators:" << numActuators;
-    for (int i = 0; i < numActuators; i++)
-        actuatorList.at(i).debugActuator();
+//    for (int i = 0; i < numActuators; i++)
+//        actuatorList.at(i).debugActuator();
 
-    wiredSensor wrdSensor = wiredSensorList.at(1);
-    wrdSensor.interrupt();
-    wrdSensor.interrupt();
-    wrdSensor.interrupt();
+//    wiredSensor *wrdSensor = wiredSensorList.at(1);
+//    wiredSensor::interruptHandler(wrdSensor);
 
-    wirelessSensor wrlSensor = wirelessSensorList.at(1);
-    wrlSensor.interrupt();
-    wrlSensor.interrupt();
-    wrlSensor.interrupt();
+//    wirelessSensor wrlSensor = wirelessSensorList.at(0);
+//    wrlSensor.interrupt();
+//    wrlSensor.interrupt();
+//    wrlSensor.interrupt();
 
     return app.exec();
 }

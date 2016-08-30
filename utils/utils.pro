@@ -1,6 +1,6 @@
-QT += dbus
 QT -= gui
 
+TARGET = piHomeUtils
 TEMPLATE = lib
 CONFIG += debug
 
@@ -12,11 +12,9 @@ CONFIG(debug, debug|release) {
 
 DEFINES += QT_MESSAGELOGCONTEXT
 
-SOURCES = homeAlarmInfo.cpp \
-    smartHomeInfo.cpp
+SOURCES += utils.cpp
 
-HEADERS = homeAlarmInfo.h \
-    smartHomeInfo.h
+HEADERS += utils.h
 
 unix {
     target.path = /usr/lib

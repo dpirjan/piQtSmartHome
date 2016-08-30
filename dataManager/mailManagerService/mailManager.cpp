@@ -39,6 +39,7 @@ mailManager::mailManager(QObject *parent) : QObject(parent)
 
 mailManager::~mailManager()
 {
+    qDebug() << "mailManager destructor";
     delete textStream;
     delete socket;
     delete m_settings;

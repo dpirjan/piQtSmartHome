@@ -1,7 +1,8 @@
 #!/bin/sh
 
 CONF="/etc/ld.so.conf.d/piHome.conf"
-EXPORT="$PWD/dataManager/databaseManagerInfo"
+EXPORT_1="$PWD/dataManager/databaseManagerInfo"
+EXPORT_2="$PWD/utils"
 
 if [ -f ${CONF} ];
 then
@@ -9,7 +10,8 @@ then
 else
 	sudo touch ${CONF}
 	sudo chmod 777 ${CONF}
-	sudo echo ${EXPORT} > ${CONF}
+	sudo echo ${EXPORT_1} > ${CONF}
+	sudo echo ${EXPORT_2} >> ${CONF}
 	sudo ldconfig
 	sudo rm ${CONF}
 fi;

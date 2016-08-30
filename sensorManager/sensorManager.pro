@@ -4,11 +4,23 @@ QT       -= gui
 TARGET = sensorManager
 CONFIG   += console
 CONFIG   -= app_bundle
+CONFIG   += debug
 
 TEMPLATE = app
 
+CONFIG(debug, debug|release) {
+    message("$${TARGET} - debug mode")
+}else {
+    message("$${TARGET} - release mode")
+}
+
+DEFINES += QT_MESSAGELOGCONTEXT
+
 INCLUDEPATH += ../dataManager/databaseManagerInfo
 LIBS += -L../dataManager/databaseManagerInfo -ldatabaseManagerInfo
+
+INCLUDEPATH += ../utils
+LIBS += -L../utils -lpiHomeUtils
 
 SOURCES += \
     actuator.cpp \
@@ -51,5 +63,7 @@ isEmpty(SYSROOT) {
         message("$${LIBS}")
 }
 
-target.path = /usr/share/pismarthome
-INSTALLS += target
+unix {
+    target.path = /usr/share/pismarthome
+    INSTALLS += target
+}

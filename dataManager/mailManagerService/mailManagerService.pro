@@ -1,31 +1,42 @@
-QT       += core dbus network
-QT       -= gui
+QT += core dbus network
+QT -= gui
 
 TARGET = mailManager
-CONFIG   += console
-CONFIG   -= app_bundle
-CONFIG   += debug
+CONFIG += console debug
+CONFIG -= app_bundle
 
 TEMPLATE = app
 
 CONFIG(debug, debug|release) {
     message("$${TARGET} - debug mode")
-}else {
+    DEFINES += QT_MESSAGELOGCONTEXT
+} else {
     message("$${TARGET} - release mode")
 }
-
-DEFINES += QT_MESSAGELOGCONTEXT
 
 INCLUDEPATH += ../../utils
 LIBS += -L../../utils -lpiHomeUtils
 
-SOURCES += mailManagerService.cpp \
-    mailManager.cpp
-
 HEADERS += \
     mailManager.h
+
+SOURCES += \
+    mailManager.cpp \
+    mailManagerService.cpp
+
+DISTFILES += \
+    piHomeMail.service \
+    piHomeMail.conf
 
 unix {
     target.path = /usr/share/pismarthome
     INSTALLS += target
+
+    SYSTEMDSERVICE.files = piHomeMail.service
+    SYSTEMDSERVICE.path = /lib/systemd/system
+    INSTALLS += SYSTEMDSERVICE
+
+    DBUSCONF.files = piHomeMail.conf
+    DBUSCONF.path = /etc/dbus-1/system.d
+    INSTALLS += DBUSCONF
 }

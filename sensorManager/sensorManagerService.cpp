@@ -47,8 +47,7 @@ int main(int argc, char *argv[])
 //    for (int i = 0; i < numActuators; i++)
 //        actuatorList.at(i).debugActuator();
 
-//    wiredSensor *wrdSensor = wiredSensorList.at(1);
-//    wiredSensor::interruptHandler(wrdSensor);
+//    wiredSensor::interruptHandler(wiredSensorList.first());
 
 //    wirelessSensor wrlSensor = wirelessSensorList.at(0);
 //    wrlSensor.interrupt();

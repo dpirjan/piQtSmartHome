@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     DatabaseManager dm;
 
     if(!dm.connectService())
-        qDebug() << "Cannot register the database manager service to session bus";
+        qDebug() << "Cannot register the database manager service to DBUS";
 
     //    //Used for testing
     //    HomeAlarmInfo entry1("Living", "Node1", "Sensor1", "2016/11/11 18:54:42");

@@ -144,17 +144,17 @@ bool mailManager::connectService()
 {
     bool ret = true;
 
-    if (!QDBusConnection::sessionBus().registerService(MAIL_MANAGER_SERVICE_NAME))
+    if (!QDBusConnection::systemBus().registerService(MAIL_MANAGER_SERVICE_NAME))
     {
-        qDebug() << QDBusConnection::sessionBus().lastError().message();
+        qDebug() << QDBusConnection::systemBus().lastError().message();
         ret = false;
     }
 
-    QDBusConnection::sessionBus().registerObject(MAIL_MANAGER_SERVICE_PATH,
+    QDBusConnection::systemBus().registerObject(MAIL_MANAGER_SERVICE_PATH,
                                                  this,
                                                  QDBusConnection::ExportScriptableContents);
 
-    qDebug() << "Registered the mail manager service to session bus";
+    qDebug() << "Registered the mail manager service to DBUS system bus";
 
     return ret;
 }

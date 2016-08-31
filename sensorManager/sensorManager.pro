@@ -1,50 +1,24 @@
-QT       += core dbus
-QT       -= gui
+QT += core dbus
+QT -= gui
 
 TARGET = sensorManager
-CONFIG   += console
-CONFIG   -= app_bundle
-CONFIG   += debug
+CONFIG += console debug
+CONFIG -= app_bundle
 
 TEMPLATE = app
 
 CONFIG(debug, debug|release) {
     message("$${TARGET} - debug mode")
-}else {
+    DEFINES += QT_MESSAGELOGCONTEXT
+} else {
     message("$${TARGET} - release mode")
 }
-
-DEFINES += QT_MESSAGELOGCONTEXT
 
 INCLUDEPATH += ../dataManager/databaseManagerInfo
 LIBS += -L../dataManager/databaseManagerInfo -ldatabaseManagerInfo
 
 INCLUDEPATH += ../utils
 LIBS += -L../utils -lpiHomeUtils
-
-SOURCES += \
-    actuator.cpp \
-    sensor.cpp \
-    wiredSensor.cpp \
-    wirelessSensor.cpp \
-    actuatorInstantiator.cpp \
-    sensorInstantiator.cpp \
-    databaseManagerInterface.cpp \
-    sensorManagerService.cpp \
-    mailManagerInterface.cpp
-
-
-HEADERS += \
-    common.h \
-    actuator.h \
-    sensor.h \
-    wiredSensor.h \
-    wirelessSensor.h \
-    actuatorInstantiator.h \
-    sensorInstantiator.h \
-    databaseManagerInterface.h \
-    mailManagerInterface.h
-
 
 SPEC = $${QMAKESPEC}
 message("QMAKESPEC: $${SPEC}")
@@ -63,7 +37,36 @@ isEmpty(SYSROOT) {
         message("$${LIBS}")
 }
 
+HEADERS += \
+    common.h \
+    actuator.h \
+    sensor.h \
+    wiredSensor.h \
+    wirelessSensor.h \
+    actuatorInstantiator.h \
+    sensorInstantiator.h \
+    databaseManagerInterface.h \
+    mailManagerInterface.h
+
+SOURCES += \
+    actuator.cpp \
+    sensor.cpp \
+    wiredSensor.cpp \
+    wirelessSensor.cpp \
+    actuatorInstantiator.cpp \
+    sensorInstantiator.cpp \
+    databaseManagerInterface.cpp \
+    sensorManagerService.cpp \
+    mailManagerInterface.cpp
+
+DISTFILES += \
+    piHomeSensor.service
+
 unix {
     target.path = /usr/share/pismarthome
     INSTALLS += target
+
+    SYSTEMDSERVICE.files = piHomeSensor.service
+    SYSTEMDSERVICE.path = /lib/systemd/system
+    INSTALLS += SYSTEMDSERVICE
 }

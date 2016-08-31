@@ -11,20 +11,14 @@
 
 databaseManagerInterface::databaseManagerInterface(QObject *parent) : QObject(parent)
 {
-    if(!QDBusConnection::sessionBus().isConnected())
-    {
-        qDebug() << "Cannot connect to the D-Bus session bus.\n"
-                "To start it, run:\n"
-                "\teval `dbus-launch --auto-syntax`\n";
-    }
+    if(!QDBusConnection::systemBus().isConnected())
+        qDebug() << "Cannot connect to the D-Bus system bus!";
 
     if(!connectToDBus())
-    {
         qDebug() << "Cannot connect to DBus service "
                  << DATABASE_MANAGER_SERVICE_NAME
                  << " on interface "
                  << DATABASE_MANAGER_SERVICE_INT;
-    }
 
     HomeAlarmInfo::registerMetaType();
     SmartHomeInfo::registerMetaType();
@@ -42,10 +36,10 @@ bool databaseManagerInterface::connectToDBus()
     iface = new QDBusInterface(DATABASE_MANAGER_SERVICE_NAME,
                                DATABASE_MANAGER_SERVICE_PATH,
                                DATABASE_MANAGER_SERVICE_INT,
-                               QDBusConnection::sessionBus());
+                               QDBusConnection::systemBus());
     if(!iface->isValid())
     {
-        qDebug() << QDBusConnection::sessionBus().lastError().message();
+        qDebug() << QDBusConnection::systemBus().lastError().message();
         ret = false;
     }
 

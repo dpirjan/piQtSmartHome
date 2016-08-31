@@ -51,10 +51,12 @@ void logHandler(QtMsgType type,
         text.insert(0, "[ WARNING ");
         textStream << text << endl;
         break;
+#if QT_VERSION > 0x050401
     case QtInfoMsg:
         text.insert(0, "[ WARNING ");
         textStream << text << endl;
         break;
+#endif
     case QtCriticalMsg:
         text.insert(0, "[ CRITICAL ");
         textStream << text << endl;

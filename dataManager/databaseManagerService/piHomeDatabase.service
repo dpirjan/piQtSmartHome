@@ -1,0 +1,14 @@
+[Unit]
+Description=piSmartHome Database Manager Service
+Requires=dbus.service
+After=dbus.service
+After=systemd-logind.service
+
+[Service]
+User=root
+ExecStart=/usr/share/pismarthome/databaseManager
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

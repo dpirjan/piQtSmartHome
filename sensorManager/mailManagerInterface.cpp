@@ -11,20 +11,14 @@
 
 mailManagerInterface::mailManagerInterface(QObject *parent) : QObject(parent)
 {
-    if(!QDBusConnection::sessionBus().isConnected())
-    {
-        qDebug() << "Cannot connect to the D-Bus session bus.\n"
-                "To start it, run:\n"
-                "\teval `dbus-launch --auto-syntax`\n";
-    }
+    if(!QDBusConnection::systemBus().isConnected())
+        qDebug() << "Cannot connect to the D-Bus system bus!";
 
     if(!connectToDBus())
-    {
         qDebug() << "Cannot connect to DBus service "
                  << MAIL_MANAGER_SERVICE_NAME
                  << " on interface "
                  << MAIL_MANAGER_SERVICE_INT;
-    }
 }
 
 mailManagerInterface::~mailManagerInterface()
@@ -39,10 +33,10 @@ bool mailManagerInterface::connectToDBus()
     iface = new QDBusInterface(MAIL_MANAGER_SERVICE_NAME,
                                MAIL_MANAGER_SERVICE_PATH,
                                MAIL_MANAGER_SERVICE_INT,
-                               QDBusConnection::sessionBus());
+                               QDBusConnection::systemBus());
     if(!iface->isValid())
     {
-        qDebug() << QDBusConnection::sessionBus().lastError().message();
+        qDebug() << QDBusConnection::systemBus().lastError().message();
         ret = false;
     }
 

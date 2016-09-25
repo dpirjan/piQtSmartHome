@@ -95,7 +95,7 @@ bool DatabaseManager::connectService()
     HomeAlarmInfo::registerMetaType();
     SmartHomeInfo::registerMetaType();
 
-    if (!QDBusConnection::systemBus().registerService(DATABASE_MANAGER_SERVICE_NAME))
+    if(!QDBusConnection::systemBus().registerService(DATABASE_MANAGER_SERVICE_NAME))
     {
         qDebug() << QDBusConnection::systemBus().lastError().message();
         ret = false;
@@ -105,7 +105,8 @@ bool DatabaseManager::connectService()
                                                  this,
                                                  QDBusConnection::ExportScriptableContents);
 
-    qDebug() << "Registered the database manager service to DBUS system bus";
+    if(ret == true)
+        qDebug() << "Registered the database manager service to DBUS system bus";
 
     return ret;
 }

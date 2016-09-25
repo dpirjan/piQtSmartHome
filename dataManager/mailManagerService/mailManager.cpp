@@ -144,7 +144,7 @@ bool mailManager::connectService()
 {
     bool ret = true;
 
-    if (!QDBusConnection::systemBus().registerService(MAIL_MANAGER_SERVICE_NAME))
+    if(!QDBusConnection::systemBus().registerService(MAIL_MANAGER_SERVICE_NAME))
     {
         qDebug() << QDBusConnection::systemBus().lastError().message();
         ret = false;
@@ -154,7 +154,8 @@ bool mailManager::connectService()
                                                  this,
                                                  QDBusConnection::ExportScriptableContents);
 
-    qDebug() << "Registered the mail manager service to DBUS system bus";
+    if(ret == true)
+        qDebug() << "Registered the mail manager service to DBUS system bus";
 
     return ret;
 }
@@ -190,7 +191,7 @@ QString mailManager::replyFromServer()
     do
     {
         if(!socket->waitForReadyRead())
-            qDebug() << "Communication timeout!!";
+            qWarning() << "Communication timeout!!";
 
         QString lineResponse;
         while(socket->canReadLine())
@@ -225,14 +226,14 @@ bool mailManager::connectToServer()
         ((QSslSocket *) socket)->connectToHostEncrypted(m_serverName, m_port);
         break;
     default:
-        qDebug() << "Connection type not supported!";
+        qWarning() << "Connection type not supported!";
         return false;
         break;
     }
 
     if(!socket->waitForConnected(m_timeout))
     {
-        qDebug() << "Connection error: " << socket->errorString();
+        qWarning() << "Connection error: " << socket->errorString();
         return false;
     }
 
@@ -283,6 +284,8 @@ bool mailManager::connectToServer()
             return false;
         }
     }
+
+    qDebug() << "Connected to smtp server";
 
     return true;
 }
@@ -339,6 +342,8 @@ bool mailManager::loginToServer()
         break;
     }
 
+    qDebug() << "Login to smtp server";
+
     return true;
 }
 
@@ -365,7 +370,6 @@ bool mailManager::sendMail(const QString &subject,
                       QString::fromLatin1("\r\n..\r\n"));
 
     qDebug() << "sendMail() :" << endl;
-    qDebug() << "=======" << endl;
     qDebug() << m_message << endl;
     qDebug() << "-------" << endl;
 
@@ -411,6 +415,8 @@ bool mailManager::sendMail(const QString &subject,
         return false;
     }
 
+    qDebug() << "Mail sent to smtp server";
+
     return true;
 }
 
@@ -425,6 +431,8 @@ bool mailManager::disconnectFromServer()
         qDebug() << "No QUIT reply from server!";
         return false;
     }
+
+    qDebug() << "Disconnected from smtp server";
 
     return true;
 }

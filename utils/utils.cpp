@@ -34,40 +34,41 @@ void logHandler(QtMsgType type,
     QString text;
     if(context.file && context.line != 0 && context.function)
     {
-        text.append(": <");
+        text.append(":<");
         text.append(QDateTime::currentDateTime().toString("dd-MMM-yyyy hh:mm:ss.zzz"));
-        text.append("> :");
+        text.append(">:");
         QString filePath = context.file;
         QStringList parts = filePath.split(QDir::separator());
         text.append(parts.last());
         text.append(":");
         text.append(QString::number(context.line));
-        text.append(" --> ");
+        text.append("-->");
         text.append(context.function);
     }
     text.append("] : ");
     text.append(msg);
+
     switch (type) {
     case QtDebugMsg:
-        text.insert(0, "[ DEBUG ");
+        text.insert(0, "[DEBUG");
         textStream << text << endl;
         break;
     case QtWarningMsg:
-        text.insert(0, "[ WARNING ");
+        text.insert(0, "[WARNING");
         textStream << text << endl;
         break;
 #if QT_VERSION > 0x050401
     case QtInfoMsg:
-        text.insert(0, "[ WARNING ");
+        text.insert(0, "[INFO");
         textStream << text << endl;
         break;
 #endif
     case QtCriticalMsg:
-        text.insert(0, "[ CRITICAL ");
+        text.insert(0, "[CRITICAL");
         textStream << text << endl;
         break;
     case QtFatalMsg:
-        text = QString("[ FATAL ");
+        text = QString("[FATAL");
         textStream << text << endl;
         logFile.close();
         abort();
@@ -78,7 +79,7 @@ void logHandler(QtMsgType type,
 
 void closeApplication(int sig)
 {
-    qDebug() << "Close application"
+    qCritical() << "Close application"
              << QCoreApplication::applicationName()
              << "( signal =" << sig << "-" << strsignal(sig) << ")";
 
@@ -96,16 +97,16 @@ void catchUnixSignal(const QList<int> &quitSignals)
 
 void printStackTrace(int sig)
 {
-    qDebug() << "Failed application ( signal = "
+    qCritical() << "Failed application ( signal = "
              << sig << "-" << strsignal(sig) << ")";
-    qDebug() << "BackTrace: ";
+    qCritical() << "BackTrace: ";
 
     void *addrArray[64]; // used to store backtrace symbols
 
     size_t addrSize = backtrace(addrArray, sizeof(addrArray) / sizeof(void *));
     if(addrSize == 0)
     {
-        qDebug() << "<empty, possibly corrupt>";
+        qCritical() << "<empty, possibly corrupt>";
         exit(-1);
     }
 
@@ -144,20 +145,20 @@ void printStackTrace(int sig)
             int status;
             char* realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
             if (status == 0)
-                qDebug() << "[bt]: (" << counter << ")" << symbolArray[counter]
+                qCritical() << "[bt]: (" << counter << ")" << symbolArray[counter]
                          << ":" << realName << "+" << offsetBegin << offsetEnd;
             else
                 // demangling failed. Output function name as a C function with
                 // no arguments.
-                qDebug() << "[bt]: (" << counter << ")"  << symbolArray[counter]
+                qCritical() << "[bt]: (" << counter << ")"  << symbolArray[counter]
                          << ":" << mangledName << "+" << offsetBegin << offsetEnd;
         }
         else
             // couldn't parse the line? print the whole line.
-            qDebug() << "[bt] (" << counter << ")"  << symbolArray[counter];
+            qCritical() << "[bt] (" << counter << ")"  << symbolArray[counter];
     }
 
     free(symbolArray);
 
-    exit(-1);
+    exit(1);
 }

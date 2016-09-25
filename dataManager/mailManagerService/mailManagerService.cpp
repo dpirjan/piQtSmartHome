@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
     //    mailManager::instance().saveSendMailDetails();
 
     if(!mailManager::instance().connectService())
-        qDebug() << "Cannot register the mail manager service to session bus";
+        qDebug() << "Cannot register the mail manager service to system bus";
 
     //    if(!mailManager::instance().connectToServer())
     //        qDebug() << "Cannot connect to server";

@@ -8,7 +8,7 @@ HomeAlarmInfo::HomeAlarmInfo() :
     m_node(),
     m_sensor()
 {
-    m_timestamp = QDateTime::currentDateTime().toString();
+    m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
     qDebug() << "DefHomeAlarmInfo Timestamp : " << m_timestamp;
 }
 
@@ -20,7 +20,7 @@ HomeAlarmInfo::HomeAlarmInfo(const QString &zone,
     m_node(node),
     m_sensor(sensor)
 {
-    m_timestamp = QDateTime::currentDateTime().toString();
+    m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
     qDebug() << "HomeAlarmInfo Timestamp : " << m_timestamp;
 }
 

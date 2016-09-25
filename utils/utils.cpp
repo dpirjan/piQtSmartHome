@@ -8,6 +8,7 @@
 #include <cxxabi.h>
 
 #include <QCoreApplication>
+#include <QDateTime>
 #include <QFile>
 #include <QDir>
 
@@ -33,8 +34,12 @@ void logHandler(QtMsgType type,
     QString text;
     if(context.file && context.line != 0 && context.function)
     {
-        text.append(": ");
-        text.append(context.file);
+        text.append(": <");
+        text.append(QDateTime::currentDateTime().toString("dd-MMM-yyyy hh:mm:ss.zzz"));
+        text.append("> :");
+        QString filePath = context.file;
+        QStringList parts = filePath.split(QDir::separator());
+        text.append(parts.last());
         text.append(":");
         text.append(QString::number(context.line));
         text.append(" --> ");

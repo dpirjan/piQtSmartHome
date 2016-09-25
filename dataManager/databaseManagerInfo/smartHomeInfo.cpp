@@ -9,7 +9,7 @@ SmartHomeInfo::SmartHomeInfo() :
     m_sensor(),
     m_value()
 {
-    m_timestamp = QDateTime::currentDateTime().toString();
+    m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
     qDebug() << "DefSmartHomeInfo Timestamp : " << m_timestamp;
 }
 
@@ -22,7 +22,7 @@ SmartHomeInfo::SmartHomeInfo(const QString &zone,
     m_sensor(sensor),
     m_value(value)
 {
-    m_timestamp = QDateTime::currentDateTime().toString();
+    m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
     qDebug() << "SmartHomeInfo Timestamp : " << m_timestamp;
 }
 

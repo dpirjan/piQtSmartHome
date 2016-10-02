@@ -46,7 +46,8 @@ HEADERS += \
     actuatorInstantiator.h \
     sensorInstantiator.h \
     databaseManagerInterface.h \
-    mailManagerInterface.h
+    mailManagerInterface.h \
+    sensorManager.h
 
 SOURCES += \
     actuator.cpp \
@@ -57,7 +58,8 @@ SOURCES += \
     sensorInstantiator.cpp \
     databaseManagerInterface.cpp \
     sensorManagerService.cpp \
-    mailManagerInterface.cpp
+    mailManagerInterface.cpp \
+    sensorManager.cpp
 
 DISTFILES += \
     piHomeSensor.service

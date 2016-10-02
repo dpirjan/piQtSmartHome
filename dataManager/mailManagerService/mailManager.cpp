@@ -27,22 +27,28 @@ mailManager::mailManager(QObject *parent) : QObject(parent)
     loadServerCredentials();
     loadSendMailDetails();
 
-    textStream = new QTextStream(socket);
+    m_textStream = new QTextStream(m_socket);
 
-    connect(socket, SIGNAL(connected()), this, SLOT(connected()));
-    connect(socket, SIGNAL(error(QAbstractSocket::SocketError)), this,
+    connect(m_socket, SIGNAL(connected()), this, SLOT(connected()));
+    connect(m_socket, SIGNAL(error(QAbstractSocket::SocketError)), this,
             SLOT(errorReceived(QAbstractSocket::SocketError)));
-    connect(socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this,
+    connect(m_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this,
             SLOT(stateChanged(QAbstractSocket::SocketState)));
-    connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    connect(m_socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
+
+    m_watchdog = new WatchdogHelper("piHomeMail");
+    m_watchdog->init();
 }
 
 mailManager::~mailManager()
 {
     qDebug() << "mailManager destructor";
-    delete textStream;
-    delete socket;
+    delete m_textStream;
+    delete m_socket;
     delete m_settings;
+
+    m_watchdog->stop();
+    m_watchdog->deleteLater();
 }
 
 bool mailManager::firstRunConfiguration()
@@ -98,18 +104,18 @@ void mailManager::loadServerCredentials()
     {
     case None:
         m_connection = None;
-        socket = new QTcpSocket(this);
+        m_socket = new QTcpSocket(this);
         break;
     case SSL:
         m_connection = SSL;
-        socket = new QSslSocket(this);
+        m_socket = new QSslSocket(this);
         break;
     case TLS:
         m_connection = TLS;
-        socket = new QSslSocket(this);
+        m_socket = new QSslSocket(this);
         break;
     default:
-        qDebug() << "Invalid connection type specified!";
+        qCritical() << "Invalid connection type specified!";
         break;
     }
 
@@ -122,7 +128,7 @@ void mailManager::loadServerCredentials()
         m_authentication = Encrypted;
         break;
     default:
-        qDebug() << "Invalid authenthication type specified!";
+        qCritical() << "Invalid authenthication type specified!";
         break;
     }
 
@@ -146,7 +152,7 @@ bool mailManager::connectService()
 
     if(!QDBusConnection::systemBus().registerService(MAIL_MANAGER_SERVICE_NAME))
     {
-        qDebug() << QDBusConnection::systemBus().lastError().message();
+        qCritical() << QDBusConnection::systemBus().lastError().message();
         ret = false;
     }
 
@@ -167,12 +173,12 @@ void mailManager::stateChanged(QAbstractSocket::SocketState socketState)
 
 void mailManager::errorReceived(QAbstractSocket::SocketError socketError)
 {
-    qDebug() << "errorReceived() - " << socketError << ": " << socket->errorString();
+    qDebug() << "errorReceived() - " << socketError << ": " << m_socket->errorString();
 }
 
 void mailManager::disconnected()
 {
-    qDebug() << "disconnected() - "  << socket->errorString();
+    qDebug() << "disconnected() - "  << m_socket->errorString();
 }
 
 void mailManager::connected()
@@ -182,21 +188,27 @@ void mailManager::connected()
 
 void mailManager::sendToServer(const QString &text)
 {
-    *textStream << text << "\r\n";
-    textStream->flush();
+    *m_textStream << text << "\r\n";
+    m_textStream->flush();
 }
 
 QString mailManager::replyFromServer()
 {
+    int timeoutError = 0;
     do
     {
-        if(!socket->waitForReadyRead())
-            qWarning() << "Communication timeout!!";
+        if(!m_socket->waitForReadyRead())
+        {
+            qCritical() << "Communication timeout!";
+            timeoutError++;
+        }
+        if(timeoutError >= 25)
+            qFatal("Too many communication timeout errors!");
 
         QString lineResponse;
-        while(socket->canReadLine())
+        while(m_socket->canReadLine())
         {
-            lineResponse = socket->readLine();
+            lineResponse = m_socket->readLine();
             m_response += lineResponse;
         }
 
@@ -220,10 +232,10 @@ bool mailManager::connectToServer()
     {
     case None:
     case TLS:
-        socket->connectToHost(m_serverName, m_port);
+        m_socket->connectToHost(m_serverName, m_port);
         break;
     case SSL:
-        ((QSslSocket *) socket)->connectToHostEncrypted(m_serverName, m_port);
+        ((QSslSocket *) m_socket)->connectToHostEncrypted(m_serverName, m_port);
         break;
     default:
         qWarning() << "Connection type not supported!";
@@ -231,16 +243,16 @@ bool mailManager::connectToServer()
         break;
     }
 
-    if(!socket->waitForConnected(m_timeout))
+    if(!m_socket->waitForConnected(m_timeout))
     {
-        qWarning() << "Connection error: " << socket->errorString();
+        qWarning() << "Connection error: " << m_socket->errorString();
         return false;
     }
 
     serverReplyCode = replyFromServer();
     if(serverReplyCode != SERVER_READY)
     {
-        qDebug() << "Cannot connect to server!";
+        qCritical() << "Cannot connect to server!";
         return false;
     }
 
@@ -250,7 +262,7 @@ bool mailManager::connectToServer()
 
     if(serverReplyCode != ACTION_COMPLETED)
     {
-        qDebug() << "No EHLO reply from server!";
+        qCritical() << "No EHLO reply from server!";
         return false;
     }
 
@@ -262,15 +274,15 @@ bool mailManager::connectToServer()
 
         if(serverReplyCode != SERVER_READY)
         {
-            qDebug() << "No STARTTLS reply from server!";
+            qCritical() << "No STARTTLS reply from server!";
             return false;
         }
 
-        ((QSslSocket*) socket)->startClientEncryption();
+        ((QSslSocket*) m_socket)->startClientEncryption();
 
-        if (!((QSslSocket*) socket)->waitForEncrypted(m_timeout))
+        if(!((QSslSocket*) m_socket)->waitForEncrypted(m_timeout))
         {
-            qDebug() << ((QSslSocket*) socket)->errorString();
+            qCritical() << ((QSslSocket*) m_socket)->errorString();
             return false;
         }
 
@@ -280,7 +292,7 @@ bool mailManager::connectToServer()
 
         if(serverReplyCode != ACTION_COMPLETED)
         {
-            qDebug() << "No EHLO encrypted reply from server!";
+            qCritical() << "No EHLO encrypted reply from server!";
             return false;
         }
     }
@@ -302,7 +314,7 @@ bool mailManager::loginToServer()
         serverReplyCode = replyFromServer();
         if(serverReplyCode != PASS_AUTH)
         {
-            qDebug() << "No AUTH LOGIN reply from server!(Plain)";
+            qCritical() << "No AUTH LOGIN reply from server!(Plain)";
             return false;
         }
         break;
@@ -313,7 +325,7 @@ bool mailManager::loginToServer()
         serverReplyCode = replyFromServer();
         if(serverReplyCode != USER_AUTH)
         {
-            qDebug() << "No AUTH LOGIN reply from server!(Login)";
+            qCritical() << "No AUTH LOGIN reply from server!(Login)";
             return false;
         }
 
@@ -322,7 +334,7 @@ bool mailManager::loginToServer()
         serverReplyCode = replyFromServer();
         if(serverReplyCode != USER_AUTH)
         {
-            qDebug() << "No USER AUTH reply from server!";
+            qCritical() << "No USER AUTH reply from server!";
             return false;
         }
 
@@ -331,13 +343,13 @@ bool mailManager::loginToServer()
         serverReplyCode = replyFromServer();
         if(serverReplyCode != PASS_AUTH)
         {
-            qDebug() << "No PASSWORD AUTH reply from server!";
+            qCritical() << "No PASSWORD AUTH reply from server!";
             return false;
         }
         break;
 
     default:
-        qDebug() << "Authentication method not supported";
+        qCritical() << "Authentication method not supported";
         return false;
         break;
     }
@@ -346,6 +358,7 @@ bool mailManager::loginToServer()
 
     return true;
 }
+
 
 bool mailManager::sendMail(const QString &subject,
                            const QString &message)
@@ -379,19 +392,19 @@ bool mailManager::sendMail(const QString &subject,
     serverReplyCode = replyFromServer();
     if(serverReplyCode != ACTION_COMPLETED)
     {
-        qDebug() << "No MAIL FROM reply from server!";
+        qCritical() << "No MAIL FROM reply from server!";
         return false;
     }
 
     for(int count = 0; count < m_recipients.count(); count++)
     {
-        qDebug() << "RCPT TO: " << m_recipients.at(count);
+        qCritical() << "RCPT TO: " << m_recipients.at(count);
         sendToServer("RCPT TO: <" + m_recipients.at(count) + ">");
 
         serverReplyCode = replyFromServer();
         if(serverReplyCode != ACTION_COMPLETED)
         {
-            qDebug() << "No MAIL TO reply from server!";
+            qCritical() << "No MAIL TO reply from server!";
             return false;
         }
     }
@@ -401,7 +414,7 @@ bool mailManager::sendMail(const QString &subject,
     serverReplyCode = replyFromServer();
     if(serverReplyCode != DATA_RESPONSE)
     {
-        qDebug() << "No DATA reply from server!";
+        qCritical() << "No DATA reply from server!";
         return false;
     }
 
@@ -411,7 +424,7 @@ bool mailManager::sendMail(const QString &subject,
     serverReplyCode = replyFromServer();
     if(serverReplyCode != ACTION_COMPLETED)
     {
-        qDebug() << "No MAIL MESSAGE reply from server!";
+        qCritical() << "No MAIL MESSAGE reply from server!";
         return false;
     }
 
@@ -428,7 +441,7 @@ bool mailManager::disconnectFromServer()
     serverReplyCode = replyFromServer();
     if(serverReplyCode != DISCONNECT_COMPLETED)
     {
-        qDebug() << "No QUIT reply from server!";
+        qCritical() << "No QUIT reply from server!";
         return false;
     }
 

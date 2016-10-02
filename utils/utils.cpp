@@ -120,11 +120,11 @@ void printStackTrace(int sig)
 
         for(char *p = symbolArray[counter]; *p; ++p)
         {
-            if (*p == '(')
+            if(*p == '(')
                 mangledName = p;
-            else if (*p == '+')
+            else if(*p == '+')
                 offsetBegin = p;
-            else if (*p == ')' && offsetBegin)
+            else if(*p == ')' && offsetBegin)
             {
                 offsetEnd = p;
                 break;
@@ -132,7 +132,7 @@ void printStackTrace(int sig)
         }
 
         // the line was processed
-        if (mangledName && offsetBegin && offsetEnd && mangledName < offsetBegin)
+        if(mangledName && offsetBegin && offsetEnd && mangledName < offsetBegin)
         {
             *mangledName++ = '\0';
             *offsetBegin++ = '\0';
@@ -144,7 +144,7 @@ void printStackTrace(int sig)
 
             int status;
             char* realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
-            if (status == 0)
+            if(status == 0)
                 qCritical() << "[bt]: (" << counter << ")" << symbolArray[counter]
                          << ":" << realName << "+" << offsetBegin << offsetEnd;
             else

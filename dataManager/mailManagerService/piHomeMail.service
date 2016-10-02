@@ -4,6 +4,8 @@ Requires=dbus.service
 Requires=network.target
 After=dbus.service
 After=systemd-resolved.service
+After=multi-user.target
+After=systemd-user-sessions.service
 After=piHomeDatabase.service
 
 [Service]
@@ -11,6 +13,9 @@ User=root
 ExecStart=/usr/share/pismarthome/mailManager
 Restart=on-failure
 RestartSec=5
+WatchdogSec=2
+Type=notify
+NotifyAccess=all/main
 
 [Install]
 WantedBy=multi-user.target

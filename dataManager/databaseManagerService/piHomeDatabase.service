@@ -9,6 +9,9 @@ User=root
 ExecStart=/usr/share/pismarthome/databaseManager
 Restart=on-failure
 RestartSec=5
+WatchdogSec=2
+Type=notify
+NotifyAccess=all/main
 
 [Install]
 WantedBy=multi-user.target

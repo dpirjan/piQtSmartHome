@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QAbstractSocket>
 
+#include "watchdogHelper.h"
+
 class QTextStream;
 class QSslSocket;
 class QTcpSocket;
@@ -132,10 +134,12 @@ private:
     QString m_sender;
     QStringList m_recipients;
 
-    QTextStream *textStream;
-    QTcpSocket *socket;
+    QTextStream *m_textStream;
+    QTcpSocket *m_socket;
 
     QSettings *m_settings;
+
+    WatchdogHelper *m_watchdog;
 };
 
 #endif // MAILMANAGER_H

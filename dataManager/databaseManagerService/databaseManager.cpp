@@ -40,6 +40,9 @@ DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent)
         createDatabaseAndTable();
     else
         connectToDatabase();
+
+    m_watchdog = new WatchdogHelper("piHomeDatabase");
+    m_watchdog->init();
 }
 
 DatabaseManager::~DatabaseManager()
@@ -47,6 +50,9 @@ DatabaseManager::~DatabaseManager()
     qDebug() << "Destructor DatabaseManager";
     if(m_db.isOpen())
         m_db.close();
+
+    m_watchdog->stop();
+    m_watchdog->deleteLater();
 }
 
 bool DatabaseManager::firstRunConfiguration()
@@ -97,13 +103,13 @@ bool DatabaseManager::connectService()
 
     if(!QDBusConnection::systemBus().registerService(DATABASE_MANAGER_SERVICE_NAME))
     {
-        qDebug() << QDBusConnection::systemBus().lastError().message();
+        qCritical() << QDBusConnection::systemBus().lastError().message();
         ret = false;
     }
 
     QDBusConnection::systemBus().registerObject(DATABASE_MANAGER_SERVICE_PATH,
-                                                 this,
-                                                 QDBusConnection::ExportScriptableContents);
+                                                this,
+                                                QDBusConnection::ExportScriptableContents);
 
     if(ret == true)
         qDebug() << "Registered the database manager service to DBUS system bus";
@@ -127,8 +133,8 @@ bool DatabaseManager::connectToDatabase()
     QSqlQuery query;
     if(!this->m_db.open())
     {
-        qDebug() << "Connect to database " << dbPath << " failed! "
-                 << query.lastError().text();
+        qCritical() << "Connect to database " << dbPath << " failed! "
+                    << query.lastError().text();
 
         ret = false;
     }
@@ -155,8 +161,8 @@ bool DatabaseManager::createDatabaseAndTable()
                      "timestamp char(30))");
     if(!ret)
     {
-        qDebug() << "Create table alarmsystem failed! " <<
-                    query.lastError().text();
+        qCritical() << "Create table alarmsystem failed! " <<
+                       query.lastError().text();
         return ret;
     }
 
@@ -169,8 +175,8 @@ bool DatabaseManager::createDatabaseAndTable()
                      "timestamp char(30))");
     if(!ret)
     {
-        qDebug() << "Create table smarthome failed! " <<
-                    query.lastError().text();
+        qCritical() << "Create table smarthome failed! " <<
+                       query.lastError().text();
         return ret;
     }
 
@@ -199,8 +205,8 @@ bool DatabaseManager::insertHomeAlarmEntry(const HomeAlarmInfo &entry)
     query.bindValue(":timestamp", entry.getTimestamp());
     ret = query.exec();
     if(!ret)
-        qDebug() << "Insert into alarmsystem table failed! "
-                 << query.lastError();
+        qCritical() << "Insert into alarmsystem table failed! "
+                    << query.lastError();
 
     return ret;
 }
@@ -218,8 +224,8 @@ bool DatabaseManager::insertSmartHomeEntry(const SmartHomeInfo &entry)
     query.bindValue(":timestamp", entry.getTimestamp());
     ret = query.exec();
     if(!ret)
-        qDebug() << "Insert into smarthome table failed! "
-                 << query.lastError();
+        qCritical() << "Insert into smarthome table failed! "
+                    << query.lastError();
 
     return ret;
 }

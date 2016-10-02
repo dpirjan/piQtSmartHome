@@ -11,10 +11,15 @@ CONFIG(debug, debug|release) {
 }
 
 DEFINES += QT_MESSAGELOGCONTEXT
+LIBS += -lsystemd
 
-SOURCES += utils.cpp
+SOURCES += utils.cpp \
+    watchdogHelper.cpp \
+    watchdogFunctions.cpp
 
-HEADERS += utils.h
+HEADERS += utils.h \
+    watchdogHelper.h \
+    watchdogFunctions.h
 
 unix {
     target.path = /usr/lib

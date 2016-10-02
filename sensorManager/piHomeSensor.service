@@ -2,7 +2,6 @@
 Description=piSmartHome Sensor Manager Service
 Requires=dbus.service
 After=dbus.service
-After=systemd-logind.service
 After=piHomeDatabase.service
 After=piHomeMail.service
 
@@ -11,6 +10,9 @@ User=root
 ExecStart=/usr/share/pismarthome/sensorManager
 Restart=on-failure
 RestartSec=5
+WatchdogSec=2
+Type=notify
+NotifyAccess=all/main
 
 [Install]
 WantedBy=multi-user.target

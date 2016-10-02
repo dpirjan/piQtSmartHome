@@ -6,6 +6,7 @@
 
 #include "smartHomeInfo.h"
 #include "homeAlarmInfo.h"
+#include "watchdogHelper.h"
 
 #define DATABASE_MANAGER_SERVICE_NAME "org.raspberrypi.piHome.DatabaseManager"
 #define DATABASE_MANAGER_SERVICE_PATH "/"
@@ -43,6 +44,8 @@ private:
 
     QString m_databaseFilePath;
     QString m_databaseFileName;
+
+    WatchdogHelper *m_watchdog;
 };
 
 #endif // DATABASEMANAGER_H

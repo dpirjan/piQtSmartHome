@@ -27,12 +27,15 @@ public:
 public slots:
     bool connectToServer();
     bool loginToServer();
-    bool sendMail(const QString&,
+    void sendMail(const QString&,
                   const QString&);
     bool disconnectFromServer();
 
+private slots:
+    void sendMailFinished(QDBusPendingCallWatcher*);
+
 private:
-    QDBusInterface *iface;
+    QDBusInterface *m_iface;
 };
 
 #endif // MAILMANAGERINTERFACE_H

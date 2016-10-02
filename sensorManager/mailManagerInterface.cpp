@@ -12,51 +12,49 @@
 mailManagerInterface::mailManagerInterface(QObject *parent) : QObject(parent)
 {
     if(!QDBusConnection::systemBus().isConnected())
-        qDebug() << "Cannot connect to the D-Bus system bus!";
+        qFatal("Cannot connect to the D-Bus system bus!");
 
     if(!connectToDBus())
-        qDebug() << "Cannot connect to DBus service "
-                 << MAIL_MANAGER_SERVICE_NAME
-                 << " on interface "
-                 << MAIL_MANAGER_SERVICE_INT;
+        qFatal("Cannot connect to DBus service %s on interface %s!",
+               MAIL_MANAGER_SERVICE_NAME, MAIL_MANAGER_SERVICE_INT);
 }
 
 mailManagerInterface::~mailManagerInterface()
 {
-    if(iface)
-        delete(iface);
+    if(m_iface)
+        delete(m_iface);
 }
 
 bool mailManagerInterface::connectToDBus()
 {
     bool ret = true;
-    iface = new QDBusInterface(MAIL_MANAGER_SERVICE_NAME,
-                               MAIL_MANAGER_SERVICE_PATH,
-                               MAIL_MANAGER_SERVICE_INT,
-                               QDBusConnection::systemBus());
-    if(!iface->isValid())
+    m_iface = new QDBusInterface(MAIL_MANAGER_SERVICE_NAME,
+                                 MAIL_MANAGER_SERVICE_PATH,
+                                 MAIL_MANAGER_SERVICE_INT,
+                                 QDBusConnection::systemBus());
+    if(!m_iface->isValid())
     {
-        qDebug() << QDBusConnection::systemBus().lastError().message();
+        qCritical() << QDBusConnection::systemBus().lastError().message();
         ret = false;
     }
 
-    qDebug() << "Service: " << iface->service();
-    qDebug() << "Path: " << iface->path();
-    qDebug() << "Interface: " << iface->interface();
+    qDebug() << "Service: " << m_iface->service();
+    qDebug() << "Path: " << m_iface->path();
+    qDebug() << "Interface: " << m_iface->interface();
 
     return ret;
 }
 
 bool mailManagerInterface::connectToServer()
 {
-    QDBusReply<bool> reply = iface->call(QDBus::BlockWithGui,
-                                         QLatin1String("connectToServer"));
-    if (reply.isValid())
+    QDBusReply<bool> reply = m_iface->call(QDBus::BlockWithGui,
+                                           QLatin1String("connectToServer"));
+    if(reply.isValid())
         qDebug() << "connectToServer reply was:" << reply.value();
     else
     {
-        qDebug() << "DBus call error: " << iface->lastError();
-        qDebug() << "DBus reply error: " << reply.error();
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
         return false;
     }
 
@@ -65,49 +63,54 @@ bool mailManagerInterface::connectToServer()
 
 bool mailManagerInterface::loginToServer()
 {
-    QDBusReply<bool> reply = iface->call(QDBus::BlockWithGui,
-                                         QLatin1String("loginToServer"));
-    if (reply.isValid())
+    QDBusReply<bool> reply = m_iface->call(QDBus::BlockWithGui,
+                                           QLatin1String("loginToServer"));
+    if(reply.isValid())
         qDebug() << "loginToServer reply was:" << reply.value();
     else
     {
-        qDebug() << "DBus call error: " << iface->lastError();
-        qDebug() << "DBus reply error: " << reply.error();
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
         return false;
     }
 
     return reply.value();
 }
 
-bool mailManagerInterface::sendMail(const QString &subject, const QString &message)
+void mailManagerInterface::sendMail(const QString &subject, const QString &message)
 {
-    //@TODO find a more elegant solution here (Thread vs AsyncCall)
-    QDBusReply<bool> reply = iface->call(QDBus::BlockWithGui,
-                                         QLatin1String("sendMail"),
-                                         qVariantFromValue(subject),
-                                         qVariantFromValue(message));
-    if (reply.isValid())
+    QDBusPendingCall pCall = m_iface->asyncCall(QLatin1String("sendMail"),
+                                                qVariantFromValue(subject),
+                                                qVariantFromValue(message));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pCall, this);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(sendMailFinished(QDBusPendingCallWatcher*)));
+}
+
+void mailManagerInterface::sendMailFinished(QDBusPendingCallWatcher *call)
+{
+    QDBusPendingReply<bool> reply = *call;
+
+    if(reply.isValid())
         qDebug() << "sendMail reply was:" << reply.value();
     else
     {
-        qDebug() << "DBus call error: " << iface->lastError();
-        qDebug() << "DBus reply error: " << reply.error();
-        return false;
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
     }
-
-    return reply.value();
 }
 
 bool mailManagerInterface::disconnectFromServer()
 {
-    QDBusReply<bool> reply = iface->call(QDBus::BlockWithGui,
-                                         QLatin1String("disconnectFromServer"));
-    if (reply.isValid())
+    QDBusReply<bool> reply = m_iface->call(QDBus::BlockWithGui,
+                                           QLatin1String("disconnectFromServer"));
+    if(reply.isValid())
         qDebug() << "disconnectFromServer reply was:" << reply.value();
     else
     {
-        qDebug() << "DBus call error: " << iface->lastError();
-        qDebug() << "DBus reply error: " << reply.error();
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
         return false;
     }
 

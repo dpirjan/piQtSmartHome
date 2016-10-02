@@ -15,7 +15,7 @@ extern "C"
     int wiringPiISR (int, int, void (*function)(void*), void*);
 };
 
-bool wiredSensor::wiringPiInitialized = false;
+bool wiredSensor::m_wiringPiInitialized = false;
 #endif
 
 wiredSensor::wiredSensor(const SystemType &system,
@@ -33,13 +33,13 @@ wiredSensor::wiredSensor(const SystemType &system,
     qDebug() << "wiredSensor ctor: " << this << " GPIO: " << address;
 
 #ifdef WIRINGPI
-            if(!wiredSensor::wiringPiInitialized)
+            if(!wiredSensor::m_wiringPiInitialized)
             {
 
                 // Call for winringPiSetupGpio to initialize wiringPi using Broadcom pin numbers
                 if(wiringPiSetupGpio() < 0)
                     qDebug() << "Unable to setup wiringPi: " << strerror(errno);
-                wiredSensor::wiringPiInitialized = true;
+                wiredSensor::m_wiringPiInitialized = true;
             }
 
             int pin = StringToGPIO(address);

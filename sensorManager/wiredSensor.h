@@ -46,9 +46,9 @@ private:
 
     void interrupt();
 
-//#ifdef WIRINGPI
+#ifdef WIRINGPI
     static bool m_wiringPiInitialized;
-//#endif
+#endif
 };
 
 #endif // WIREDSENSOR_H

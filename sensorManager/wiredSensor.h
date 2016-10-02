@@ -47,7 +47,7 @@ private:
     void interrupt();
 
 //#ifdef WIRINGPI
-    static bool wiringPiInitialized;
+    static bool m_wiringPiInitialized;
 //#endif
 };
 

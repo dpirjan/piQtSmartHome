@@ -62,13 +62,19 @@ void wirelessSensor::interrupt()
     {
         // Will create a smartHomeInfo class instance and insert it in the
         // database containing the events.
-        SmartHomeInfo event(getZone(),getNode(),sensorTypeToString(getSensorType()), getValue());
+        SmartHomeInfo event(getZone(),
+                            getNode(),
+                            sensorTypeToString(getSensorType()),
+                            getValue());
         databaseManagerInterface::instance().insertSmartHomeEntry(event);
     }
-    else {
+    else
+    {
         // Will create a homeAlarmInfo class instance and insert it in the
         // database containing the events.
-        HomeAlarmInfo event(getZone(),getNode(),sensorTypeToString(getSensorType()));
+        HomeAlarmInfo event(getZone(),
+                            getNode(),
+                            sensorTypeToString(getSensorType()));
         databaseManagerInterface::instance().insertHomeAlarmEntry(event);
         if(getSendMail())
         {

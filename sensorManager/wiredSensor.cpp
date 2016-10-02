@@ -58,7 +58,7 @@ wiredSensor::wiredSensor(const SystemType &system,
             //
 
             if(wiringPiISR(pin, edgeType, &wiredSensor::interruptHandler, this) < 0)
-                qDebug() << "Unable to setup ISR on " << pin << " : " << strerror(errno);
+                qCritical() << "Unable to setup ISR on " << pin << " : " << strerror(errno);
             else
                 qDebug() << "Setup interrupt on " << this << " was successfull!";
 #endif
@@ -125,7 +125,7 @@ void wiredSensor::interruptHandler(void *userData)
         sensor->interrupt();
     }
     else
-        qDebug() << "interruptHandler: WrongData - " << userData;
+        qCritical() << "interruptHandler: WrongData - " << userData;
 }
 
 void wiredSensor::interrupt()

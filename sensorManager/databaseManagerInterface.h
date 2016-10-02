@@ -30,7 +30,7 @@ public slots:
     bool insertSmartHomeEntry(const SmartHomeInfo&);
 
 private:
-    QDBusInterface *iface;
+    QDBusInterface *m_iface;
 };
 
 #endif // DATABASEMANAGERINTERFACE_H

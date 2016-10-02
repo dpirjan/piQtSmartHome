@@ -16,6 +16,8 @@ class actuatorInstantiator : public QObject
     virtual ~actuatorInstantiator();
     Q_DISABLE_COPY(actuatorInstantiator)
 
+     void loadActuators();
+
 public:
     static actuatorInstantiator &instance()
     {
@@ -26,10 +28,12 @@ public:
     static bool firstRunInitActuators();
 
 public slots:
-    QList<actuator> loadActuators() const;
+    QList<actuator *> getActuators() const;
 
 private:
     QSettings *m_settings;
+
+    QList<actuator *> m_actuatorsList;
 };
 
 #endif // ACTUATORINSTANTIATOR_H

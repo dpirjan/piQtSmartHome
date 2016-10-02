@@ -17,7 +17,7 @@ sensorInstantiator::~sensorInstantiator()
     if(m_sendMail)
     {
         if(!mailManagerInterface::instance().disconnectFromServer())
-            qDebug() << "Error occured while disconnecting from the smtp server ...";
+            qCritical() << "Error occured while disconnecting from the smtp server...";
     }
 
     delete m_settings;
@@ -45,12 +45,12 @@ void sensorInstantiator::loadSensors()
     {
         if(!mailManagerInterface::instance().connectToServer())
         {
-            qDebug() << "Cannot connect to smtp server!";
+            qCritical() << "Cannot connect to smtp server!";
             smtpInitialized = false;
         }
         if(!mailManagerInterface::instance().loginToServer())
         {
-            qDebug() << "Cannot authenticate to smtp server!";
+            qCritical() << "Cannot authenticate to smtp server!";
             smtpInitialized = false;
         }
     }

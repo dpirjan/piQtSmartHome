@@ -25,10 +25,9 @@ void actuator::debugActuator() const
     qDebug() << m_value;
 }
 
-QList<actuator> actuatorInstantiator::loadActuators() const
+void actuatorInstantiator::loadActuators()
 {
     int numActuators = -1;
-    QList<actuator> list;
 
     m_settings->beginGroup("GenericSettings");
     numActuators = m_settings->value("NumberOfActuators").toInt();
@@ -39,18 +38,21 @@ QList<actuator> actuatorInstantiator::loadActuators() const
         QString group = "Actuator";
         group.append(QString::number(i));
         m_settings->beginGroup(group);
-        actuator tmp (
-        StringToSystemType(m_settings->value("SystemType").toString()),
-        StringToActuatorType(m_settings->value("ActuatorType").toString()),
-        StringToHardwareType(m_settings->value("HardwareType").toString()),
-        m_settings->value("Zone").toString(),
-        m_settings->value("Node").toString(),
-        m_settings->value("Address").toString());
-        list.append(tmp);
+        actuator *tmp = new actuator(
+                    StringToSystemType(m_settings->value("SystemType").toString()),
+                    StringToActuatorType(m_settings->value("ActuatorType").toString()),
+                    StringToHardwareType(m_settings->value("HardwareType").toString()),
+                    m_settings->value("Zone").toString(),
+                    m_settings->value("Node").toString(),
+                    m_settings->value("Address").toString());
+        m_actuatorsList.append(tmp);
         m_settings->endGroup();
     }
+}
 
-    return list;
+QList<actuator *> actuatorInstantiator::getActuators() const
+{
+    return m_actuatorsList;
 }
 
 bool actuatorInstantiator::firstRunInitActuators()

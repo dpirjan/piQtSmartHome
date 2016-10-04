@@ -1,8 +1,7 @@
 [Unit]
-Description=piSmartHome Database Manager Service
+Description=piHomeDatabase Service
 Requires=dbus.service
 After=dbus.service
-After=systemd-logind.service
 
 [Service]
 User=root

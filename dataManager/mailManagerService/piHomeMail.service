@@ -1,7 +1,8 @@
 [Unit]
-Description=piSmartHome Mail Manager Service
+Description=piHomeMail Service
 Requires=dbus.service
 Requires=network.target
+Requires=piHomeDatabase.service
 After=dbus.service
 After=systemd-resolved.service
 After=multi-user.target

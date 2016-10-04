@@ -1,6 +1,8 @@
 [Unit]
-Description=piSmartHome Sensor Manager Service
+Description=piHomeSensor Service
 Requires=dbus.service
+Requires=piHomeDatabase.service
+Requires=piHomeMail.service
 After=dbus.service
 After=piHomeDatabase.service
 After=piHomeMail.service

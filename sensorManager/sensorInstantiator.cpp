@@ -6,7 +6,8 @@
 
 sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
 {
-    QString filePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator()).append("sensors.ini");
+    QString filePath = QDir::homePath().append(QDir::separator());
+    filePath.append(".piHome").append(QDir::separator()).append("sensors.ini");
     m_settings = new QSettings(filePath, QSettings::NativeFormat);
 
     loadSensors();
@@ -17,7 +18,7 @@ sensorInstantiator::~sensorInstantiator()
     if(m_sendMail)
     {
         if(!mailManagerInterface::instance().disconnectFromServer())
-            qCritical() << "Error occured while disconnecting from the smtp server...";
+            qCritical() << "Error occured while disconnecting from smtp server!";
     }
 
     delete m_settings;

@@ -2,7 +2,6 @@
 #define MAILMANAGERINTERFACE_H
 
 #include <QObject>
-#include <QDBusInterface>
 #include <QtDBus>
 
 class QDBusInterface;

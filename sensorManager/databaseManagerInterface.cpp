@@ -50,28 +50,45 @@ bool databaseManagerInterface::connectToDBus()
     return ret;
 }
 
-bool databaseManagerInterface::insertHomeAlarmEntry(const HomeAlarmInfo &entry)
+void databaseManagerInterface::insertHomeAlarmEntry(const HomeAlarmInfo &entry)
 {
-    QDBusReply<bool> reply = m_iface->call(QDBus::BlockWithGui,
-                                           QLatin1String("insertHomeAlarmEntry"),
-                                           qVariantFromValue(entry));
+    QDBusPendingCall pCall = m_iface->asyncCall(
+                QLatin1String("insertHomeAlarmEntry"),
+                qVariantFromValue(entry));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pCall, this);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(insertHomeAlarmEntryFinished(QDBusPendingCallWatcher*)));
+}
+
+void databaseManagerInterface::insertHomeAlarmEntryFinished(
+        QDBusPendingCallWatcher *call)
+{
+    QDBusReply<bool> reply = *call;
+
     if(reply.isValid())
         qDebug() << "insertHomeAlarmEntry reply was:" << reply.value();
     else
     {
         qCritical() << "DBus call error: " << m_iface->lastError();
         qCritical() << "DBus reply error: " << reply.error();
-        return false;
     }
-
-    return reply.value();
 }
 
-bool databaseManagerInterface::insertSmartHomeEntry(const SmartHomeInfo &entry)
+void databaseManagerInterface::insertSmartHomeEntry(const SmartHomeInfo &entry)
 {
-    QDBusReply<bool> reply = m_iface->call(QDBus::BlockWithGui,
-                                           "insertSmartHomeEntry",
-                                           qVariantFromValue(entry));
+    QDBusPendingCall pCall = m_iface->asyncCall(QLatin1String("insertSmartHomeEntry"),
+                                                qVariantFromValue(entry));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pCall, this);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(insertSmartHomeEntryFinished(QDBusPendingCallWatcher*)));
+}
+
+void databaseManagerInterface::insertSmartHomeEntryFinished(
+        QDBusPendingCallWatcher *call)
+{
+    QDBusReply<bool> reply = *call;
 
     if(reply.isValid())
         qDebug() << "insertSmartHomeEntry reply was:" << reply.value();
@@ -79,8 +96,5 @@ bool databaseManagerInterface::insertSmartHomeEntry(const SmartHomeInfo &entry)
     {
         qCritical() << "DBus call error: " << m_iface->lastError();
         qCritical() << "DBus reply error: " << reply.error();
-        return false;
     }
-
-    return reply.value();
 }

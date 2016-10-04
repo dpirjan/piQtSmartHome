@@ -2,6 +2,7 @@
 #define DATABASEMANAGERINTERFACE_H
 
 #include <QObject>
+#include <QtDBus>
 
 #include "homeAlarmInfo.h"
 #include "smartHomeInfo.h"
@@ -26,8 +27,12 @@ public:
     }
 
 public slots:
-    bool insertHomeAlarmEntry(const HomeAlarmInfo&);
-    bool insertSmartHomeEntry(const SmartHomeInfo&);
+    void insertHomeAlarmEntry(const HomeAlarmInfo&);
+    void insertSmartHomeEntry(const SmartHomeInfo&);
+
+private slots:
+    void insertHomeAlarmEntryFinished(QDBusPendingCallWatcher*);
+    void insertSmartHomeEntryFinished(QDBusPendingCallWatcher*);
 
 private:
     QDBusInterface *m_iface;

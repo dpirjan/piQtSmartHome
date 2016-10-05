@@ -10,6 +10,8 @@ SensorManager::SensorManager(QObject *parent) : QObject(parent)
 
 SensorManager::~SensorManager()
 {
+    m_watchdog->stop();
+    m_watchdog->deleteLater();
 }
 
 void SensorManager::init()
@@ -33,6 +35,9 @@ void SensorManager::init()
     qDebug() << numActuators << " Actuators.";
     //    for(int i = 0; i < numActuators; i++)
     //        actuatorList.at(i)->debugActuator();
+
+    m_watchdog = new WatchdogHelper("piHomeSensor");
+    m_watchdog->init();
 
     // @TODO remove this later, is not needed here
     QObject::connect(&databaseManagerInterface::instance(),

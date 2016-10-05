@@ -12,7 +12,7 @@
 #include <QFile>
 #include <QDir>
 
-#include "utils.h"
+#include "piHomeCommon.h"
 
 void logHandler(QtMsgType type,
                 const QMessageLogContext &context,

@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 
-#include "utils.h"
+#include "piHomeCommon.h"
 #include "databaseManager.h"
 
 int main(int argc, char *argv[])

@@ -1,16 +1,22 @@
 #include <QDir>
 
 #include "actuatorInstantiator.h"
+#include "databaseManagerInterface.h"
 
 actuatorInstantiator::actuatorInstantiator(QObject *parent) : QObject(parent)
 {
     QString filePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator()).append("actuators.ini");
     m_settings = new QSettings(filePath, QSettings::NativeFormat);
+
+    loadActuators();
 }
 
 actuatorInstantiator::~actuatorInstantiator()
 {
     delete m_settings;
+
+    for(int count = 0; count<m_actuatorsList.count(); count++)
+        delete m_actuatorsList.takeAt(count);
 }
 
 void actuator::debugActuator() const
@@ -46,6 +52,16 @@ void actuatorInstantiator::loadActuators()
                     m_settings->value("Node").toString(),
                     m_settings->value("Address").toString());
         m_actuatorsList.append(tmp);
+
+        databaseManagerInterface::instance().insertIO(
+                    m_settings->value("SystemType").toString(),
+                    m_settings->value("HardwareType").toString(),
+                    "Actuator",
+                    m_settings->value("ActuatorType").toString(),
+                    m_settings->value("Zone").toString(),
+                    m_settings->value("Node").toString(),
+                    m_settings->value("Address").toString());
+
         m_settings->endGroup();
     }
 }

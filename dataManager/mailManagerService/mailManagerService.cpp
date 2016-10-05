@@ -1,7 +1,7 @@
 #include <QCoreApplication>
 #include <QTimer>
 
-#include "utils.h"
+#include "piHomeCommon.h"
 #include "mailManager.h"
 
 int main(int argc, char *argv[])

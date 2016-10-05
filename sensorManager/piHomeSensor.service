@@ -4,6 +4,7 @@ Requires=dbus.service
 Requires=piHomeDatabase.service
 Requires=piHomeMail.service
 After=dbus.service
+After=multi-user.target
 After=piHomeDatabase.service
 After=piHomeMail.service
 

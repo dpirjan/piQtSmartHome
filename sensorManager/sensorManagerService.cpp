@@ -1,6 +1,6 @@
 #include <QCoreApplication>
 
-#include "utils.h"
+#include "piHomeCommon.h"
 #include "sensorManager.h"
 #include "sensorInstantiator.h"
 #include "actuatorInstantiator.h"

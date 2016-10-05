@@ -8,6 +8,7 @@
 #include <QDBusError>
 
 #include <QSqlDatabase>
+#include <QSqlQueryModel>
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlRecord>
@@ -68,7 +69,8 @@ bool DatabaseManager::firstRunConfiguration()
     if(!QFile(settingsPath).exists())
     {
         returnCode = true;
-        QSettings *settings = new QSettings(settingsPath, QSettings::NativeFormat);
+        QSettings *settings = new QSettings(settingsPath,
+                                            QSettings::NativeFormat);
 
         QString databaseFileName = "database.sqlite";
         QString databaseFilePath = QDir::homePath().append(QDir::separator());
@@ -101,15 +103,17 @@ bool DatabaseManager::connectService()
     HomeAlarmInfo::registerMetaType();
     SmartHomeInfo::registerMetaType();
 
-    if(!QDBusConnection::systemBus().registerService(DATABASE_MANAGER_SERVICE_NAME))
+    if(!QDBusConnection::systemBus().registerService(
+                DATABASE_MANAGER_SERVICE_NAME))
     {
         qCritical() << QDBusConnection::systemBus().lastError().message();
         ret = false;
     }
 
-    QDBusConnection::systemBus().registerObject(DATABASE_MANAGER_SERVICE_PATH,
-                                                this,
-                                                QDBusConnection::ExportScriptableContents);
+    QDBusConnection::systemBus().registerObject(
+                DATABASE_MANAGER_SERVICE_PATH,
+                this,
+                QDBusConnection::ExportScriptableContents);
 
     if(ret == true)
         qDebug() << "Registered the database manager service to DBUS system bus";
@@ -165,6 +169,8 @@ bool DatabaseManager::createDatabaseAndTable()
                        query.lastError().text();
         return ret;
     }
+    else
+        qDebug("Created table alarmsystem");
 
     ret = query.exec("CREATE TABLE smarthome "
                      "(id integer primary key autoincrement, "
@@ -179,6 +185,33 @@ bool DatabaseManager::createDatabaseAndTable()
                        query.lastError().text();
         return ret;
     }
+    else
+        qDebug("Created table smarthome");
+
+    ret = query.exec("CREATE TABLE io "
+                     "(id integer primary key autoincrement, "
+                     "system char(30), "
+                     "hardware char(30), "
+                     "type char(30), "
+                     "function char(30), "
+                     "zone char(30), "
+                     "node char(30), "
+                     "address char(30),"
+                     "UNIQUE(system, "
+                     "hardware, "
+                     "type, "
+                     "function, "
+                     "zone, "
+                     "node, "
+                     "address))");
+    if(!ret)
+    {
+        qCritical() << "Create table IO failed! " <<
+                       query.lastError().text();
+        return ret;
+    }
+    else
+        qDebug("Created table IO");
 
     return ret;
 }
@@ -230,6 +263,33 @@ bool DatabaseManager::insertSmartHomeEntry(const SmartHomeInfo &entry)
     return ret;
 }
 
+bool DatabaseManager::insertIO(const QString &system,
+                               const QString &hardware,
+                               const QString &type,
+                               const QString &function,
+                               const QString &zone,
+                               const QString &node,
+                               const QString &address)
+{
+    bool ret = true;
+    QSqlQuery query;
+    query.prepare("INSERT INTO io (system, hardware, type, function, zone, node, address)"
+                  " VALUES (:system, :hardware, :type, :function, :zone, :node, :address)");
+    query.bindValue(":system", system);
+    query.bindValue(":hardware", hardware);
+    query.bindValue(":type", type);
+    query.bindValue(":function", function);
+    query.bindValue(":zone", zone);
+    query.bindValue(":node", node);
+    query.bindValue(":address", address);
+    ret = query.exec();
+    if(!ret)
+        qCritical() << "Insert into IO table failed! "
+                    << query.lastError();
+
+    return ret;
+}
+
 QList<HomeAlarmInfo> DatabaseManager::getAllHomeAlarmEntries()
 {
     int idZone, idNode, idSensor, idTimestamp;
@@ -252,6 +312,8 @@ QList<HomeAlarmInfo> DatabaseManager::getAllHomeAlarmEntries()
                           query.value(idTimestamp).toString());
         tmpList.append(tmp);
     }
+
+    qDebug() << "Returned " << tmpList.count() << " HomeAlarm entries.";
 
     return tmpList;
 }
@@ -279,6 +341,23 @@ QList<SmartHomeInfo> DatabaseManager::getAllSmartHomeEntries()
                           query.value(idTimestamp).toString());
         tmpList.append(tmp);
     }
+
+    qDebug() << "Returned " << tmpList.count() << " SmartHome entries.";
+
+    return tmpList;
+}
+
+QStringList DatabaseManager::getAllZones()
+{
+    QStringList tmpList;
+
+    QSqlQueryModel model;
+    model.setQuery("SELECT DISTINCT zone FROM io");
+
+    for(int i = 0; i < model.rowCount(); ++i)
+        tmpList.append(model.record(i).value("zone").toString());
+
+    qDebug() << "Returned " << tmpList.count() << " zone(s).";
 
     return tmpList;
 }

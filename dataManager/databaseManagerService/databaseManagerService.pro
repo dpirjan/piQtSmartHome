@@ -14,22 +14,16 @@ CONFIG(debug, debug|release) {
     message("$${TARGET} - release mode")
 }
 
-INCLUDEPATH += ../databaseManagerInfo
-LIBS += -L../databaseManagerInfo -ldatabaseManagerInfo
+INCLUDEPATH += ../../piHomeCommon
+LIBS += -L../../piHomeCommon -lpiHomeCommon
 
-INCLUDEPATH += ../../utils
-LIBS += -L../../utils -lpiHomeUtils
+HEADERS += databaseManager.h
 
-HEADERS += \
-    databaseManager.h
+SOURCES += databaseManager.cpp \
+           databaseManagerService.cpp
 
-SOURCES += \
-    databaseManager.cpp \
-    databaseManagerService.cpp
-
-DISTFILES += \
-    piHomeDatabase.service \
-    piHomeDatabase.conf
+DISTFILES += piHomeDatabase.service \
+             piHomeDatabase.conf
 
 unix {
     target.path = /usr/share/pismarthome

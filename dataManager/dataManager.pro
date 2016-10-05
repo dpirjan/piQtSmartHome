@@ -6,8 +6,5 @@ CONFIG(debug, debug|release) {
     message("$${TARGET} - release mode")
 }
 
-SUBDIRS = databaseManagerInfo \
-          databaseManagerService \
+SUBDIRS = databaseManagerService \
           mailManagerService
-
-databaseManagerService.depends = databaseManagerInfo

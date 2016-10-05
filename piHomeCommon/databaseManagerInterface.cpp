@@ -67,7 +67,7 @@ void databaseManagerInterface::insertHomeAlarmEntryFinished(
     QDBusReply<bool> reply = *call;
 
     if(reply.isValid())
-        qDebug() << "insertHomeAlarmEntry reply was:" << reply.value();
+        qDebug() << "insertHomeAlarmEntry reply was: " << reply.value();
     else
     {
         qCritical() << "DBus call error: " << m_iface->lastError();
@@ -91,7 +91,71 @@ void databaseManagerInterface::insertSmartHomeEntryFinished(
     QDBusReply<bool> reply = *call;
 
     if(reply.isValid())
-        qDebug() << "insertSmartHomeEntry reply was:" << reply.value();
+        qDebug() << "insertSmartHomeEntry reply was: " << reply.value();
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+}
+
+
+void databaseManagerInterface::insertIO(const QString &system,
+                                        const QString &hardware,
+                                        const QString &type,
+                                        const QString &function,
+                                        const QString &zone,
+                                        const QString &node,
+                                        const QString &address)
+{
+    QDBusPendingCall pCall = m_iface->asyncCall(QLatin1String("insertIO"),
+                                                qVariantFromValue(system),
+                                                qVariantFromValue(hardware),
+                                                qVariantFromValue(type),
+                                                qVariantFromValue(function),
+                                                qVariantFromValue(zone),
+                                                qVariantFromValue(node),
+                                                qVariantFromValue(address));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pCall, this);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(insertIOFinished(QDBusPendingCallWatcher*)));
+}
+
+void databaseManagerInterface::insertIOFinished(QDBusPendingCallWatcher *call)
+{
+    QDBusReply<bool> reply = *call;
+
+    if(reply.isValid())
+        qDebug() << "insertIO reply was: " << reply.value();
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+}
+
+void databaseManagerInterface::getAllZones()
+{
+    QDBusPendingCall pCall = m_iface->asyncCall(
+                QLatin1String("getAllZones"));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pCall, this);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(getAllZonesFinished(QDBusPendingCallWatcher*)));
+}
+
+void databaseManagerInterface::getAllZonesFinished(QDBusPendingCallWatcher *call)
+{
+    QStringList tmpList;
+    QDBusReply<QStringList> reply = *call;
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllZones reply was: " << tmpList;
+        emit zonesReceived(tmpList);
+    }
     else
     {
         qCritical() << "DBus call error: " << m_iface->lastError();

@@ -3,6 +3,7 @@
 
 #include "sensorInstantiator.h"
 #include "mailManagerInterface.h"
+#include "databaseManagerInterface.h"
 
 sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
 {
@@ -83,6 +84,15 @@ void sensorInstantiator::loadSensors()
                         wiredEdge,
                         wiredTimeout);
             m_wiredSensorList.append(tmp);
+
+            databaseManagerInterface::instance().insertIO(
+                        m_settings->value("SystemType").toString(),
+                        m_settings->value("HardwareType").toString(),
+                        "Sensor",
+                        m_settings->value("SensorType").toString(),
+                        m_settings->value("Zone").toString(),
+                        m_settings->value("Node").toString(),
+                        m_settings->value("Address").toString());
         }
         else
         {
@@ -95,6 +105,15 @@ void sensorInstantiator::loadSensors()
                         m_sendMail & smtpInitialized,
                         wirelessTimeout);
             m_wirelessSensorList.append(tmp);
+
+            databaseManagerInterface::instance().insertIO(
+                        m_settings->value("SystemType").toString(),
+                        m_settings->value("HardwareType").toString(),
+                        "Sensor",
+                        m_settings->value("SensorType").toString(),
+                        m_settings->value("Zone").toString(),
+                        m_settings->value("Node").toString(),
+                        m_settings->value("Address").toString());
         }
 
         m_settings->endGroup();

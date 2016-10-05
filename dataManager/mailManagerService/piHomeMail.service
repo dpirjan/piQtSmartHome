@@ -6,7 +6,6 @@ Requires=piHomeDatabase.service
 After=dbus.service
 After=systemd-resolved.service
 After=multi-user.target
-After=systemd-user-sessions.service
 After=piHomeDatabase.service
 
 [Service]

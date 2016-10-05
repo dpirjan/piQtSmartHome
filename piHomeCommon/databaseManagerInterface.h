@@ -29,10 +29,23 @@ public:
 public slots:
     void insertHomeAlarmEntry(const HomeAlarmInfo&);
     void insertSmartHomeEntry(const SmartHomeInfo&);
+    void insertIO(const QString&,
+                  const QString&,
+                  const QString&,
+                  const QString&,
+                  const QString&,
+                  const QString&,
+                  const QString&);
+    void getAllZones();
+
+signals:
+    void zonesReceived(const QStringList&);
 
 private slots:
     void insertHomeAlarmEntryFinished(QDBusPendingCallWatcher*);
     void insertSmartHomeEntryFinished(QDBusPendingCallWatcher*);
+    void insertIOFinished(QDBusPendingCallWatcher*);
+    void getAllZonesFinished(QDBusPendingCallWatcher*);
 
 private:
     QDBusInterface *m_iface;

@@ -2,6 +2,7 @@
 
 #include "sensorInstantiator.h"
 #include "actuatorInstantiator.h"
+#include "databaseManagerInterface.h"
 
 SensorManager::SensorManager(QObject *parent) : QObject(parent)
 {
@@ -32,4 +33,17 @@ void SensorManager::init()
     qDebug() << numActuators << " Actuators.";
     //    for(int i = 0; i < numActuators; i++)
     //        actuatorList.at(i)->debugActuator();
+
+    // @TODO remove this later, is not needed here
+    QObject::connect(&databaseManagerInterface::instance(),
+                     SIGNAL(zonesReceived(QStringList)),
+                     this,
+                     SLOT(listAllZones(QStringList)));
+
+    databaseManagerInterface::instance().getAllZones();
+}
+
+void SensorManager::listAllZones(const QStringList &list)
+{
+    qDebug() << "Zones: " << list;
 }

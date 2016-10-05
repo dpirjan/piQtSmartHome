@@ -30,8 +30,16 @@ public:
 public slots:
     Q_SCRIPTABLE bool insertHomeAlarmEntry(const HomeAlarmInfo&);
     Q_SCRIPTABLE bool insertSmartHomeEntry(const SmartHomeInfo&);
+    Q_SCRIPTABLE bool insertIO(const QString&,
+                               const QString&,
+                               const QString&,
+                               const QString&,
+                               const QString&,
+                               const QString&,
+                               const QString&);
     Q_SCRIPTABLE QList<HomeAlarmInfo> getAllHomeAlarmEntries();
     Q_SCRIPTABLE QList<SmartHomeInfo> getAllSmartHomeEntries();
+    Q_SCRIPTABLE QStringList getAllZones();
 
 private:
     void loadDatabaseSettings();

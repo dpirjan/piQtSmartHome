@@ -8,11 +8,9 @@ CONFIG(debug, debug|release) {
     message("$${TARGET} - release mode")
 }
 
-
 SUBDIRS = dataManager \
           sensorManager \
-          utils
+          piHomeCommon
 
-dataManager.depends = utils
-sensorManager.depends = utils
+dataManager.depends = piHomeCommon
 sensorManager.depends = dataManager

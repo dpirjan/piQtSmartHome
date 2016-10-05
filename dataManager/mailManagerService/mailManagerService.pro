@@ -14,8 +14,8 @@ CONFIG(debug, debug|release) {
     message("$${TARGET} - release mode")
 }
 
-INCLUDEPATH += ../../utils
-LIBS += -L../../utils -lpiHomeUtils
+INCLUDEPATH += ../../piHomeCommon
+LIBS += -L../../piHomeCommon -lpiHomeCommon
 
 HEADERS += \
     mailManager.h

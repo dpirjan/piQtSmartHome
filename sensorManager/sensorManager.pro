@@ -14,11 +14,8 @@ CONFIG(debug, debug|release) {
     message("$${TARGET} - release mode")
 }
 
-INCLUDEPATH += ../dataManager/databaseManagerInfo
-LIBS += -L../dataManager/databaseManagerInfo -ldatabaseManagerInfo
-
-INCLUDEPATH += ../utils
-LIBS += -L../utils -lpiHomeUtils
+INCLUDEPATH += ../piHomeCommon
+LIBS += -L../piHomeCommon -lpiHomeCommon
 
 SPEC = $${QMAKESPEC}
 message("QMAKESPEC: $${SPEC}")
@@ -45,8 +42,6 @@ HEADERS += \
     wirelessSensor.h \
     actuatorInstantiator.h \
     sensorInstantiator.h \
-    databaseManagerInterface.h \
-    mailManagerInterface.h \
     sensorManager.h
 
 SOURCES += \
@@ -56,9 +51,7 @@ SOURCES += \
     wirelessSensor.cpp \
     actuatorInstantiator.cpp \
     sensorInstantiator.cpp \
-    databaseManagerInterface.cpp \
     sensorManagerService.cpp \
-    mailManagerInterface.cpp \
     sensorManager.cpp
 
 DISTFILES += \

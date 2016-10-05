@@ -15,6 +15,8 @@ public:
     ~SensorManager();
     void init();
 
+private slots:
+    void listAllZones(const QStringList&);
 
 private:
     QList<wiredSensor *> m_wiredSensorList;

@@ -73,6 +73,8 @@ void databaseManagerInterface::insertHomeAlarmEntryFinished(
         qCritical() << "DBus call error: " << m_iface->lastError();
         qCritical() << "DBus reply error: " << reply.error();
     }
+
+    call->deleteLater();
 }
 
 void databaseManagerInterface::insertSmartHomeEntry(const SmartHomeInfo &entry)
@@ -97,6 +99,8 @@ void databaseManagerInterface::insertSmartHomeEntryFinished(
         qCritical() << "DBus call error: " << m_iface->lastError();
         qCritical() << "DBus reply error: " << reply.error();
     }
+
+    call->deleteLater();
 }
 
 
@@ -133,6 +137,8 @@ void databaseManagerInterface::insertIOFinished(QDBusPendingCallWatcher *call)
         qCritical() << "DBus call error: " << m_iface->lastError();
         qCritical() << "DBus reply error: " << reply.error();
     }
+
+    call->deleteLater();
 }
 
 void databaseManagerInterface::getAllZones()
@@ -161,4 +167,84 @@ void databaseManagerInterface::getAllZonesFinished(QDBusPendingCallWatcher *call
         qCritical() << "DBus call error: " << m_iface->lastError();
         qCritical() << "DBus reply error: " << reply.error();
     }
+
+    call->deleteLater();
+}
+
+void databaseManagerInterface::getAllCategories()
+{
+    QDBusPendingCall pCall = m_iface->asyncCall(
+                QLatin1String("getAllCategories"));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pCall, this);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(getAllCategoriesFinished(QDBusPendingCallWatcher*)));
+}
+
+void databaseManagerInterface::getAllCategoriesFinished(
+        QDBusPendingCallWatcher *call)
+{
+    QStringList tmpList;
+    QDBusReply<QStringList> reply = *call;
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllCategoriesFinished reply was: " << tmpList;
+        emit categoriesReceived(tmpList);
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    call->deleteLater();
+}
+
+QStringList databaseManagerInterface::getAllFromZone(const QString &zone) const
+{
+    QStringList tmpList;
+
+    QDBusReply<QStringList> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getAllFromZone"),
+                qVariantFromValue(zone));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllFromZone reply was: " << tmpList;
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
+}
+
+QStringList databaseManagerInterface::getAllFromCategory(
+        const QString &category) const
+{
+    QStringList tmpList;
+
+    QDBusReply<QStringList> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getAllFromCategory"),
+                qVariantFromValue(category));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllFromCategory reply was: " << tmpList;
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
 }

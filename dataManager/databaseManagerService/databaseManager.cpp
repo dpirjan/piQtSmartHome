@@ -193,14 +193,14 @@ bool DatabaseManager::createDatabaseAndTable()
                      "system char(30), "
                      "hardware char(30), "
                      "type char(30), "
-                     "function char(30), "
+                     "category char(30), "
                      "zone char(30), "
                      "node char(30), "
                      "address char(30),"
                      "UNIQUE(system, "
                      "hardware, "
                      "type, "
-                     "function, "
+                     "category, "
                      "zone, "
                      "node, "
                      "address))");
@@ -216,7 +216,7 @@ bool DatabaseManager::createDatabaseAndTable()
     return ret;
 }
 
-bool DatabaseManager::insertHomeAlarmEntry(const HomeAlarmInfo &entry)
+bool DatabaseManager::insertHomeAlarmEntry(const HomeAlarmInfo &entry) const
 {
     qDebug() << "insertHomeAlarmEntry ("
              << entry.getZone()
@@ -244,7 +244,7 @@ bool DatabaseManager::insertHomeAlarmEntry(const HomeAlarmInfo &entry)
     return ret;
 }
 
-bool DatabaseManager::insertSmartHomeEntry(const SmartHomeInfo &entry)
+bool DatabaseManager::insertSmartHomeEntry(const SmartHomeInfo &entry) const
 {
     bool ret = true;
     QSqlQuery query;
@@ -266,19 +266,19 @@ bool DatabaseManager::insertSmartHomeEntry(const SmartHomeInfo &entry)
 bool DatabaseManager::insertIO(const QString &system,
                                const QString &hardware,
                                const QString &type,
-                               const QString &function,
+                               const QString &category,
                                const QString &zone,
                                const QString &node,
-                               const QString &address)
+                               const QString &address) const
 {
     bool ret = true;
     QSqlQuery query;
-    query.prepare("INSERT INTO io (system, hardware, type, function, zone, node, address)"
-                  " VALUES (:system, :hardware, :type, :function, :zone, :node, :address)");
+    query.prepare("INSERT INTO io (system, hardware, type, category, zone, node, address)"
+                  " VALUES (:system, :hardware, :type, :category, :zone, :node, :address)");
     query.bindValue(":system", system);
     query.bindValue(":hardware", hardware);
     query.bindValue(":type", type);
-    query.bindValue(":function", function);
+    query.bindValue(":category", category);
     query.bindValue(":zone", zone);
     query.bindValue(":node", node);
     query.bindValue(":address", address);
@@ -290,7 +290,7 @@ bool DatabaseManager::insertIO(const QString &system,
     return ret;
 }
 
-QList<HomeAlarmInfo> DatabaseManager::getAllHomeAlarmEntries()
+QList<HomeAlarmInfo> DatabaseManager::getAllHomeAlarmEntries() const
 {
     int idZone, idNode, idSensor, idTimestamp;
     QList<HomeAlarmInfo> tmpList;
@@ -318,7 +318,7 @@ QList<HomeAlarmInfo> DatabaseManager::getAllHomeAlarmEntries()
     return tmpList;
 }
 
-QList<SmartHomeInfo> DatabaseManager::getAllSmartHomeEntries()
+QList<SmartHomeInfo> DatabaseManager::getAllSmartHomeEntries() const
 {
     int idZone, idNode, idSensor, idValue, idTimestamp;
     QList<SmartHomeInfo> tmpList;
@@ -347,7 +347,7 @@ QList<SmartHomeInfo> DatabaseManager::getAllSmartHomeEntries()
     return tmpList;
 }
 
-QStringList DatabaseManager::getAllZones()
+QStringList DatabaseManager::getAllZones() const
 {
     QStringList tmpList;
 
@@ -358,6 +358,71 @@ QStringList DatabaseManager::getAllZones()
         tmpList.append(model.record(i).value("zone").toString());
 
     qDebug() << "Returned " << tmpList.count() << " zone(s).";
+
+    return tmpList;
+}
+
+QStringList DatabaseManager::getAllCategories() const
+{
+    QStringList tmpList;
+
+    QSqlQueryModel model;
+    model.setQuery("SELECT DISTINCT category FROM io");
+
+    for(int i = 0; i < model.rowCount(); ++i)
+        tmpList.append(model.record(i).value("category").toString());
+
+    qDebug() << "Returned " << tmpList.count() << " categories.";
+
+    return tmpList;
+}
+
+QStringList DatabaseManager::getAllFromZone(const QString &zone) const
+{
+    QStringList tmpList;
+    QSqlQuery query;
+
+    query.prepare("SELECT category FROM io WHERE zone = (:zone)");
+    query.bindValue(":zone", zone);
+
+
+
+    if(query.exec())
+    {
+        int idCategory = query.record().indexOf("category");
+
+        while(query.next())
+            tmpList.append(query.value(idCategory).toString());
+    }
+    else
+        qCritical() << "getAllFromZone query failed! " << query.lastError();
+
+    qDebug() << "Returned " << tmpList.count() << " categories for zone "
+             << zone << ".";
+
+    return tmpList;
+}
+
+QStringList DatabaseManager::getAllFromCategory(const QString &category) const
+{
+    QStringList tmpList;
+    QSqlQuery query;
+
+    query.prepare("SELECT zone FROM io WHERE category = (:category)");
+    query.bindValue(":category", category);
+
+    if(query.exec())
+    {
+        int idZone = query.record().indexOf("zone");
+
+        while(query.next())
+            tmpList.append(query.value(idZone).toString());
+    }
+    else
+        qCritical() << "getAllFromCategory query failed! " << query.lastError();
+
+    qDebug() << "Returned " << tmpList.count() << " zones for category "
+             << category << ".";
 
     return tmpList;
 }

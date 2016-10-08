@@ -28,18 +28,21 @@ public:
     static bool firstRunConfiguration();
 
 public slots:
-    Q_SCRIPTABLE bool insertHomeAlarmEntry(const HomeAlarmInfo&);
-    Q_SCRIPTABLE bool insertSmartHomeEntry(const SmartHomeInfo&);
+    Q_SCRIPTABLE bool insertHomeAlarmEntry(const HomeAlarmInfo&) const;
+    Q_SCRIPTABLE bool insertSmartHomeEntry(const SmartHomeInfo&) const;
     Q_SCRIPTABLE bool insertIO(const QString&,
                                const QString&,
                                const QString&,
                                const QString&,
                                const QString&,
                                const QString&,
-                               const QString&);
-    Q_SCRIPTABLE QList<HomeAlarmInfo> getAllHomeAlarmEntries();
-    Q_SCRIPTABLE QList<SmartHomeInfo> getAllSmartHomeEntries();
-    Q_SCRIPTABLE QStringList getAllZones();
+                               const QString&) const;
+    Q_SCRIPTABLE QList<HomeAlarmInfo> getAllHomeAlarmEntries() const;
+    Q_SCRIPTABLE QList<SmartHomeInfo> getAllSmartHomeEntries() const;
+    Q_SCRIPTABLE QStringList getAllZones() const;
+    Q_SCRIPTABLE QStringList getAllCategories() const;
+    Q_SCRIPTABLE QStringList getAllFromZone(const QString&) const;
+    Q_SCRIPTABLE QStringList getAllFromCategory(const QString&) const;
 
 private:
     void loadDatabaseSettings();

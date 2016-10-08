@@ -37,15 +37,20 @@ public slots:
                   const QString&,
                   const QString&);
     void getAllZones();
+    void getAllCategories();
+    QStringList getAllFromZone(const QString&) const;
+    QStringList getAllFromCategory(const QString&) const;
 
 signals:
     void zonesReceived(const QStringList&);
+    void categoriesReceived(const QStringList&);
 
 private slots:
     void insertHomeAlarmEntryFinished(QDBusPendingCallWatcher*);
     void insertSmartHomeEntryFinished(QDBusPendingCallWatcher*);
     void insertIOFinished(QDBusPendingCallWatcher*);
     void getAllZonesFinished(QDBusPendingCallWatcher*);
+    void getAllCategoriesFinished(QDBusPendingCallWatcher*);
 
 private:
     QDBusInterface *m_iface;

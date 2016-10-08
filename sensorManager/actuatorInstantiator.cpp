@@ -98,7 +98,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Siren));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
-        settings->setValue("Node", "Door");
+        settings->setValue("Node", "Entrance Door");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Actuator2");
@@ -106,15 +106,15 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Buzzer));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Kitchen");
-        settings->setValue("Node", "Box1");
+        settings->setValue("Node", "Cooker");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Actuator3");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Relay));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-        settings->setValue("Zone", "Kitchen");
-        settings->setValue("Node", "Box1");
+        settings->setValue("Zone", "Hall");
+        settings->setValue("Node", "Air Conditioning");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Actuator4");
@@ -130,7 +130,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->setValue("ActuatorType", actuatorTypeToString(Actuator_IR));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
-        settings->setValue("Node", "Box2");
+        settings->setValue("Node", "Air Conditioning");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Actuator6");
@@ -138,7 +138,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Pump));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Balcony");
-        settings->setValue("Node", "Box1");
+        settings->setValue("Node", "Plants");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
 

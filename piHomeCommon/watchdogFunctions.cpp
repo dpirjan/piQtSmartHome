@@ -11,12 +11,10 @@
 
 WatchdogFunctions::WatchdogFunctions(QObject *parent) : QObject(parent)
 {
-    qDebug() << "WatchdogFunctions::constructor: " << QThread::currentThreadId();
     m_watchdogStop = false;
 
     QString env = qgetenv("WATCHDOG_USEC");
     m_watchdogInterval = env.toULongLong();
-    qDebug() << "WATCHDOG_USEC: " << env << " value: " << m_watchdogInterval;
 
     if(m_watchdogInterval == 0)
     {
@@ -27,10 +25,11 @@ WatchdogFunctions::WatchdogFunctions(QObject *parent) : QObject(parent)
     m_watchdogTimer = new QTimer(this);
     m_watchdogTimer->setTimerType(Qt::PreciseTimer);
 
-    connect(m_watchdogTimer, SIGNAL(timeout()), this, SLOT(watchdogTimerNotify()));
-    qDebug() << "WatchdogFunctions::constructor: "
-             << QThread::currentThreadId() << " : timer() "
-             << m_watchdogTimer->interval() << "ms";
+    connect(m_watchdogTimer, SIGNAL(timeout()),
+            this, SLOT(watchdogTimerNotify()));
+    qDebug() << "WatchdogFunctions::constructor: " << QThread::currentThreadId()
+             << " WATCHDOG_USEC: " << env << " value: " << m_watchdogInterval
+             << " : timer() " << m_watchdogTimer->interval() << "ms";
 }
 
 WatchdogFunctions::~WatchdogFunctions()
@@ -69,11 +68,13 @@ void WatchdogFunctions::watchdogTimerInitialize()
     m_watchdogTimer->start(m_watchdogInterval / 1000); // us to ms
 }
 
-void WatchdogFunctions::watchdogTimerFailure(const int &errorCode, const QString &errorString)
+void WatchdogFunctions::watchdogTimerFailure(const int &errorCode,
+                                             const QString &errorString)
 {
-    qDebug() << "WatchdogFunctions::watchdogTimerFailure: " << QThread::currentThreadId();
+    qDebug() << "WatchdogFunctions::watchdogTimerFailure: "
+             << QThread::currentThreadId() << "Failure: " << errorCode
+             << " - " << errorString;;
 
-    qDebug() << "Failure: " << errorCode << " - " << errorString;
     sd_notifyf(0, "STATUS=Failed to start up: %s\n"
                   "ERRNO=%i",
                errorString.toLocal8Bit().data(),
@@ -87,7 +88,8 @@ void WatchdogFunctions::watchdogTimerFailure(const int &errorCode, const QString
 
 void WatchdogFunctions::watchdogTimerStop()
 {
-    qDebug() << "WatchdogFunctions::watchdogTimerStop: " << QThread::currentThreadId();
+    qDebug() << "WatchdogFunctions::watchdogTimerStop: "
+             << QThread::currentThreadId();
 
     sd_notify(0, "STOPPING=1");
 
@@ -97,9 +99,16 @@ void WatchdogFunctions::watchdogTimerStop()
 
 void WatchdogFunctions::watchdogTimerNotify()
 {
-    qDebug() << "WatchdogFunctions::watchdogTimerNotify: "
-             << QThread::currentThreadId() << " : timer() "
-             << m_watchdogTimer->interval() << "ms";
+    static bool printOnce = false;
+
+    if(!printOnce)
+    {
+        qDebug() << "WatchdogFunctions::watchdogTimerNotify: "
+                 << QThread::currentThreadId() << " : timer() "
+                 << m_watchdogTimer->interval() << "ms";
+        printOnce = true;
+    }
+
     Q_ASSERT(QThread::currentThread() == m_watchdogThread);
 
     sd_notify(0, "WATCHDOG=1");

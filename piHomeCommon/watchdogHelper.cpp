@@ -43,19 +43,13 @@ void WatchdogHelper::init()
             m_watchdogThread, &QObject::deleteLater);
 
     m_watchdogThread->start();
-    qDebug() << "WatchdogHelper::init " << QThread::currentThreadId();
 }
 
 void WatchdogHelper::stop()
 {
     qDebug() << "WatchdogHelper::stop " << QThread::currentThreadId();
     if(m_watchdogThread->isRunning())
-    {
-        qDebug() << "THREAD RUNNING";
         m_watchdogFunctions->watchdogTimerStop();
-    }
-    else
-        qDebug() << "THREAD not RUNNING";
 }
 
 void WatchdogHelper::setInterval(const quint64 &interval)

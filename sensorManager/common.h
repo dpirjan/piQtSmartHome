@@ -21,26 +21,26 @@ typedef enum {
 } HardwareType;
 
 typedef enum {
-    Sensor_PIR = 7,
-    Sensor_Contact,
-    Sensor_Light, // Light intensity
-    Sensor_Temperature, // + humidity => DHT22
-    Sensor_CO, // Carbon Monoxid
-    Sensor_CH4, // Methane
-    Sensor_Vibration, // Knock sensor
-    Sensor_Flood, // Water presence
-    Sensor_Level, // Water level
-    Sensor_Locked, // Door locked
-    Sensor_Battery // Read battery voltage on Analog
+    PIR = 7,
+    Contact,
+    Light, // Light intensity
+    Temperature, // + humidity => DHT22
+    CO, // Carbon Monoxid
+    CH4, // Methane
+    Vibration, // Knock sensor
+    Flood, // Water presence
+    WaterLevel, // Water level
+    DoorLocked, // Door locked
+    BatteryLevel // Read battery voltage on Analog
 } SensorType;
 
 typedef enum {
-    Actuator_Siren = 19,
-    Actuator_Buzzer,
-    Actuator_Relay,
-    Actuator_DoorBell,
-    Actuator_IR,
-    Actuator_Pump // Water pump
+    Siren = 19,
+    Buzzer,
+    Relay,
+    DoorBell,
+    IR,
+    Pump // Water pump
 } ActuatorType;
 
 inline QString systemTypeToString(const SystemType &value)
@@ -125,38 +125,38 @@ inline QString sensorTypeToString(const SensorType &value)
     QString returnString;
     switch (value)
     {
-    case Sensor_PIR:
-        returnString = "Sensor_PIR";
+    case PIR:
+        returnString = "PIR";
         break;
-    case Sensor_Contact:
-        returnString = "Sensor_Contact";
+    case Contact:
+        returnString = "Contact";
         break;
-    case Sensor_Light:
-        returnString = "Sensor_Light";
+    case Light:
+        returnString = "Light";
         break;
-    case Sensor_Temperature:
-        returnString = "Sensor_Temperature";
+    case Temperature:
+        returnString = "Temperature";
         break;
-    case Sensor_CO:
-        returnString = "Sensor_CO";
+    case CO:
+        returnString = "CO";
         break;
-    case Sensor_CH4:
-        returnString = "Sensor_CH4";
+    case CH4:
+        returnString = "CH4";
         break;
-    case Sensor_Vibration:
-        returnString = "Sensor_Vibration";
+    case Vibration:
+        returnString = "Vibration";
         break;
-    case Sensor_Flood:
-        returnString = "Sensor_Flood";
+    case Flood:
+        returnString = "Flood";
         break;
-    case Sensor_Level:
-        returnString = "Sensor_Level";
+    case WaterLevel:
+        returnString = "WaterLevel";
         break;
-    case Sensor_Locked:
-        returnString = "Sensor_Locked";
+    case DoorLocked:
+        returnString = "DoorLocked";
         break;
-    case Sensor_Battery:
-        returnString = "Sensor_Battery";
+    case BatteryLevel:
+        returnString = "BatteryLevel";
         break;
     default:
         qDebug() << "sensorTypeToString() - Value not supported!";
@@ -169,59 +169,59 @@ inline SensorType StringToSensorType(const QString &str)
 {
     bool found = false;
     SensorType returnValue;
-    if(str == "Sensor_PIR")
+    if(str == "PIR")
     {
-        returnValue = Sensor_PIR;
+        returnValue = PIR;
         found = true;
     }
-    if(str == "Sensor_Contact")
+    if(str == "Contact")
     {
-        returnValue = Sensor_Contact;
+        returnValue = Contact;
         found = true;
     }
-    if(str == "Sensor_Light")
+    if(str == "Light")
     {
-        returnValue = Sensor_Light;
+        returnValue = Light;
         found = true;
     }
-    if(str == "Sensor_Temperature")
+    if(str == "Temperature")
     {
-        returnValue = Sensor_Temperature;
+        returnValue = Temperature;
         found = true;
     }
-    if(str == "Sensor_CO")
+    if(str == "CO")
     {
-        returnValue = Sensor_CO;
+        returnValue = CO;
         found = true;
     }
-    if(str == "Sensor_CH4")
+    if(str == "CH4")
     {
-        returnValue = Sensor_CH4;
+        returnValue = CH4;
         found = true;
     }
-    if(str == "Sensor_Vibration")
+    if(str == "Vibration")
     {
-        returnValue = Sensor_Vibration;
+        returnValue = Vibration;
         found = true;
     }
-    if(str == "Sensor_Flood")
+    if(str == "Flood")
     {
-        returnValue = Sensor_Flood;
+        returnValue = Flood;
         found = true;
     }
-    if(str == "Sensor_Level")
+    if(str == "WaterLevel")
     {
-        returnValue = Sensor_Level;
+        returnValue = WaterLevel;
         found = true;
     }
-    if(str == "Sensor_Locked")
+    if(str == "DoorLocked")
     {
-        returnValue = Sensor_Locked;
+        returnValue = DoorLocked;
         found = true;
     }
-    if(str == "Sensor_Battery")
+    if(str == "BatteryLevel")
     {
-        returnValue = Sensor_Battery;
+        returnValue = BatteryLevel;
         found = true;
     }
 
@@ -236,23 +236,23 @@ inline QString actuatorTypeToString(const ActuatorType &value)
     QString returnString;
     switch (value)
     {
-    case Actuator_Siren:
-        returnString = "Actuator_Siren";
+    case Siren:
+        returnString = "Siren";
         break;
-    case Actuator_Buzzer:
-        returnString = "Actuator_Buzzer";
+    case Buzzer:
+        returnString = "Buzzer";
         break;
-    case Actuator_Relay:
-        returnString = "Actuator_Relay";
+    case Relay:
+        returnString = "Relay";
         break;
-    case Actuator_DoorBell:
-        returnString = "Actuator_DoorBell";
+    case DoorBell:
+        returnString = "DoorBell";
         break;
-    case Actuator_IR:
-        returnString = "Actuator_IR";
+    case IR:
+        returnString = "IR";
         break;
-    case Actuator_Pump:
-        returnString = "Actuator_Pump";
+    case Pump:
+        returnString = "Pump";
         break;
     default:
         qDebug() << "actuatorTypeToString() - Value not supported!";
@@ -266,34 +266,34 @@ inline ActuatorType StringToActuatorType(const QString &str)
     bool found = false;
     ActuatorType returnValue;
 
-    if(str == "Actuator_Siren")
+    if(str == "Siren")
     {
-        returnValue = Actuator_Siren;
+        returnValue = Siren;
         found = true;
     }
-    if(str == "Actuator_Buzzer")
+    if(str == "Buzzer")
     {
-        returnValue = Actuator_Buzzer;
+        returnValue = Buzzer;
         found = true;
     }
-    if(str == "Actuator_Relay")
+    if(str == "Relay")
     {
-        returnValue = Actuator_Relay;
+        returnValue = Relay;
         found = true;
     }
-    if(str == "Actuator_DoorBell")
+    if(str == "DoorBell")
     {
-        returnValue = Actuator_DoorBell;
+        returnValue = DoorBell;
         found = true;
     }
-    if(str == "Actuator_IR")
+    if(str == "IR")
     {
-        returnValue = Actuator_IR;
+        returnValue = IR;
         found = true;
     }
-    if(str == "Actuator_Pump")
+    if(str == "Pump")
     {
-        returnValue = Actuator_Pump;
+        returnValue = Pump;
         found = true;
     }
 

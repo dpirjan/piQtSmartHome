@@ -95,7 +95,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator1");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Siren));
+        settings->setValue("ActuatorType", actuatorTypeToString(Siren));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Entrance Door");
@@ -103,7 +103,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator2");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Buzzer));
+        settings->setValue("ActuatorType", actuatorTypeToString(Buzzer));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Kitchen");
         settings->setValue("Node", "Cooker");
@@ -111,7 +111,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator3");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Relay));
+        settings->setValue("ActuatorType", actuatorTypeToString(Relay));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Air Conditioning");
@@ -119,7 +119,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator4");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_DoorBell));
+        settings->setValue("ActuatorType", actuatorTypeToString(DoorBell));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Door");
@@ -127,7 +127,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator5");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_IR));
+        settings->setValue("ActuatorType", actuatorTypeToString(IR));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Air Conditioning");
@@ -135,7 +135,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator6");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Actuator_Pump));
+        settings->setValue("ActuatorType", actuatorTypeToString(Pump));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Balcony");
         settings->setValue("Node", "Plants");

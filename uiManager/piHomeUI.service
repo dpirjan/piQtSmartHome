@@ -12,6 +12,7 @@ After=piHomeSensor.service
 
 [Service]
 User=root
+Environment=QT_QPA_PLATFORM=eglfs
 ExecStart=/usr/share/pismarthome/uiManager
 Restart=on-failure
 RestartSec=5

@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>icons/ic_home_white_48dp.png</file>
+        <file>icons/ic_location_on_white_48dp.png</file>
+        <file>icons/ic_menu_white_48dp.png</file>
+        <file>icons/ic_people_white_48dp.png</file>
+        <file>qml/components/AppSideNav.qml</file>
+        <file>qml/components/AppSideNavItem.qml</file>
+        <file>qml/MainPage.qml</file>
+        <file>icons/ic_vpn_key_white_48dp.png</file>
+        <file>qml/components/AboutDialogPanel.qml</file>
+        <file>icons/ic_security_white_48dp.png</file>
+        <file>qml/components/AboutDialogPopup.qml</file>
+        <file>qml/components/TopToolbar.qml</file>
+        <file>qml/components/SettingsPopup.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>qml/components/SmartHomePanel.qml</file>
+        <file>qml/components/LoginPanel.qml</file>
+        <file>qml/components/WeatherPanel.qml</file>
+        <file>qml/components/UserPanel.qml</file>
+        <file>qml/components/AlarmPanel.qml</file>
+        <file>icons/ic_more_horiz_white_48dp.png</file>
+        <file>icons/ic_more_vert_white_48dp.png</file>
+        <file>qml/components/CategoriesListPanel.qml</file>
+        <file>qml/components/ZonesListPanel.qml</file>
+    </qresource>
+</RCC>

@@ -11,7 +11,7 @@ Pane
 
     Component
     {
-        id: categoryDelegate
+        id: ioDelegate
         Item
         {
             width: smartHomeTabBar.width
@@ -22,7 +22,7 @@ Pane
                 Text
                 {
                     font.family: fontLoader.name
-                    text: '<b>Category:</b> ' + display
+                    text: '<b>IO:</b> ' + display
                     color: settings.style==="Material" ? Material.foreground : Universal.foreground
                 }
             }
@@ -35,8 +35,7 @@ Pane
                     listView.currentIndex = index
                     listView.highlight = highlightBar
                     console.log("Selected: ", display)
-                    UIM.selectedCategory = display
-                    ioList.visible = true
+                    UIM.selectedSensor = display
                 }
             }
         }
@@ -65,7 +64,7 @@ Pane
 
     ColumnLayout
     {
-        id: categoriesColumn
+        id: ioColumn
         spacing: 40
         anchors.fill: parent
         anchors.topMargin: 10
@@ -74,8 +73,8 @@ Pane
         {
             id: listView
             anchors.fill: parent
-            model: categoriesModel
-            delegate: categoryDelegate
+            model: ioModel
+            delegate: ioDelegate
             focus: true
             clip: true
         }

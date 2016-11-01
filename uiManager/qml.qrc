@@ -24,5 +24,6 @@
         <file>qml/components/CategoriesListPanel.qml</file>
         <file>qml/components/ZonesListPanel.qml</file>
         <file>fonts/Roboto-Regular.ttf</file>
+        <file>qml/components/IOListPanel.qml</file>
     </qresource>
 </RCC>

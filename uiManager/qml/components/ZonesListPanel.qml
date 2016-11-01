@@ -35,6 +35,8 @@ Pane
                     listView.currentIndex = index
                     listView.highlight = highlightBar
                     console.log("Selected: ", display)
+                    UIM.selectedZone = display
+                    ioList.visible = true
                 }
             }
         }

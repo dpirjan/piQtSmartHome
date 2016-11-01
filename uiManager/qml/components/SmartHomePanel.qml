@@ -58,4 +58,13 @@ Pane
         anchors.top: smartHomeTabBar.bottom
         height: parent.height - smartHomeTabBar.height
     }
+
+    IOListPanel
+    {
+        id: ioList
+        visible: false
+        anchors.top: smartHomeTabBar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: smartHomeTabBar.right
+    }
 }

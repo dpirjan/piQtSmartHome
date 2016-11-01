@@ -63,6 +63,12 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty(
                 "categoriesModel",
                 uim.getCategoriesModel());
+    engine.rootContext()->setContextProperty(
+                "ioModel",
+                uim.getIOModel());
+    engine.rootContext()->setContextProperty(
+                "UIM",
+                &uim);
 
     if(engine.rootObjects().isEmpty())
         qFatal("RootObjects empty!");

@@ -18,18 +18,23 @@ Pane
             width: parent.width
             wrapMode: Label.Wrap
             horizontalAlignment: Qt.AlignLeft
-            text: qsTr("Login:")
+            font.family: fontLoader.name
+            font.bold: true
+            font.pixelSize: 35
+            text: qsTr("Login")
         }
 
         Column
         {
             spacing: 20
+            width: parent.width
 
             TextField
             {
                 id: usernameField
+                font.family: fontLoader.name
                 placeholderText: qsTr("Username")
-                width: Math.max(implicitWidth, Math.min(implicitWidth * 2, pane.availableWidth / 3))
+                width: Math.max(implicitWidth, Math.max(implicitWidth * 2, loginPanel.availableWidth / 3))
                 anchors.left: parent.left
 
                 onAccepted: console.log("Username entered: ", text)
@@ -38,8 +43,9 @@ Pane
             TextField
             {
                 id: passwordField
+                font.family: fontLoader.name
                 placeholderText: qsTr("Password")
-                width: Math.max(implicitWidth, Math.min(implicitWidth * 2, pane.availableWidth / 3))
+                width: Math.max(implicitWidth, Math.max(implicitWidth * 2, loginPanel.availableWidth / 3))
                 anchors.left: parent.left
                 echoMode: TextInput.Password
 
@@ -49,8 +55,9 @@ Pane
             TextField
             {
                 id: pinField
+                font.family: fontLoader.name
                 placeholderText: qsTr("Pin")
-                width: Math.max(implicitWidth, Math.min(implicitWidth * 2, pane.availableWidth / 3))
+                width: Math.max(implicitWidth, Math.max(implicitWidth * 2, loginPanel.availableWidth / 3))
                 anchors.left: parent.left
                 echoMode: TextInput.Password
                 validator: IntValidator { bottom: 0; top: 9999; }

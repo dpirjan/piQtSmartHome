@@ -17,6 +17,7 @@ ToolBar
             id: titleLabel
             text: qsTr("piSmartHome")
             font.pixelSize: 20
+            font.family: fontLoader.name
             elide: Label.ElideRight
             horizontalAlignment: Qt.AlignHCenter
             verticalAlignment: Qt.AlignVCenter
@@ -43,11 +44,13 @@ ToolBar
                 MenuItem
                 {
                     text: qsTr("Settings")
+                    font.family: fontLoader.name
                     onTriggered: settingsPopup.open()
                 }
                 MenuItem
                 {
                     text: qsTr("About")
+                    font.family: fontLoader.name
                     onTriggered: aboutDialogPopupWindow.open()
                 }
             }

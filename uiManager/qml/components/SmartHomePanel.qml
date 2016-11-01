@@ -33,10 +33,12 @@ Pane
 
         TabButton
         {
+            font.family: fontLoader.name
             text: qsTr("Zones")
         }
         TabButton
         {
+            font.family: fontLoader.name
             text: qsTr("Categories")
         }
     }

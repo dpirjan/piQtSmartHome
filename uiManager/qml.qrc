@@ -23,5 +23,6 @@
         <file>icons/ic_more_vert_white_48dp.png</file>
         <file>qml/components/CategoriesListPanel.qml</file>
         <file>qml/components/ZonesListPanel.qml</file>
+        <file>fonts/Roboto-Regular.ttf</file>
     </qresource>
 </RCC>

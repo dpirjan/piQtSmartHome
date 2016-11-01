@@ -20,8 +20,10 @@ Popup
 
         Label
         {
-            text: "Settings"
+            font.family: fontLoader.name
             font.bold: true
+            text: "Settings"
+
         }
 
         RowLayout
@@ -30,6 +32,7 @@ Popup
 
             Label
             {
+                font.family: fontLoader.name
                 text: "Style:"
             }
 
@@ -38,6 +41,7 @@ Popup
                 id: styleBox
                 property int styleIndex: -1
                 model: ["Default", "Material", "Universal"]
+                font.family: fontLoader.name
                 Component.onCompleted:
                 {
                     styleIndex = find(settings.style, Qt.MatchFixedString)
@@ -50,6 +54,7 @@ Popup
 
         Label
         {
+            font.family: fontLoader.name
             text: "Restart required"
             color: "#e41e25"
             opacity: styleBox.currentIndex !== styleBox.styleIndex ? 1.0 : 0.0
@@ -65,6 +70,7 @@ Popup
 
             Button {
                 id: okButton
+                font.family: fontLoader.name
                 text: qsTr("Ok")
                 onClicked:
                 {
@@ -82,6 +88,7 @@ Popup
 
             Button {
                 id: cancelButton
+                font.family: fontLoader.name
                 text: qsTr("Cancel")
                 onClicked:
                 {

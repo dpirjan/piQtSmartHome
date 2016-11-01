@@ -21,6 +21,7 @@ Pane
             {
                 Text
                 {
+                    font.family: fontLoader.name
                     text: '<b>Category:</b> ' + display
                     color: settings.style==="Material" ? Material.foreground : Universal.foreground
                 }

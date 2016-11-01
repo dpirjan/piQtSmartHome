@@ -17,6 +17,12 @@ ApplicationWindow
     property alias stackView: stackView
     property alias window: window
 
+    FontLoader {
+        id: fontLoader
+        // Font downloaded from https://material.google.com/resources/roboto-noto-fonts.html
+        source: "qrc:/fonts/Roboto-Regular.ttf"
+    }
+
     Settings
     {
         id: settings
@@ -46,6 +52,7 @@ ApplicationWindow
 
             Label
             {
+                font.family: fontLoader.name
                 text: "piSmartHome"
                 anchors.margins: 20
                 anchors.fill: parent

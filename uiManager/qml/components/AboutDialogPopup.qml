@@ -20,16 +20,18 @@ Popup
 
         Label
         {
+            font.family: fontLoader.name
             text: qsTr("About")
             font.bold: true
         }
 
 ColumnLayout
 {
-	spacing: 10
+    spacing: 10
         Label
         {
             width: aboutDialogPopupWindow.availableWidth
+            font.family: fontLoader.name
             //@TODO update this
             text: qsTr("piSmartHome")
             wrapMode: Label.Wrap
@@ -39,6 +41,7 @@ ColumnLayout
         Label
         {
             width: aboutDialogPopupWindow.availableWidth
+            font.family: fontLoader.name
             //@TODO update this
             text: qsTr("Description here to be added later ..")
             wrapMode: Label.Wrap

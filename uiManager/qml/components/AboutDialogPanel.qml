@@ -15,6 +15,7 @@ Pane
 
             Label
             {
+                font.family: fontLoader.name
                 text: qsTr("About")
                 font.bold: true
             }
@@ -25,6 +26,7 @@ Pane
             Label
             {
                 width: aboutDialogPanel.availableWidth
+                font.family: fontLoader.name
                 //@TODO update this
                 text: qsTr("piSmartHome")
                 wrapMode: Label.Wrap
@@ -34,6 +36,7 @@ Pane
             Label
             {
                 width: aboutDialogPanel.availableWidth
+                font.family: fontLoader.name
                 //@TODO update this
                 text: qsTr("Description here to be added later ..")
                 wrapMode: Label.Wrap

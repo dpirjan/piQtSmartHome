@@ -11,6 +11,7 @@ Pane
     Label
     {
         text: qsTr("Weather Panel")
+        font.family: fontLoader.name
     }
 
     Component.onCompleted:

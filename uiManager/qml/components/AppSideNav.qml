@@ -131,11 +131,13 @@ Rectangle {
 
                 MenuItem
                 {
+                    font.family: fontLoader.name
                     text: "Settings"
                     onTriggered: settingsPopup.open()
                 }
                 MenuItem
                 {
+                    font.family: fontLoader.name
                     text: "About"
                     onTriggered: aboutDialogPopupWindow.open()
                 }
@@ -158,6 +160,7 @@ Rectangle {
             delegate: ItemDelegate
             {
                 width: parent.width
+                font.family: fontLoader.name
                 text: model.title
                 highlighted: ListView.isCurrentItem
                 onClicked:

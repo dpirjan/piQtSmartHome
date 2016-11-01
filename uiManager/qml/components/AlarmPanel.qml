@@ -10,6 +10,7 @@ Pane
 
     Label
     {
+        font.family: fontLoader.name
         text: qsTr("Alarm Panel")
     }
 

@@ -15,6 +15,10 @@ CONFIG(debug, debug|release) {
 INCLUDEPATH += ../piHomeCommon
 LIBS += -L../piHomeCommon -lpiHomeCommon
 
+
+HEADERS += \
+    UIManager.h
+
 SOURCES += \
     uiManagerService.cpp \
     UIManager.cpp
@@ -32,6 +36,3 @@ unix {
     SYSTEMDSERVICE.path = /lib/systemd/system
     INSTALLS += SYSTEMDSERVICE
 }
-
-HEADERS += \
-    UIManager.h

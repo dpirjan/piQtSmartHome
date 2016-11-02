@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls.Material 2.0
 import QtQuick.Controls.Universal 2.0
+import QtQuick.VirtualKeyboard 2.1
 
 Pane
 {
@@ -48,6 +49,7 @@ Pane
                 width: Math.max(implicitWidth, Math.max(implicitWidth * 2, loginPanel.availableWidth / 3))
                 anchors.left: parent.left
                 echoMode: TextInput.Password
+                inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
 
                 onAccepted: console.log("Password entered: ", text)
             }
@@ -61,6 +63,7 @@ Pane
                 anchors.left: parent.left
                 echoMode: TextInput.Password
                 validator: IntValidator { bottom: 0; top: 9999; }
+                inputMethodHints: Qt.ImhDigitsOnly
 
                 onAccepted: console.log("Pin entered: ", text)
             }

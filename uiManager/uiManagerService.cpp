@@ -12,6 +12,7 @@
 int main(int argc, char *argv[])
 {
     qInstallMessageHandler(logHandler);
+    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
 
     QGuiApplication::setApplicationName("uiManager");
     QGuiApplication::setOrganizationName("piHome");

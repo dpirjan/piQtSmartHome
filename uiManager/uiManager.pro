@@ -3,6 +3,11 @@ QT += qml quick quickcontrols2 dbus
 TARGET = uiManager
 CONFIG += c++11 debug
 
+static {
+    QT += svg
+    QTPLUGIN += qtvirtualkeyboardplugin
+}
+
 TEMPLATE = app
 
 CONFIG(debug, debug|release) {

@@ -16,12 +16,6 @@ sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
 
 sensorInstantiator::~sensorInstantiator()
 {
-    if(m_sendMail)
-    {
-        if(!mailManagerInterface::instance().disconnectFromServer())
-            qCritical() << "Error occured while disconnecting from smtp server!";
-    }
-
     delete m_settings;
 
     for(int count=0; count<m_wiredSensorList.count(); count++)

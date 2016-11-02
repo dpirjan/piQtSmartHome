@@ -177,7 +177,7 @@ Rectangle {
 
             model: ListModel
             {
-                ListElement { title: "Menu"; source: "qrc:/qml/components/LoginPanel.qml" }
+                ListElement { title: "Menu"; source: "qrc:/qml/components/LoginPanelContainer.qml" }
                 ListElement { title: "Home"; source: "qrc:/qml/components/SmartHomePanel.qml" }
                 ListElement { title: "Weather"; source: "qrc:/qml/components/WeatherPanel.qml" }
                 ListElement { title: "Users"; source: "qrc:/qml/components/UserPanel.qml" }

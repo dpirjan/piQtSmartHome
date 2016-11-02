@@ -25,5 +25,7 @@
         <file>qml/components/ZonesListPanel.qml</file>
         <file>fonts/Roboto-Regular.ttf</file>
         <file>qml/components/IOListPanel.qml</file>
+        <file>qml/components/LoginPanelContainer.qml</file>
+        <file>qml/components/AutoScroller.qml</file>
     </qresource>
 </RCC>

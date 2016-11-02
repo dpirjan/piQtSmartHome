@@ -11,7 +11,7 @@ Pane
 
     Column
     {
-        spacing: 60
+        spacing: 40
         anchors.fill: parent
 
         Label

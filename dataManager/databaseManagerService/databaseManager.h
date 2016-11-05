@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QSqlDatabase>
 
+#include "io.h"
 #include "smartHomeInfo.h"
 #include "homeAlarmInfo.h"
 #include "watchdogHelper.h"
@@ -39,10 +40,12 @@ public slots:
                                const QString&) const;
     Q_SCRIPTABLE QList<HomeAlarmInfo> getAllHomeAlarmEntries() const;
     Q_SCRIPTABLE QList<SmartHomeInfo> getAllSmartHomeEntries() const;
+    Q_SCRIPTABLE QList<HomeAlarmInfo> getHomeAlarmEntriesForIO(const io&) const;
+    Q_SCRIPTABLE QList<SmartHomeInfo> getSmartHomeEntriesForIO(const io&) const;
     Q_SCRIPTABLE QStringList getAllZones() const;
     Q_SCRIPTABLE QStringList getAllCategories() const;
-    Q_SCRIPTABLE QStringList getAllFromZone(const QString&) const;
-    Q_SCRIPTABLE QStringList getAllFromCategory(const QString&) const;
+    Q_SCRIPTABLE QList<io> getAllFromZone(const QString&) const;
+    Q_SCRIPTABLE QList<io> getAllFromCategory(const QString&) const;
 
 private:
     void loadDatabaseSettings();

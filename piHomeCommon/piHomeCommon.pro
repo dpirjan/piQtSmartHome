@@ -11,6 +11,13 @@ CONFIG(debug, debug|release) {
     message("$${TARGET} - release mode")
 }
 
+!isEmpty(SYSROOT) {
+        message("SYSROOT not empty, assuming compiling for target")
+        DEFINES += WIRINGPI
+        LIBS += -lwiringPi
+        message("$${LIBS}")
+}
+
 DEFINES += QT_MESSAGELOGCONTEXT
 LIBS += -lsystemd
 
@@ -21,15 +28,18 @@ SOURCES += homeAlarmInfo.cpp \
            watchdogHelper.cpp \
            watchdogFunctions.cpp \
            mailManagerInterface.cpp \
-           databaseManagerInterface.cpp
+           databaseManagerInterface.cpp \
+           io.cpp
 
-HEADERS += homeAlarmInfo.h \
+HEADERS += common.h \
+           homeAlarmInfo.h \
            smartHomeInfo.h \
            piHomeCommon.h \
            watchdogHelper.h \
            watchdogFunctions.h \
            mailManagerInterface.h \
-           databaseManagerInterface.h
+           databaseManagerInterface.h \
+           io.h
 
 unix {
     target.path = /usr/lib

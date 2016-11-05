@@ -22,11 +22,13 @@ LIBS += -L../piHomeCommon -lpiHomeCommon
 
 
 HEADERS += \
-    UIManager.h
+    UIManager.h \
+    ioModel.h
 
 SOURCES += \
     uiManagerService.cpp \
-    UIManager.cpp
+    UIManager.cpp \
+    ioModel.cpp
 
 RESOURCES += qml.qrc
 

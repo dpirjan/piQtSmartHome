@@ -22,7 +22,7 @@ Pane
                 Text
                 {
                     font.family: fontLoader.name
-                    text: '<b>IO:</b> ' + display
+                    text: '<b>IO: </b> ' + category + " " +hardware + " " + type
                     color: settings.style==="Material" ? Material.foreground : Universal.foreground
                 }
             }
@@ -34,8 +34,7 @@ Pane
                 {
                     listView.currentIndex = index
                     listView.highlight = highlightBar
-                    console.log("Selected: ", display)
-                    UIM.selectedSensor = display
+                    ioModel.selectedIOIndex = index
                 }
             }
         }

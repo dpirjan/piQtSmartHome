@@ -30,7 +30,7 @@ void UIManager::init()
 
     m_zonesModel = new QStringListModel(this);
     m_categoriesModel = new QStringListModel(this);
-    m_IOModel = new QStringListModel(this);
+    m_IOModel = new ioModel(this);
 
     QObject::connect(&databaseManagerInterface::instance(),
                      SIGNAL(zonesReceived(QStringList)),
@@ -47,13 +47,11 @@ void UIManager::init()
 
 void UIManager::zonesReceived(const QStringList &list)
 {
-    qDebug() << "Zones: " << list;
     m_zonesModel->setStringList(list);
 }
 
 void UIManager::categoriesReceived(const QStringList &list)
 {
-    qDebug() << "Categories: " << list;
     m_categoriesModel->setStringList(list);
 }
 
@@ -67,34 +65,25 @@ QStringListModel* UIManager::getCategoriesModel() const
     return m_categoriesModel;
 }
 
-QStringListModel* UIManager::getIOModel() const
+ioModel* UIManager::getIOModel() const
 {
     return m_IOModel;
 }
 
 void UIManager::setSelectedZone(const QString &zone)
 {
-    QStringList sensorList;
+    QList<io> ioList;
     m_selectedZone = zone;
-    sensorList = databaseManagerInterface::instance().getAllFromZone(zone);
-    qDebug() << "All sensors from zone " << zone << ": " << sensorList;
-    m_IOModel->setStringList(sensorList);
+    ioList = databaseManagerInterface::instance().getAllFromZone(zone);
+    m_IOModel->setIOList(ioList);
 }
 
 void UIManager::setSelectedCategory(const QString &category)
 {
-    QStringList sensorList;
+    QList<io> ioList;
     m_selectedCategory = category;
-    sensorList = databaseManagerInterface::instance().getAllFromCategory(category);
-    qDebug() << "All sensors from category " << category << ": " << sensorList;
-    m_IOModel->setStringList(sensorList);
-}
-
-void UIManager::setSelectedIO(const QString &io)
-{
-    m_selectedIO = io;
-    qDebug() << "Selected IO: " << io << " from zone: " << m_selectedZone;
-    //@TODO add call to select all entries from database for this specific sensor
+    ioList = databaseManagerInterface::instance().getAllFromCategory(category);
+    m_IOModel->setIOList(ioList);
 }
 
 QString UIManager::getSelectedZone() const
@@ -105,9 +94,4 @@ QString UIManager::getSelectedZone() const
 QString UIManager::getSelectedCategory() const
 {
     return m_selectedCategory;
-}
-
-QString UIManager::getSelectedIO() const
-{
-    return m_selectedIO;
 }

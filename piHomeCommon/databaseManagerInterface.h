@@ -6,6 +6,7 @@
 
 #include "homeAlarmInfo.h"
 #include "smartHomeInfo.h"
+#include "io.h"
 
 class QDBusInterface;
 
@@ -36,10 +37,14 @@ public slots:
                   const QString&,
                   const QString&,
                   const QString&);
+    QList<HomeAlarmInfo> getAllHomeAlarmEntries() const;
+    QList<SmartHomeInfo> getAllSmartHomeEntries() const;
+    QList<HomeAlarmInfo> getHomeAlarmEntriesForIO(const io&) const;
+    QList<SmartHomeInfo> getSmartHomeEntriesForIO(const io&) const;
     void getAllZones();
     void getAllCategories();
-    QStringList getAllFromZone(const QString&) const;
-    QStringList getAllFromCategory(const QString&) const;
+    QList<io> getAllFromZone(const QString&) const;
+    QList<io> getAllFromCategory(const QString&) const;
 
 signals:
     void zonesReceived(const QStringList&);

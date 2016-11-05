@@ -22,6 +22,7 @@ databaseManagerInterface::databaseManagerInterface(QObject *parent) : QObject(pa
 
     HomeAlarmInfo::registerMetaType();
     SmartHomeInfo::registerMetaType();
+    io::registerMetaType();
 }
 
 databaseManagerInterface::~databaseManagerInterface()
@@ -103,6 +104,99 @@ void databaseManagerInterface::insertSmartHomeEntryFinished(
     call->deleteLater();
 }
 
+QList<HomeAlarmInfo> databaseManagerInterface::getAllHomeAlarmEntries() const
+{
+    QList<HomeAlarmInfo> tmpList;
+
+    QDBusReply<QList<HomeAlarmInfo>> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getAllHomeAlarmEntries"));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllHomeAlarmEntries reply contains " << tmpList.count()
+                 << "HomeAlarm entries";
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
+}
+
+QList<SmartHomeInfo> databaseManagerInterface::getAllSmartHomeEntries() const
+{
+    QList<SmartHomeInfo> tmpList;
+
+    QDBusReply<QList<SmartHomeInfo>> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getAllSmartHomeEntries"));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllSmartHomeEntries reply contains " << tmpList.count()
+                 << "SmartHome entries";
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
+}
+
+QList<HomeAlarmInfo> databaseManagerInterface::getHomeAlarmEntriesForIO(const io &obj) const
+{
+    QList<HomeAlarmInfo> tmpList;
+
+    QDBusReply<QList<HomeAlarmInfo>> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getHomeAlarmEntriesForIO"),
+                QVariant::fromValue(obj));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getHomeAlarmEntriesForIO reply contains " << tmpList.count()
+                 << "HomeAlarm entries";
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
+}
+
+QList<SmartHomeInfo> databaseManagerInterface::getSmartHomeEntriesForIO(const io &obj) const
+{
+    QList<SmartHomeInfo> tmpList;
+
+    QDBusReply<QList<SmartHomeInfo>> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getSmartHomeEntriesForIO"),
+                QVariant::fromValue(obj));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllSmartHomeEntries reply contains " << tmpList.count()
+                 << "SmartHome entries";
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
+}
 
 void databaseManagerInterface::insertIO(const QString &system,
                                         const QString &hardware,
@@ -202,11 +296,11 @@ void databaseManagerInterface::getAllCategoriesFinished(
     call->deleteLater();
 }
 
-QStringList databaseManagerInterface::getAllFromZone(const QString &zone) const
+QList<io> databaseManagerInterface::getAllFromZone(const QString &zone) const
 {
-    QStringList tmpList;
+    QList<io> tmpList;
 
-    QDBusReply<QStringList> reply = m_iface->call(
+    QDBusReply<QList<io>> reply = m_iface->call(
                 QDBus::BlockWithGui,
                 QLatin1String("getAllFromZone"),
                 qVariantFromValue(zone));
@@ -214,7 +308,7 @@ QStringList databaseManagerInterface::getAllFromZone(const QString &zone) const
     if(reply.isValid())
     {
         tmpList = reply.value();
-        qDebug() << "getAllFromZone reply was: " << tmpList;
+        qDebug() << "getAllFromZone reply contains " << tmpList.count() << "io(s)";
     }
     else
     {
@@ -225,12 +319,12 @@ QStringList databaseManagerInterface::getAllFromZone(const QString &zone) const
     return tmpList;
 }
 
-QStringList databaseManagerInterface::getAllFromCategory(
+QList<io> databaseManagerInterface::getAllFromCategory(
         const QString &category) const
 {
-    QStringList tmpList;
+    QList<io> tmpList;
 
-    QDBusReply<QStringList> reply = m_iface->call(
+    QDBusReply<QList<io>> reply = m_iface->call(
                 QDBus::BlockWithGui,
                 QLatin1String("getAllFromCategory"),
                 qVariantFromValue(category));
@@ -238,7 +332,7 @@ QStringList databaseManagerInterface::getAllFromCategory(
     if(reply.isValid())
     {
         tmpList = reply.value();
-        qDebug() << "getAllFromCategory reply was: " << tmpList;
+        qDebug() << "getAllFromCategory reply contains " << tmpList.count() << "io(s)";
     }
     else
     {

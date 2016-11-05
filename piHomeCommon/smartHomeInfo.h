@@ -13,8 +13,10 @@ public:
     SmartHomeInfo(const QString&,
                   const QString&,
                   const QString&,
+                  const QString&,
                   const QString&);
     SmartHomeInfo(const QString&,
+                  const QString&,
                   const QString&,
                   const QString&,
                   const QString&,
@@ -32,7 +34,8 @@ public:
 
     QString getZone() const;
     QString getNode() const;
-    QString getSensor() const;
+    QString getCategory() const;
+    QString getAddress() const;
     QString getValue() const;
     QString getTimestamp() const;
 
@@ -41,13 +44,15 @@ public:
 private:
     QString m_zone;
     QString m_node;
-    QString m_sensor;
+    QString m_category;
+    QString m_address;
     QString m_value;
     QString m_timestamp;
 
     void setZone(const QString&);
     void setNode(const QString&);
-    void setSensor(const QString&);
+    void setCategory(const QString&);
+    void setAddress(const QString&);
     void setTimestamp(const QString&);
 
     template<class T> friend class QList;

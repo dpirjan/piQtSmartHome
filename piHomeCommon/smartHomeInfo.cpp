@@ -6,7 +6,8 @@
 SmartHomeInfo::SmartHomeInfo() :
     m_zone(),
     m_node(),
-    m_sensor(),
+    m_category(),
+    m_address(),
     m_value()
 {
     m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
@@ -15,11 +16,13 @@ SmartHomeInfo::SmartHomeInfo() :
 
 SmartHomeInfo::SmartHomeInfo(const QString &zone,
                              const QString &node,
-                             const QString &sensor,
+                             const QString &category,
+                             const QString &address,
                              const QString &value) :
     m_zone(zone),
     m_node(node),
-    m_sensor(sensor),
+    m_category(category),
+    m_address(address),
     m_value(value)
 {
     m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
@@ -28,12 +31,14 @@ SmartHomeInfo::SmartHomeInfo(const QString &zone,
 
 SmartHomeInfo::SmartHomeInfo(const QString &zone,
                              const QString &node,
-                             const QString &sensor,
+                             const QString &category,
+                             const QString &address,
                              const QString &value,
                              const QString &timestamp) :
     m_zone(zone),
     m_node(node),
-    m_sensor(sensor),
+    m_category(category),
+    m_address(address),
     m_value(value),
     m_timestamp(timestamp)
 {
@@ -43,7 +48,8 @@ SmartHomeInfo::SmartHomeInfo(const SmartHomeInfo &obj)
 {
     m_zone = obj.getZone();
     m_node = obj.getNode();
-    m_sensor = obj.getSensor();
+    m_category = obj.getCategory();
+    m_address = obj.getAddress();
     m_value = obj.getValue();
     m_timestamp = obj.getTimestamp();
 }
@@ -52,7 +58,8 @@ SmartHomeInfo& SmartHomeInfo::operator=(const SmartHomeInfo &other)
 {
     m_zone = other.getZone();
     m_node= other.getNode();
-    m_sensor = other.getSensor();
+    m_category = other.getCategory();
+    m_address = other.getAddress();
     m_value = other.getValue();
     m_timestamp = other.getTimestamp();
 
@@ -77,12 +84,14 @@ QDBusArgument &operator<<(QDBusArgument &argument, const SmartHomeInfo &data)
     argument.beginStructure();
     QString zone = data.getZone();
     QString node = data.getNode();
-    QString sensor = data.getSensor();
+    QString category = data.getCategory();
+    QString address = data.getAddress();
     QString value = data.getValue();
     QString timestamp = data.getTimestamp();
     argument << zone;
     argument << node;
-    argument << sensor;
+    argument << category;
+    argument << address;
     argument << value;
     argument << timestamp;
     argument.endStructure();
@@ -91,17 +100,19 @@ QDBusArgument &operator<<(QDBusArgument &argument, const SmartHomeInfo &data)
 
 const QDBusArgument &operator>>(const QDBusArgument &argument, SmartHomeInfo &data)
 {
-    QString zone, node, sensor, value, timestamp;
+    QString zone, node, category, address, value, timestamp;
     argument.beginStructure();
     argument >> zone;
     argument >> node;
-    argument >> sensor;
+    argument >> category;
+    argument >> address;
     argument >> value;
     argument >> timestamp;
     argument.endStructure();
     data.setNode(node);
     data.setZone(zone);
-    data.setSensor(sensor);
+    data.setCategory(category);
+    data.setAddress(address);
     data.setValue(value);
     data.setTimestamp(timestamp);
     return argument;
@@ -117,9 +128,14 @@ QString SmartHomeInfo::getNode() const
     return m_node;
 }
 
-QString SmartHomeInfo::getSensor() const
+QString SmartHomeInfo::getCategory() const
 {
-    return m_sensor;
+    return m_category;
+}
+
+QString SmartHomeInfo::getAddress() const
+{
+    return m_address;
 }
 
 QString SmartHomeInfo::getValue() const
@@ -142,9 +158,14 @@ void SmartHomeInfo::setNode(const QString &node)
     m_node = node;
 }
 
-void SmartHomeInfo::setSensor(const QString &sensor)
+void SmartHomeInfo::setCategory(const QString &category)
 {
-    m_sensor = sensor;
+    m_category = category;
+}
+
+void SmartHomeInfo::setAddress(const QString &address)
+{
+    m_address = address;
 }
 
 void SmartHomeInfo::setValue(const QString &value)

@@ -38,8 +38,9 @@ wiredSensor::wiredSensor(const SystemType &system,
 
                 // Call for winringPiSetupGpio to initialize wiringPi using Broadcom pin numbers
                 if(wiringPiSetupGpio() < 0)
-                    qDebug() << "Unable to setup wiringPi: " << strerror(errno);
-                wiredSensor::m_wiringPiInitialized = true;
+                    qCritical() << "Unable to setup wiringPi: " << strerror(errno);
+                else
+                    wiredSensor::m_wiringPiInitialized = true;
             }
 
             int pin = StringToGPIO(address);
@@ -118,6 +119,8 @@ void wiredSensor::setWiredTimeout(const int &timeout)
 void wiredSensor::interruptHandler(void *userData)
 {
     qDebug() << "interruptHandler: " << userData;
+    QElapsedTimer timer;
+    timer.start();
     wiredSensor *sensor = reinterpret_cast<wiredSensor *>(userData);
     if(sensor)
     {
@@ -126,6 +129,7 @@ void wiredSensor::interruptHandler(void *userData)
     }
     else
         qCritical() << "interruptHandler: WrongData - " << userData;
+    qDebug() << "interruptHandler() took " << timer.elapsed() << "ms";
 }
 
 void wiredSensor::interrupt()
@@ -135,7 +139,8 @@ void wiredSensor::interrupt()
     timer.start();
     // Will create a homeAlarmInfo class instance and insert it in the
     // database containing the events.
-    HomeAlarmInfo event(getZone(),getNode(),sensorTypeToString(getSensorType()));
+    HomeAlarmInfo event(getZone(),getNode(),sensorTypeToString(getSensorType()),
+                        getAddress());
     databaseManagerInterface::instance().insertHomeAlarmEntry(event);
     if(getSendMail())
     {

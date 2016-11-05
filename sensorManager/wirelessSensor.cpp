@@ -65,6 +65,7 @@ void wirelessSensor::interrupt()
         SmartHomeInfo event(getZone(),
                             getNode(),
                             sensorTypeToString(getSensorType()),
+                            getAddress(),
                             getValue());
         databaseManagerInterface::instance().insertSmartHomeEntry(event);
     }
@@ -74,7 +75,8 @@ void wirelessSensor::interrupt()
         // database containing the events.
         HomeAlarmInfo event(getZone(),
                             getNode(),
-                            sensorTypeToString(getSensorType()));
+                            sensorTypeToString(getSensorType()),
+                            getAddress());
         databaseManagerInterface::instance().insertHomeAlarmEntry(event);
         if(getSendMail())
         {

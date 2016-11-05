@@ -110,7 +110,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Actuator3");
-        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("SystemType", systemTypeToString(SmartHome));
         settings->setValue("ActuatorType", actuatorTypeToString(Relay));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
@@ -126,7 +126,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Actuator5");
-        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("SystemType", systemTypeToString(SmartHome));
         settings->setValue("ActuatorType", actuatorTypeToString(IR));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
@@ -134,7 +134,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Actuator6");
-        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings->setValue("SystemType", systemTypeToString(SmartHome));
         settings->setValue("ActuatorType", actuatorTypeToString(Pump));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Balcony");

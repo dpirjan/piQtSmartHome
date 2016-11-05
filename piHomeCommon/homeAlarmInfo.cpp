@@ -6,7 +6,8 @@
 HomeAlarmInfo::HomeAlarmInfo() :
     m_zone(),
     m_node(),
-    m_sensor()
+    m_category(),
+    m_address()
 {
     m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
     qDebug() << "DefHomeAlarmInfo Timestamp : " << m_timestamp;
@@ -15,10 +16,12 @@ HomeAlarmInfo::HomeAlarmInfo() :
 
 HomeAlarmInfo::HomeAlarmInfo(const QString &zone,
                              const QString &node,
-                             const QString &sensor) :
+                             const QString &category,
+                             const QString &address) :
     m_zone(zone),
     m_node(node),
-    m_sensor(sensor)
+    m_category(category),
+    m_address(address)
 {
     m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
     qDebug() << "HomeAlarmInfo Timestamp : " << m_timestamp;
@@ -26,12 +29,14 @@ HomeAlarmInfo::HomeAlarmInfo(const QString &zone,
 
 HomeAlarmInfo::HomeAlarmInfo(const QString &zone,
                              const QString &node,
-                             const QString &sensor,
+                             const QString &category,
+                             const QString &address,
                              const QString &timestamp) :
-  m_zone(zone),
-  m_node(node),
-  m_sensor(sensor),
-  m_timestamp(timestamp)
+    m_zone(zone),
+    m_node(node),
+    m_category(category),
+    m_address(address),
+    m_timestamp(timestamp)
 {
 }
 
@@ -39,7 +44,8 @@ HomeAlarmInfo::HomeAlarmInfo(const HomeAlarmInfo &obj)
 {
     m_zone = obj.getZone();
     m_node = obj.getNode();
-    m_sensor = obj.getSensor();
+    m_category = obj.getCategory();
+    m_address = obj.getAddress();
     m_timestamp = obj.getTimestamp();
 }
 
@@ -47,7 +53,8 @@ HomeAlarmInfo& HomeAlarmInfo::operator=(const HomeAlarmInfo &other)
 {
     m_zone = other.getZone();
     m_node= other.getNode();
-    m_sensor = other.getSensor();
+    m_category = other.getCategory();
+    m_address = other.getAddress();
     m_timestamp = other.getTimestamp();
 
     return *this;
@@ -71,11 +78,13 @@ QDBusArgument &operator<<(QDBusArgument &argument, const HomeAlarmInfo &data)
     argument.beginStructure();
     QString zone = data.getZone();
     QString node = data.getNode();
-    QString sensor = data.getSensor();
+    QString category = data.getCategory();
+    QString address = data.getAddress();
     QString timestamp = data.getTimestamp();
     argument << zone;
     argument << node;
-    argument << sensor;
+    argument << category;
+    argument << address;
     argument << timestamp;
     argument.endStructure();
     return argument;
@@ -83,16 +92,18 @@ QDBusArgument &operator<<(QDBusArgument &argument, const HomeAlarmInfo &data)
 
 const QDBusArgument &operator>>(const QDBusArgument &argument, HomeAlarmInfo &data)
 {
-    QString zone, node, sensor, timestamp;
+    QString zone, node, category, address, timestamp;
     argument.beginStructure();
     argument >> zone;
     argument >> node;
-    argument >> sensor;
+    argument >> category;
+    argument >> address;
     argument >> timestamp;
     argument.endStructure();
     data.setNode(node);
     data.setZone(zone);
-    data.setSensor(sensor);
+    data.setCategory(category);
+    data.setAddress(address);
     data.setTimestamp(timestamp);
     return argument;
 }
@@ -117,14 +128,24 @@ QString HomeAlarmInfo::getNode() const
     return m_node;
 }
 
-void HomeAlarmInfo::setSensor(const QString &sensor)
+void HomeAlarmInfo::setCategory(const QString &category)
 {
-    m_sensor = sensor;
+    m_category = category;
 }
 
-QString HomeAlarmInfo::getSensor() const
+QString HomeAlarmInfo::getCategory() const
 {
-    return m_sensor;
+    return m_category;
+}
+
+void HomeAlarmInfo::setAddress(const QString &address)
+{
+    m_address = address;
+}
+
+QString HomeAlarmInfo::getAddress() const
+{
+    return m_address;
 }
 
 void HomeAlarmInfo::setTimestamp(const QString &timestamp)

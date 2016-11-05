@@ -12,8 +12,10 @@ public:
     explicit HomeAlarmInfo();
     HomeAlarmInfo(const QString&,
                   const QString&,
+                  const QString&,
                   const QString&);
     HomeAlarmInfo(const QString&,
+                  const QString&,
                   const QString&,
                   const QString&,
                   const QString&);
@@ -31,18 +33,21 @@ public:
 
     QString getZone() const;
     QString getNode() const;
-    QString getSensor() const;
+    QString getCategory() const;
+    QString getAddress() const;
     QString getTimestamp() const;
 
     void setZone(const QString&);
     void setNode(const QString&);
-    void setSensor(const QString&);
+    void setCategory(const QString&);
+    void setAddress(const QString&);
     void setTimestamp(const QString&);
 
 private:
     QString m_zone;
     QString m_node;
-    QString m_sensor;
+    QString m_category;
+    QString m_address;
     QString m_timestamp;
 
     template<class T> friend class QList;

@@ -8,6 +8,12 @@
 #include <RF24/RF24.h>
 #include <RF24Network/RF24Network.h>
 #include <RF24Mesh/RF24Mesh.h>
+
+#include <cstdlib>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <unistd.h>
 #endif
 
 class RF24Functions : public QObject

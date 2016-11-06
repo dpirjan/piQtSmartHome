@@ -4,6 +4,7 @@
 #include "homeAlarmInfo.h"
 #include "databaseManagerInterface.h"
 #include "mailManagerInterface.h"
+#include "wiringPiInterface.h"
 
 wiredSensor::wiredSensor(const SystemType &system,
                          const SensorType &type,
@@ -18,7 +19,10 @@ wiredSensor::wiredSensor(const SystemType &system,
     , m_wiredTimeout(timeout)
 {
     qDebug() << "wiredSensor ctor: " << this << " GPIO: " << address;
-    //@TODO add call to setupInterrupt here
+    wiringPiInterface::instance().setupInterrupt(address,
+                                                 edge,
+                                                 &wiredSensor::interruptHandler,
+                                                 this);
 }
 
 wiredSensor::wiredSensor(const wiredSensor &obj) : sensor(obj)

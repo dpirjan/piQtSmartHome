@@ -63,8 +63,6 @@ void wiringPiInterface::setupInterrupt(const QString &GPIO,
     // This function will work in any mode, and does not need root
     // privileges to work.
     //
-    //
-
     if(wiringPiISR(pin, edge, function, arg) < 0)
         qCritical() << "Unable to setup ISR on " << pin << " : " << strerror(errno);
     else

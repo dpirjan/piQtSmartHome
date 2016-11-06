@@ -11,16 +11,8 @@ CONFIG(debug, debug|release) {
     message("$${TARGET} - release mode")
 }
 
-!isEmpty(SYSROOT) {
-        message("SYSROOT not empty, assuming compiling for target")
-        DEFINES += WIRINGPI
-        LIBS += -lwiringPi
-        message("$${LIBS}")
-}
-
 DEFINES += QT_MESSAGELOGCONTEXT
 LIBS += -lsystemd
-
 
 SOURCES += homeAlarmInfo.cpp \
            smartHomeInfo.cpp \

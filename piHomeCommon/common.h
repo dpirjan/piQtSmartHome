@@ -4,10 +4,6 @@
 #include <QString>
 #include <QDebug>
 
-#ifdef WIRINGPI
-#include<wiringPi.h>
-#endif
-
 namespace piHome {
 
 typedef enum {
@@ -302,32 +298,6 @@ inline ActuatorType StringToActuatorType(const QString &str)
 
     return returnValue;
 }
-
-#ifdef WIRINGPI
-inline int StringToGPIO(const QString &gpio)
-{
-    int returnValue = -1;
-    QString toRemove = "GPIO_";
-    QString copy = gpio;
-    if(gpio.contains(toRemove))
-        returnValue = copy.remove(toRemove).toInt();
-
-    return returnValue;
-}
-
-inline int StringToEdge(const QString &edge)
-{
-    int returnValue = -1;
-    if(edge.contains("FALLING"))
-        returnValue = 1; //INT_EDGE_FALLING;
-    if(edge.contains("RISING"))
-        returnValue = 2; //INT_EDGE_RISING;
-    if(edge.contains("BOT"))
-        returnValue = 3; //INT_EDGE_BOTH;
-
-    return returnValue;
-}
-#endif
 
 }
 

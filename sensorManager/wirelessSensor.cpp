@@ -6,6 +6,7 @@
 #include "smartHomeInfo.h"
 #include "databaseManagerInterface.h"
 #include "mailManagerInterface.h"
+#include "RF24Interface.h"
 
 wirelessSensor::wirelessSensor(const SystemType &system,
                                const SensorType &type,
@@ -17,6 +18,8 @@ wirelessSensor::wirelessSensor(const SystemType &system,
     : sensor(system, type, zone, node, address, sendMail)
     , m_wirelessTimeout(timeout)
 {
+    qDebug() << "wirelessSensor ctor: " << QThread::currentThreadId();
+    RF24Interface::instance().init();
 }
 
 wirelessSensor::wirelessSensor(const wirelessSensor &obj) : sensor(obj)

@@ -1,4 +1,8 @@
+#include <QThread>
+
 #include "actuator.h"
+#include "RF24Interface.h"
+
 
 actuator::actuator(const SystemType &system,
                    const ActuatorType &type,
@@ -15,6 +19,8 @@ actuator::actuator(const SystemType &system,
   , m_address(address)
   , m_value(value)
 {
+    qDebug() << "actuator ctor: " << QThread::currentThreadId();
+    RF24Interface::instance().init();
 }
 
 actuator::actuator(const actuator &obj)

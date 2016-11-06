@@ -35,14 +35,16 @@ isEmpty(SYSROOT) {
 }
 
 HEADERS += \
-    common.h \
     actuator.h \
     sensor.h \
     wiredSensor.h \
     wirelessSensor.h \
     actuatorInstantiator.h \
     sensorInstantiator.h \
-    sensorManager.h
+    sensorManager.h \
+    RF24Interface.h \
+    RF24Functions.h \
+    wiringPiInterface.h
 
 SOURCES += \
     actuator.cpp \
@@ -52,7 +54,10 @@ SOURCES += \
     actuatorInstantiator.cpp \
     sensorInstantiator.cpp \
     sensorManagerService.cpp \
-    sensorManager.cpp
+    sensorManager.cpp \
+    RF24Interface.cpp \
+    RF24Functions.cpp \
+    wiringPiInterface.cpp
 
 DISTFILES += \
     piHomeSensor.service

@@ -45,10 +45,6 @@ private:
     template<class T> friend class QList;
 
     void interrupt();
-
-#ifdef WIRINGPI
-    static bool m_wiringPiInitialized;
-#endif
 };
 
 #endif // WIREDSENSOR_H

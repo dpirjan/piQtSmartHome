@@ -5,19 +5,6 @@
 #include "databaseManagerInterface.h"
 #include "mailManagerInterface.h"
 
-#ifdef WIRINGPI
-#include <wiringPi.h>
-#include <errno.h>
-
-extern "C"
-{
-    int wiringPiSetupGpio(void);
-    int wiringPiISR (int, int, void (*function)(void*), void*);
-};
-
-bool wiredSensor::m_wiringPiInitialized = false;
-#endif
-
 wiredSensor::wiredSensor(const SystemType &system,
                          const SensorType &type,
                          const QString &zone,
@@ -31,38 +18,7 @@ wiredSensor::wiredSensor(const SystemType &system,
     , m_wiredTimeout(timeout)
 {
     qDebug() << "wiredSensor ctor: " << this << " GPIO: " << address;
-
-#ifdef WIRINGPI
-            if(!wiredSensor::m_wiringPiInitialized)
-            {
-
-                // Call for winringPiSetupGpio to initialize wiringPi using Broadcom pin numbers
-                if(wiringPiSetupGpio() < 0)
-                    qCritical() << "Unable to setup wiringPi: " << strerror(errno);
-                else
-                    wiredSensor::m_wiringPiInitialized = true;
-            }
-
-            int pin = StringToGPIO(address);
-            int edgeType = StringToEdge(edge);
-
-            // Call for wiringPiISR() interrupt initalization function
-            // the edgeType can be: INT_EDGE_FALLING, INT_EDGE_RISING,
-            // INT_EDGE_BOTH or INT_EDGE_SETUP
-            //
-            // The pin number is supplied in the current mode – native
-            // wiringPi, BCM_GPIO, physical or Sys modes.
-            //
-            // This function will work in any mode, and does not need root
-            // privileges to work.
-            //
-            //
-
-            if(wiringPiISR(pin, edgeType, &wiredSensor::interruptHandler, this) < 0)
-                qCritical() << "Unable to setup ISR on " << pin << " : " << strerror(errno);
-            else
-                qDebug() << "Setup interrupt on " << this << " was successfull!";
-#endif
+    //@TODO add call to setupInterrupt here
 }
 
 wiredSensor::wiredSensor(const wiredSensor &obj) : sensor(obj)

@@ -23,9 +23,9 @@ RF24Interface::~RF24Interface()
     delete m_functions;
 }
 
-void RF24Interface::interruptHandler(void *userData)
+void RF24Interface::interruptHandler(void)
 {
-    qDebug() << "interruptHandler: " << userData;
+    qDebug() << "RF24Interface::interruptHandler";
     QElapsedTimer timer;
     timer.start();
 #ifdef WIRINGPI

@@ -58,6 +58,8 @@ inline QString EdgeToString(const int &edge)
         qCritical() << "Wrong edge value provided!";
         break;
     }
+
+    return ret;
 }
 #endif
 

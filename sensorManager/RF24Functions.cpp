@@ -1,12 +1,12 @@
 #include "RF24Functions.h"
 #include "RF24Interface.h"
-#include "wiringPiInterface.h"
+//#include "wiringPiInterface.h"
 
 #include <QDebug>
 #include <QThread>
 
-#define RF24InterruptGPIO "GPIO_2" //@TODO read this from settings file
-#define RF24InterruptEDGE "INT_EDGE_RISING"
+#define RF24InterruptGPIO 2 //@TODO read this from settings file
+#define RF24InterruptEDGE "INT_EDGE_FALLING"
 
 bool RF24Functions::m_rf24Initialized = false;
 
@@ -37,10 +37,11 @@ void RF24Functions::init()
     if(RF24Functions::m_rf24Initialized)
         return;
 
-    wiringPiInterface::instance().setupInterrupt(RF24InterruptGPIO,
-                                                 RF24InterruptEDGE,
-                                                 &RF24Interface::interruptHandler,
-                                                 NULL);
+    attachInterrupt(RF24InterruptGPIO, INT_EDGE_FALLING, RF24Interface::interruptHandler);
+//    wiringPiInterface::instance().setupInterrupt(RF24InterruptGPIO,
+//                                                 RF24InterruptEDGE,
+//                                                 &RF24Interface::interruptHandler,
+//                                                 NULL);
 #ifdef WIRINGPI //@TODO change this to something more suggestive
     // Set up NRF24L01+ radio on SPI bus (see the above wiring)
     radio = new RF24(RPI_V2_GPIO_P1_15, BCM2835_SPI_CS0, BCM2835_SPI_SPEED_8MHZ);

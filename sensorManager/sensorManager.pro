@@ -31,6 +31,7 @@ isEmpty(SYSROOT) {
         message("SYSROOT not empty, assuming compiling for target")
         DEFINES += WIRINGPI
         LIBS += -lwiringPi
+        LIBS += -lrf24-bcm
         LIBS += -lrf24
         LIBS += -lrf24network
         LIBS += -lrf24mesh

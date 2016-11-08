@@ -37,7 +37,7 @@ public:
         return obj;
     }
 
-    static void interruptHandler(void*);
+    static void interruptHandler(void);
     void init();
 
 private slots:

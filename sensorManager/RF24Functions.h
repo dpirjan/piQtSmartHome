@@ -28,8 +28,8 @@ protected:
     friend class RF24Interface;
 
 protected slots:
-    void loop();
     void stop();
+    void loop();
 
 signals:
     void error();
@@ -37,6 +37,11 @@ signals:
 
 private:
     void init();
+    bool checkData();
+
+    static void interruptHandler(void);
+
+    static quint64 m_counter;
 
     bool m_stop;
     QMutex m_mutex;
@@ -44,6 +49,13 @@ private:
     static bool m_rf24Initialized;
 
 #ifdef WIRINGPI
+    // RF payload transmition:
+    struct t_payload
+    {
+      unsigned short int IDnode; // Node ID - redundant information
+      unsigned char val[4];
+    };
+
     RF24 *radio;
     RF24Network *network;
     RF24Mesh *mesh;

@@ -3,16 +3,12 @@
 
 #include <QDebug>
 #include <QThread>
-#include <QElapsedTimer>
 
-quint64 RF24Interface::m_counter = 0;
 bool RF24Interface::m_RF24InterfaceInitialized = false;
 
 RF24Interface::RF24Interface(QObject *parent) : QObject(parent)
 {
     qDebug() << "Constructor RF24Interface";
-    m_functions = new RF24Functions();
-    m_functions->init();
 }
 
 RF24Interface::~RF24Interface()
@@ -21,18 +17,6 @@ RF24Interface::~RF24Interface()
     if(m_thread->isRunning())
         m_functions->stop();
     delete m_functions;
-}
-
-void RF24Interface::interruptHandler(void)
-{
-    qDebug() << "RF24Interface::interruptHandler";
-    QElapsedTimer timer;
-    timer.start();
-#ifdef WIRINGPI
-    RF24Interface::m_counter++;
-    qDebug() << "interruptHandler() counter " << RF24Interface::m_counter;
-#endif
-    qDebug() << "interruptHandler() took " << timer.elapsed() << "ms";
 }
 
 void RF24Interface::init()
@@ -46,6 +30,7 @@ void RF24Interface::init()
     m_thread->setObjectName("RF24Interface");
 
     m_functions = new RF24Functions();
+    m_functions->init();
     m_functions->moveToThread(m_thread);
 
     connect(m_thread, SIGNAL(started()), m_functions, SLOT(loop()));

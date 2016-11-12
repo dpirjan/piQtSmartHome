@@ -40,6 +40,7 @@ void RF24Interface::init()
     connect(m_thread, &QThread::finished, m_thread, &QObject::deleteLater);
 
     m_thread->start();
+    qDebug() << "Thread STATUS: isRunning - " << m_thread->isRunning();
     RF24Interface::m_RF24InterfaceInitialized = true;
 }
 

@@ -31,6 +31,17 @@ RF24Functions::~RF24Functions()
 #endif
 }
 
+void RF24Functions::interruptHandler()
+{
+    qDebug() << "RF24Functions::interruptHandler";
+    QElapsedTimer timer;
+    timer.start();
+#ifdef WIRINGPI
+    qDebug() << "interruptHandler() counter " << ++RF24Functions::m_counter;
+#endif
+    qDebug() << "interruptHandler() took " << timer.elapsed() << "ms";
+}
+
 void RF24Functions::init()
 {
     qDebug() << "RF24Functions::init: " << QThread::currentThreadId();
@@ -61,17 +72,6 @@ void RF24Functions::init()
     RF24Functions::m_rf24Initialized = true;
 }
 
-void RF24Functions::interruptHandler(void)
-{
-    qDebug() << "RF24Functions::interruptHandler";
-    QElapsedTimer timer;
-    timer.start();
-#ifdef WIRINGPI
-    qDebug() << "interruptHandler() counter " << ++RF24Functions::m_counter;
-#endif
-    qDebug() << "interruptHandler() took " << timer.elapsed() << "ms";
-}
-
 void RF24Functions::loop()
 {
     qDebug() << "RF24Functions::loop: " << QThread::currentThreadId();
@@ -81,17 +81,19 @@ void RF24Functions::loop()
     {
         // Keep the network updated
         mesh->update();
+
         // DHCP service runs on the master node and assign addresses to the unit nodes
         mesh->DHCP();
-        // MASTER never sleeps as it is in receive and has to assign addresses
 
         // @TODO move this to the interruptHandler.
         if(network->available())
-            qDebug() << "New RF24 packet received <" << checkData() << "> loop counter: "
-                     << ++counter;
+            qDebug() << "New RF24 packet received <" << checkData()
+                     << "> loop counter: " << ++counter;
 
         if(m_stop)
             break;
+
+        delayMicroseconds(250000); //250ms
     }
 #endif
 

@@ -39,7 +39,7 @@ private:
     void init();
     bool checkData();
 
-    static void interruptHandler(void);
+    static void interruptHandler();
 
     static quint64 m_counter;
 

@@ -20,7 +20,11 @@ actuator::actuator(const SystemType &system,
   , m_value(value)
 {
     qDebug() << "actuator ctor: " << QThread::currentThreadId();
-    RF24Interface::instance().init();
+    if(m_hard == Wireless)
+    {
+        qDebug() << "Wireless Actuator";
+        RF24Interface::instance().init();
+    }
 }
 
 actuator::actuator(const actuator &obj)

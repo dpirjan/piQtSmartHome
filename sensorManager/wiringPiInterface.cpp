@@ -22,7 +22,6 @@ bool wiringPiInterface::initWiringPi()
 {
     bool ret = false;
 #ifdef WIRINGPI
-    QMutexLocker lock(&m_mutex);
     if(!wiringPiInterface::m_wiringPiInitialized)
     {
         // Call for wiringPiSetupGpio to initialize wiringPi using Broadcom pin numbers

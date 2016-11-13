@@ -17,7 +17,6 @@ PINS | NRF24L01 | PINS RPi | P1 Connector  |
 */
 
 #include <QObject>
-#include <QMutex>
 
 class QThread;
 class RF24Functions;
@@ -46,7 +45,6 @@ private:
     QThread *m_thread;
     RF24Functions *m_functions;
 
-    QMutex m_mutex;
     static bool m_RF24InterfaceInitialized;
 };
 

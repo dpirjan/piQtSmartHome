@@ -21,8 +21,9 @@ RF24Interface::~RF24Interface()
 
 void RF24Interface::init()
 {
-    qDebug() << "RF24Interface::init() " << RF24Interface::m_RF24InterfaceInitialized;
-    QMutexLocker locker(&m_mutex);
+    qDebug() << "RF24Interface::init() " << RF24Interface::m_RF24InterfaceInitialized
+             << "TID: " << QThread::currentThreadId();
+
     if(RF24Interface::m_RF24InterfaceInitialized)
         return;
 
@@ -30,7 +31,6 @@ void RF24Interface::init()
     m_thread->setObjectName("RF24Interface");
 
     m_functions = new RF24Functions();
-    m_functions->init();
     m_functions->moveToThread(m_thread);
 
     connect(m_thread, SIGNAL(started()), m_functions, SLOT(loop()));
@@ -40,7 +40,7 @@ void RF24Interface::init()
     connect(m_thread, &QThread::finished, m_thread, &QObject::deleteLater);
 
     m_thread->start();
-    qDebug() << "Thread STATUS: isRunning - " << m_thread->isRunning();
+
     RF24Interface::m_RF24InterfaceInitialized = true;
 }
 

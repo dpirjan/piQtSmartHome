@@ -2,18 +2,11 @@
 #define RF24FUNCTIONS_H
 
 #include <QObject>
-#include <QMutex>
 
 #ifdef WIRINGPI
 #include <RF24/RF24.h>
 #include <RF24Network/RF24Network.h>
 #include <RF24Mesh/RF24Mesh.h>
-
-#include <cstdlib>
-#include <iostream>
-#include <sstream>
-#include <string>
-#include <unistd.h>
 #endif
 
 class RF24Functions : public QObject
@@ -25,6 +18,8 @@ protected:
     virtual ~RF24Functions();
     Q_DISABLE_COPY(RF24Functions)
 
+    static void interruptHandler();
+
     friend class RF24Interface;
 
 protected slots:
@@ -32,33 +27,22 @@ protected slots:
     void loop();
 
 signals:
-    void error();
     void finished();
 
 private:
-    void init();
-    bool checkData();
-
-    static void interruptHandler();
-
-    static quint64 m_counter;
-
     bool m_stop;
-    QMutex m_mutex;
-
-    static bool m_rf24Initialized;
 
 #ifdef WIRINGPI
+    static RF24 m_radio;
+    static RF24Network m_network;
+    static RF24Mesh m_mesh;
+
     // RF payload transmition:
     struct t_payload
     {
       unsigned short int IDnode; // Node ID - redundant information
       unsigned char val[4];
     };
-
-    RF24 *radio;
-    RF24Network *network;
-    RF24Mesh *mesh;
 #endif
 };
 

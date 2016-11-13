@@ -3,7 +3,6 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QMutex>
 
 #ifdef WIRINGPI
 #include <wiringPi.h>
@@ -75,7 +74,6 @@ class wiringPiInterface : public QObject
 
 #ifdef WIRINGPI
     static bool m_wiringPiInitialized;
-    QMutex m_mutex;
 #endif
 
 public:

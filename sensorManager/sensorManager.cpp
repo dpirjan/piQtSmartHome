@@ -15,6 +15,9 @@ SensorManager::~SensorManager()
 
 void SensorManager::init()
 {
+    m_watchdog = new WatchdogHelper("piHomeSensor");
+    m_watchdog->init();
+
     m_wiredSensorList = sensorInstantiator::instance().getWiredSensors();
     int numSensors = m_wiredSensorList.count();
     qDebug() << numSensors << " Wired Sensors.";
@@ -34,7 +37,4 @@ void SensorManager::init()
     qDebug() << numActuators << " Actuators.";
     //    for(int i = 0; i < numActuators; i++)
     //        actuatorList.at(i)->debugActuator();
-
-    m_watchdog = new WatchdogHelper("piHomeSensor");
-    m_watchdog->init();
 }

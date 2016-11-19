@@ -20,7 +20,8 @@ typedef enum {
     PIR = 7,
     Contact,
     Light, // Light intensity
-    Temperature, // + humidity => DHT22
+    Temperature, // DHT22
+    Humidity, // DHT22
     CO, // Carbon Monoxid
     CH4, // Methane
     Vibration, // Knock sensor
@@ -31,7 +32,7 @@ typedef enum {
 } SensorType;
 
 typedef enum {
-    Siren = 19,
+    Siren = 20,
     Buzzer,
     Relay,
     DoorBell,

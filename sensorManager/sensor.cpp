@@ -1,7 +1,7 @@
 #include "sensor.h"
 
 sensor::sensor(const SystemType &system,
-               const SensorType &type,
+               const IOType &type,
                const QString &zone,
                const QString &node,
                const QString &address,
@@ -48,7 +48,7 @@ void sensor::debugSensor() const
 {
     qDebug() << "==============================================";
     qDebug() << systemTypeToString(m_system);
-    qDebug() << sensorTypeToString(m_type);
+    qDebug() << typeToString(m_type);
     qDebug() << m_zone;
     qDebug() << m_node;
     qDebug() << m_address;
@@ -61,7 +61,7 @@ SystemType sensor::getSystemType() const
     return m_system;
 }
 
-SensorType sensor::getSensorType() const
+IOType sensor::getSensorType() const
 {
     return m_type;
 }

@@ -9,7 +9,7 @@
 #include "RF24Interface.h"
 
 wirelessSensor::wirelessSensor(const SystemType &system,
-                               const SensorType &type,
+                               const IOType &type,
                                const QString &zone,
                                const QString &node,
                                const QString &address,
@@ -60,14 +60,14 @@ void wirelessSensor::interrupt()
 {
     QElapsedTimer timer;
     timer.start();
-    SensorType type = getSensorType();
+    IOType type = getSensorType();
     if(type == Light || type == Temperature)
     {
         // Will create a smartHomeInfo class instance and insert it in the
         // database containing the events.
         SmartHomeInfo event(getZone(),
                             getNode(),
-                            sensorTypeToString(getSensorType()),
+                            typeToString(getSensorType()),
                             getAddress(),
                             getValue());
         databaseManagerInterface::instance().insertSmartHomeEntry(event);
@@ -78,7 +78,7 @@ void wirelessSensor::interrupt()
         // database containing the events.
         HomeAlarmInfo event(getZone(),
                             getNode(),
-                            sensorTypeToString(getSensorType()),
+                            typeToString(getSensorType()),
                             getAddress());
         databaseManagerInterface::instance().insertHomeAlarmEntry(event);
         if(getSendMail())
@@ -86,7 +86,7 @@ void wirelessSensor::interrupt()
             QString subject = "Alarm Notification piHome";
             QString message = "Alarm from Zone: " + getZone() +
                     " Node: " + getNode() +
-                    " Sensor: " + sensorTypeToString(getSensorType());
+                    " Sensor: " + typeToString(getSensorType());
             mailManagerInterface::instance().sendMail(subject,message);
         }
     }

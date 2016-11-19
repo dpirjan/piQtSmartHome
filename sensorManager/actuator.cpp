@@ -5,7 +5,7 @@
 
 
 actuator::actuator(const SystemType &system,
-                   const ActuatorType &type,
+                   const IOType &type,
                    const HardwareType &hw,
                    const QString &zone,
                    const QString &node,
@@ -60,7 +60,7 @@ SystemType actuator::getSystemType() const
     return m_system;
 }
 
-ActuatorType actuator::getActuatorType() const
+IOType actuator::getActuatorType() const
 {
     return m_type;
 }

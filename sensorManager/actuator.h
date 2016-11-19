@@ -9,7 +9,7 @@ class actuator
 {
 public:
     explicit actuator(const SystemType&,
-                      const ActuatorType&,
+                      const IOType&,
                       const HardwareType&,
                       const QString&,
                       const QString&,
@@ -21,7 +21,7 @@ public:
 
 public:
     SystemType getSystemType() const;
-    ActuatorType getActuatorType() const;
+    IOType getActuatorType() const;
     HardwareType getHardwareType() const;
     QString getZone() const;
     QString getNode() const;
@@ -34,7 +34,7 @@ public:
 
 private:
     SystemType m_system;
-    ActuatorType m_type;
+    IOType m_type;
     HardwareType m_hard;
     QString m_zone;
     QString m_node;

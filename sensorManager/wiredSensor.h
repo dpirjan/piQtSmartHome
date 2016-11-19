@@ -14,7 +14,7 @@ class wiredSensor : public sensor
 {
 public:
     explicit wiredSensor(const SystemType&,
-                         const SensorType&,
+                         const IOType&,
                          const QString&,
                          const QString&,
                          const QString&,

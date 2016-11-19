@@ -23,7 +23,7 @@ void actuator::debugActuator() const
 {
     qDebug() << "==============================================";
     qDebug() << systemTypeToString(m_system);
-    qDebug() << actuatorTypeToString(m_type);
+    qDebug() << typeToString(m_type);
     qDebug() << hardwareTypeToString(m_hard);
     qDebug() << m_zone;
     qDebug() << m_node;
@@ -46,7 +46,7 @@ void actuatorInstantiator::loadActuators()
         m_settings->beginGroup(group);
         actuator *tmp = new actuator(
                     StringToSystemType(m_settings->value("SystemType").toString()),
-                    StringToActuatorType(m_settings->value("ActuatorType").toString()),
+                    StringToType(m_settings->value("ActuatorType").toString()),
                     StringToHardwareType(m_settings->value("HardwareType").toString()),
                     m_settings->value("Zone").toString(),
                     m_settings->value("Node").toString(),
@@ -95,7 +95,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator1");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Siren));
+        settings->setValue("ActuatorType", typeToString(Siren));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Entrance Door");
@@ -103,7 +103,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator2");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(Buzzer));
+        settings->setValue("ActuatorType", typeToString(Buzzer));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Kitchen");
         settings->setValue("Node", "Cooker");
@@ -111,7 +111,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator3");
         settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("ActuatorType", actuatorTypeToString(Relay));
+        settings->setValue("ActuatorType", typeToString(Relay));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Air Conditioning");
@@ -119,7 +119,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator4");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", actuatorTypeToString(DoorBell));
+        settings->setValue("ActuatorType", typeToString(DoorBell));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Door");
@@ -127,7 +127,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator5");
         settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("ActuatorType", actuatorTypeToString(IR));
+        settings->setValue("ActuatorType", typeToString(IR));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Air Conditioning");
@@ -135,7 +135,7 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings->endGroup();
         settings->beginGroup("Actuator6");
         settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("ActuatorType", actuatorTypeToString(Pump));
+        settings->setValue("ActuatorType", typeToString(Pump));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Balcony");
         settings->setValue("Node", "Plants");

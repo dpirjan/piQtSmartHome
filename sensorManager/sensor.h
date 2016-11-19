@@ -9,7 +9,7 @@ class sensor
 {
 public:
     explicit sensor(const SystemType&,
-                    const SensorType&,
+                    const IOType&,
                     const QString&,
                     const QString&,
                     const QString&,
@@ -19,7 +19,7 @@ public:
     virtual ~sensor();
 
     SystemType getSystemType() const;
-    SensorType getSensorType() const;
+    IOType getSensorType() const;
     QString getZone() const;
     QString getNode() const;
     QString getAddress() const;
@@ -32,7 +32,7 @@ public:
 
 private:
     SystemType m_system;
-    SensorType m_type;
+    IOType m_type;
     QString m_zone;
     QString m_node;
     QString m_address;

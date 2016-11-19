@@ -70,7 +70,7 @@ void sensorInstantiator::loadSensors()
         {
             wiredSensor *tmp = new wiredSensor(
                         StringToSystemType(m_settings->value("SystemType").toString()),
-                        StringToSensorType(m_settings->value("SensorType").toString()),
+                        StringToType(m_settings->value("SensorType").toString()),
                         m_settings->value("Zone").toString(),
                         m_settings->value("Node").toString(),
                         m_settings->value("Address").toString(),
@@ -92,7 +92,7 @@ void sensorInstantiator::loadSensors()
         {
             wirelessSensor *tmp = new wirelessSensor(
                         StringToSystemType(m_settings->value("SystemType").toString()),
-                        StringToSensorType(m_settings->value("SensorType").toString()),
+                        StringToType(m_settings->value("SensorType").toString()),
                         m_settings->value("Zone").toString(),
                         m_settings->value("Node").toString(),
                         m_settings->value("Address").toString(),
@@ -156,7 +156,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor1");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(Contact));
+        settings->setValue("SensorType", typeToString(Contact));
         settings->setValue("HardwareType", hardwareTypeToString(Wired));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Entrance Door");
@@ -164,7 +164,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor2");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(Contact));
+        settings->setValue("SensorType", typeToString(Contact));
         settings->setValue("HardwareType", hardwareTypeToString(Wired));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Entrance Door");
@@ -172,7 +172,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor3");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(Contact));
+        settings->setValue("SensorType", typeToString(Contact));
         settings->setValue("HardwareType", hardwareTypeToString(Wired));
         settings->setValue("Zone", "Dressing");
         settings->setValue("Node", "Main");
@@ -180,7 +180,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor4");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(PIR));
+        settings->setValue("SensorType", typeToString(PIR));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Living");
         settings->setValue("Node", "Main");
@@ -188,7 +188,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor5");
         settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("SensorType", sensorTypeToString(Light));
+        settings->setValue("SensorType", typeToString(Light));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Master Bedroom");
         settings->setValue("Node", "Main");
@@ -196,7 +196,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor6");
         settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("SensorType", sensorTypeToString(Temperature));
+        settings->setValue("SensorType", typeToString(Temperature));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Kids Bedroom");
         settings->setValue("Node", "Main");
@@ -204,7 +204,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor7");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(CO));
+        settings->setValue("SensorType", typeToString(CO));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Kitchen");
         settings->setValue("Node", "Cooker");
@@ -212,7 +212,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor8");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(CH4));
+        settings->setValue("SensorType", typeToString(CH4));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Kitchen");
         settings->setValue("Node", "Cooker");
@@ -220,7 +220,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor9");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(Vibration));
+        settings->setValue("SensorType", typeToString(Vibration));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Entrance Door");
@@ -228,7 +228,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor10");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(Flood));
+        settings->setValue("SensorType", typeToString(Flood));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Bathroom");
         settings->setValue("Node", "Main");
@@ -236,7 +236,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor11");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(WaterLevel));
+        settings->setValue("SensorType", typeToString(WaterLevel));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Balcony");
         settings->setValue("Node", "Plants");
@@ -244,7 +244,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor12");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(DoorLocked));
+        settings->setValue("SensorType", typeToString(DoorLocked));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Hall");
         settings->setValue("Node", "Entrance Door");
@@ -252,7 +252,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->endGroup();
         settings->beginGroup("Sensor13");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("SensorType", sensorTypeToString(BatteryLevel));
+        settings->setValue("SensorType", typeToString(BatteryLevel));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
         settings->setValue("Zone", "Toilet");
         settings->setValue("Node", "Main");

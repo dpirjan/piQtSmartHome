@@ -12,7 +12,7 @@ class wirelessSensor : public sensor
 {
 public:
     explicit wirelessSensor(const SystemType&,
-                            const SensorType&,
+                            const IOType&,
                             const QString&,
                             const QString&,
                             const QString&,

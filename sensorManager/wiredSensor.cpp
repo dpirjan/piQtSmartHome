@@ -7,7 +7,7 @@
 #include "wiringPiInterface.h"
 
 wiredSensor::wiredSensor(const SystemType &system,
-                         const SensorType &type,
+                         const IOType &type,
                          const QString &zone,
                          const QString &node,
                          const QString &address,
@@ -99,7 +99,7 @@ void wiredSensor::interrupt()
     timer.start();
     // Will create a homeAlarmInfo class instance and insert it in the
     // database containing the events.
-    HomeAlarmInfo event(getZone(),getNode(),sensorTypeToString(getSensorType()),
+    HomeAlarmInfo event(getZone(),getNode(),typeToString(getSensorType()),
                         getAddress());
     databaseManagerInterface::instance().insertHomeAlarmEntry(event);
     if(getSendMail())
@@ -107,7 +107,7 @@ void wiredSensor::interrupt()
         QString subject = "Alarm Notification piHome";
         QString message = "Alarm from Zone: " + getZone() +
                 " Node: " + getNode() +
-                " Sensor: " + sensorTypeToString(getSensorType()) +
+                " Sensor: " + typeToString(getSensorType()) +
                 " GPIO: " + getAddress();
         mailManagerInterface::instance().sendMail(subject,message);
     }

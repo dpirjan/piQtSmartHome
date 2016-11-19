@@ -7,38 +7,35 @@
 namespace piHome {
 
 typedef enum {
-    HomeAlarm = 1,
-    SmartHome
+    HomeAlarm = 0x1,
+    SmartHome = 0x2,
 } SystemType;
 
 typedef enum {
-    Wired = 4,
-    Wireless
+    Wired = 0x10,
+    Wireless = 0x20,
 } HardwareType;
 
 typedef enum {
-    PIR = 7,
-    Contact,
-    Light, // Light intensity
-    Temperature, // DHT22
-    Humidity, // DHT22
-    CO, // Carbon Monoxid
-    CH4, // Methane
-    Vibration, // Knock sensor
-    Flood, // Water presence
-    WaterLevel, // Water level
-    DoorLocked, // Door locked
-    BatteryLevel // Read battery voltage on Analog
-} SensorType;
-
-typedef enum {
-    Siren = 20,
-    Buzzer,
-    Relay,
-    DoorBell,
-    IR,
-    Pump // Water pump
-} ActuatorType;
+    PIR = 0x100,
+    Contact = 0x200,
+    Light = 0x400, // Light intensity
+    Temperature = 0x800, // DHT22
+    Humidity = 0x1000, // DHT22
+    CO = 0x2000, // Carbon Monoxid
+    CH4 = 0x4000, // Methane
+    Vibration = 0x8000, // Knock sensor
+    Flood = 0x10000, // Water presence
+    WaterLevel = 0x20000, // Water level
+    DoorLocked = 0x40000, // Door locked
+    BatteryLevel = 0x80000, // Read battery voltage on Analog
+    Siren = 0x100000,
+    Buzzer = 0x200000,
+    Relay = 0x400000,
+    DoorBell = 0x800000,
+    IR = 0x1000000,
+    Pump = 0x2000000 // Water pump
+} IOType;
 
 inline QString systemTypeToString(const SystemType &value)
 {
@@ -117,7 +114,7 @@ inline HardwareType StringToHardwareType(const QString &str)
     return returnValue;
 }
 
-inline QString sensorTypeToString(const SensorType &value)
+inline QString typeToString(const IOType &value)
 {
     QString returnString;
     switch (value)
@@ -133,6 +130,9 @@ inline QString sensorTypeToString(const SensorType &value)
         break;
     case Temperature:
         returnString = "Temperature";
+        break;
+    case Humidity:
+        returnString = "Humidity";
         break;
     case CO:
         returnString = "CO";
@@ -155,17 +155,35 @@ inline QString sensorTypeToString(const SensorType &value)
     case BatteryLevel:
         returnString = "BatteryLevel";
         break;
+    case Siren:
+        returnString = "Siren";
+        break;
+    case Buzzer:
+        returnString = "Buzzer";
+        break;
+    case Relay:
+        returnString = "Relay";
+        break;
+    case DoorBell:
+        returnString = "DoorBell";
+        break;
+    case IR:
+        returnString = "IR";
+        break;
+    case Pump:
+        returnString = "Pump";
+        break;
     default:
-        qDebug() << "sensorTypeToString() - Value not supported!";
+        qDebug() << "typeToString() - Value not supported!";
         break;
     }
     return returnString;
 }
 
-inline SensorType StringToSensorType(const QString &str)
+inline IOType StringToType(const QString &str)
 {
     bool found = false;
-    SensorType returnValue;
+    IOType returnValue;
     if(str == "PIR")
     {
         returnValue = PIR;
@@ -184,6 +202,11 @@ inline SensorType StringToSensorType(const QString &str)
     if(str == "Temperature")
     {
         returnValue = Temperature;
+        found = true;
+    }
+    if(str == "Humidity")
+    {
+        returnValue = Humidity;
         found = true;
     }
     if(str == "CO")
@@ -221,48 +244,6 @@ inline SensorType StringToSensorType(const QString &str)
         returnValue = BatteryLevel;
         found = true;
     }
-
-    if(!found)
-        qDebug() << "StringToSensorType() - Value not supported!";
-
-    return returnValue;
-}
-
-inline QString actuatorTypeToString(const ActuatorType &value)
-{
-    QString returnString;
-    switch (value)
-    {
-    case Siren:
-        returnString = "Siren";
-        break;
-    case Buzzer:
-        returnString = "Buzzer";
-        break;
-    case Relay:
-        returnString = "Relay";
-        break;
-    case DoorBell:
-        returnString = "DoorBell";
-        break;
-    case IR:
-        returnString = "IR";
-        break;
-    case Pump:
-        returnString = "Pump";
-        break;
-    default:
-        qDebug() << "actuatorTypeToString() - Value not supported!";
-        break;
-    }
-    return returnString;
-}
-
-inline ActuatorType StringToActuatorType(const QString &str)
-{
-    bool found = false;
-    ActuatorType returnValue;
-
     if(str == "Siren")
     {
         returnValue = Siren;
@@ -295,7 +276,7 @@ inline ActuatorType StringToActuatorType(const QString &str)
     }
 
     if(!found)
-        qDebug() << "StringToActuatorType() - Value not supported!";
+        qDebug() << "StringToType() - Value not supported!";
 
     return returnValue;
 }

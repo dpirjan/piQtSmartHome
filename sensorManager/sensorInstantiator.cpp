@@ -144,7 +144,7 @@ bool sensorInstantiator::firstRunInitSensors()
 
         settings->clear();
         settings->beginGroup("GenericSettings");
-        settings->setValue("NumberOfSensors", 13);
+        settings->setValue("NumberOfSensors", 14);
         settings->setValue("SendMailOnAlarm", true);
         settings->endGroup();
         settings->beginGroup("WiredSettings");
@@ -203,6 +203,14 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
         settings->beginGroup("Sensor7");
+        settings->setValue("SystemType", systemTypeToString(SmartHome));
+        settings->setValue("SensorType", typeToString(Humidity));
+        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings->setValue("Zone", "Kids Bedroom");
+        settings->setValue("Node", "Main");
+        settings->setValue("Address", "SPI_0");
+        settings->endGroup();
+        settings->beginGroup("Sensor8");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("SensorType", typeToString(CO));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
@@ -210,7 +218,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->setValue("Node", "Cooker");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
-        settings->beginGroup("Sensor8");
+        settings->beginGroup("Sensor9");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("SensorType", typeToString(CH4));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
@@ -218,7 +226,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->setValue("Node", "Cooker");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
-        settings->beginGroup("Sensor9");
+        settings->beginGroup("Sensor10");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("SensorType", typeToString(Vibration));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
@@ -226,7 +234,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->setValue("Node", "Entrance Door");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
-        settings->beginGroup("Sensor10");
+        settings->beginGroup("Sensor11");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("SensorType", typeToString(Flood));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
@@ -234,7 +242,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->setValue("Node", "Main");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
-        settings->beginGroup("Sensor11");
+        settings->beginGroup("Sensor12");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("SensorType", typeToString(WaterLevel));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
@@ -242,7 +250,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->setValue("Node", "Plants");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
-        settings->beginGroup("Sensor12");
+        settings->beginGroup("Sensor13");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("SensorType", typeToString(DoorLocked));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));
@@ -250,7 +258,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings->setValue("Node", "Entrance Door");
         settings->setValue("Address", "SPI_0");
         settings->endGroup();
-        settings->beginGroup("Sensor13");
+        settings->beginGroup("Sensor14");
         settings->setValue("SystemType", systemTypeToString(HomeAlarm));
         settings->setValue("SensorType", typeToString(BatteryLevel));
         settings->setValue("HardwareType", hardwareTypeToString(Wireless));

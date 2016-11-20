@@ -37,4 +37,33 @@ void SensorManager::init()
     qDebug() << numActuators << " Actuators.";
     //    for(int i = 0; i < numActuators; i++)
     //        actuatorList.at(i)->debugActuator();
+
+    // @TODO remove this after proper testing
+//    wirelessSensor *wrlTmp;
+//    wrlTmp = sensorInstantiator::instance().findWirelessSensor(Temperature, "SPI_0");
+//    if(wrlTmp)
+//        wrlTmp->debugSensor();
+//    wrlTmp = sensorInstantiator::instance().findWirelessSensor(Humidity, "SPI_0");
+//    if(wrlTmp)
+//        wrlTmp->debugSensor();
+//    wrlTmp = sensorInstantiator::instance().findWirelessSensor(Light, "SPI_0");
+//    if(wrlTmp)
+//        wrlTmp->debugSensor();
+//    wrlTmp = sensorInstantiator::instance().findWirelessSensor(Contact, "SPI_1");
+//    if(wrlTmp)
+//        wrlTmp->debugSensor();
+
+//    actuator *actTmp;
+//    actTmp = actuatorInstantiator::instance().findActuator(Siren, "SPI_0");
+//    if(actTmp)
+//        actTmp->debugActuator();
+//    actTmp = actuatorInstantiator::instance().findActuator(Relay, "SPI_0");
+//    if(actTmp)
+//        actTmp->debugActuator();
+//    actTmp = actuatorInstantiator::instance().findActuator(IR, "SPI_0");
+//    if(actTmp)
+//        actTmp->debugActuator();
+//    actTmp = actuatorInstantiator::instance().findActuator(Pump, "SPI_0");
+//    if(actTmp)
+//        actTmp->debugActuator();
 }

@@ -71,6 +71,35 @@ QList<actuator *> actuatorInstantiator::getActuators() const
     return m_actuatorsList;
 }
 
+actuator* actuatorInstantiator::findActuator(const IOType &actuatorType,
+                                             const QString &actuatorAddress) const
+{
+    bool found = false;
+    int counter;
+    for(counter = 0; counter < m_actuatorsList.count(); counter++)
+        if(m_actuatorsList.at(counter)->getActuatorType() == actuatorType &&
+                m_actuatorsList.at(counter)->getAddress() == actuatorAddress)
+        {
+            // assuming is not possible to have two actuators with same type
+            // at the same address
+            found = true;
+            qDebug() << "Found " << typeToString(actuatorType)
+                     << " actuator with " << actuatorAddress
+                     << " address on position " << counter;
+            break;
+        }
+
+    if(found)
+        return m_actuatorsList.at(counter);
+    else
+    {
+        qCritical() << "Cannot find specified actuator ("
+                    << typeToString(actuatorType) << ", " << actuatorAddress
+                    << ") !";
+        return NULL;
+    }
+}
+
 bool actuatorInstantiator::firstRunInitActuators()
 {
     bool returnCode = false;

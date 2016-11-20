@@ -30,6 +30,8 @@ public:
 public slots:
     QList<actuator *> getActuators() const;
 
+    actuator* findActuator(const IOType&, const QString &) const;
+
 private:
     QSettings *m_settings;
 

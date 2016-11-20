@@ -1,5 +1,6 @@
 #include "RF24Functions.h"
 #include "RF24Interface.h"
+#include "sensorInstantiator.h"
 
 #include <QDebug>
 #include <QThread>
@@ -65,16 +66,49 @@ void RF24Functions::interruptHandler()
 
         value = (float *) pp.val;
 
+        // @TODO remove debugging messages after the validation complete
         if(hdr.type == 'T' || hdr.type == 'H' || hdr.type == 'P' || hdr.type == 'G')
         {
             qDebug() << "<" << hdr.type << "> from addr: " << hdr.from_node <<
                         " nodeID: " << pp.IDnode << "value: " << *value;
             qDebug() << "array: " << pp.val[0] << pp.val[1] << pp.val[2] << pp.val[3];
         }
-        else
+
+        wirelessSensor *tmp;
+        switch (hdr.type)
         {
+        // @TODO use the IOType instead of T, H, P, G
+        case 'T':
+            // Temperature sensor
+            tmp = sensorInstantiator::instance().findWirelessSensor(Temperature,
+                                                                    QString::number(hdr.from_node));
+            if(tmp)
+                tmp->interrupt();
+            break;
+        case 'H':
+            // Humidity sensor
+            tmp = sensorInstantiator::instance().findWirelessSensor(Humidity,
+                                                                    QString::number(hdr.from_node));
+            if(tmp)
+                tmp->interrupt();
+        case 'P':
+            // PIR sensor
+            tmp = sensorInstantiator::instance().findWirelessSensor(PIR,
+                                                                    QString::number(hdr.from_node));
+            if(tmp)
+                tmp->interrupt();
+            break;
+        case 'G':
+            // CH4 sensor
+            tmp = sensorInstantiator::instance().findWirelessSensor(CH4,
+                                                                    QString::number(hdr.from_node));
+            if(tmp)
+                tmp->interrupt();
+            break;
+        default:
             RF24Functions::m_network.read(hdr,0,0);
             qDebug() << "Header: " << hdr.type << " from node: " << hdr.from_node;
+            break;
         }
     }
 #endif

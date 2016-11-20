@@ -33,6 +33,8 @@ public slots:
     QList<wiredSensor *> getWiredSensors() const;
     QList<wirelessSensor *> getWirelessSensors() const;
 
+    wirelessSensor* findWirelessSensor(const IOType&, const QString&) const;
+
 private:
     QSettings *m_settings;
 

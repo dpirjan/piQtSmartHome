@@ -124,6 +124,33 @@ QList<wirelessSensor *> sensorInstantiator::getWirelessSensors() const
     return m_wirelessSensorList;
 }
 
+wirelessSensor* sensorInstantiator::findWirelessSensor(const IOType &sensorType,
+                                                       const QString &sensorAddress) const
+{
+    bool found = false;
+    int counter;
+    for(counter = 0; counter < m_wirelessSensorList.count(); counter++)
+        if(m_wirelessSensorList.at(counter)->getSensorType() == sensorType &&
+                m_wirelessSensorList.at(counter)->getAddress() == sensorAddress)
+        {
+            // assuming is not possible to have two sensors with same type
+            // at the same address
+            found = true;
+            qDebug() << "Found " << typeToString(sensorType) << " sensor with "
+                     << sensorAddress << " address on position " << counter;
+            break;
+        }
+
+    if(found)
+        return m_wirelessSensorList.at(counter);
+    else
+    {
+        qCritical() << "Cannot find specified sensor (" << typeToString(sensorType)
+                    << ", " << sensorAddress << ") !";
+        return NULL;
+    }
+}
+
 bool sensorInstantiator::firstRunInitSensors()
 {
     bool returnCode = false;

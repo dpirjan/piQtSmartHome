@@ -19,10 +19,11 @@ wiredSensor::wiredSensor(const SystemType &system,
     , m_wiredTimeout(timeout)
 {
     qDebug() << "wiredSensor ctor: " << this << " GPIO: " << address;
-    wiringPiInterface::instance().setupInterrupt(address,
-                                                 edge,
-                                                 &wiredSensor::interruptHandler,
-                                                 this);
+    // @TODO uncomment this when the CPU load problem is solved
+//    wiringPiInterface::instance().setupInterrupt(address,
+//                                                 edge,
+//                                                 &wiredSensor::interruptHandler,
+//                                                 this);
 }
 
 wiredSensor::wiredSensor(const wiredSensor &obj) : sensor(obj)

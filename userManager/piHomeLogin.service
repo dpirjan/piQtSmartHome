@@ -1,0 +1,17 @@
+[Unit]
+Description=piHomeLogin Service
+Requires=dbus.service
+After=dbus.service
+After=multi-user.target
+
+[Service]
+User=root
+ExecStart=/usr/share/pismarthome/userManager
+Restart=on-failure
+RestartSec=5
+WatchdogSec=2
+Type=notify
+NotifyAccess=all/main
+
+[Install]
+WantedBy=multi-user.target

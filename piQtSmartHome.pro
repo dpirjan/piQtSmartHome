@@ -10,9 +10,11 @@ CONFIG(debug, debug|release) {
 
 SUBDIRS = piHomeCommon \
           dataManager \
+          userManager \
           sensorManager \
           uiManager
 
 dataManager.depends = piHomeCommon
 sensorManager.depends = dataManager
+uiManager.depends = userManager
 uiManager.depends = sensorManager

@@ -57,7 +57,6 @@ int main(int argc, char *argv[])
     uim.init();
 
     QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("qrc:/qml/MainPage.qml")));
     engine.rootContext()->setContextProperty(
                 "zonesModel",
                 uim.getZonesModel());
@@ -70,6 +69,7 @@ int main(int argc, char *argv[])
     engine.rootContext()->setContextProperty(
                 "UIM",
                 &uim);
+    engine.load(QUrl(QLatin1String("qrc:/qml/MainPage.qml")));
 
     if(engine.rootObjects().isEmpty())
         qFatal("RootObjects empty!");

@@ -17,6 +17,26 @@ ApplicationWindow
     property alias stackView: stackView
     property alias window: window
 
+    Connections
+    {
+        target: UIM
+        onValidLoginUpdated:
+        {
+            console.log("Valid Login Updated: ", UIM.validLogin);
+            // always go to SmartHomePanel after login successfull
+            if(UIM.validLogin)
+            {
+                stackView.replace("qrc:/qml/components/AlarmPanel.qml");
+                stackView.loginEnabled = true;
+            }
+            else
+            {
+                stackView.replace("qrc:/qml/components/LoginPanelContainer.qml");
+                stackView.loginEnabled = false;
+            }
+        }
+    }
+
     FontLoader {
         id: fontLoader
         // Font downloaded from https://material.google.com/resources/roboto-noto-fonts.html
@@ -46,21 +66,9 @@ ApplicationWindow
         width: window.width - appSideNav.width
         height: window.height
 
-        initialItem: Pane
-        {
-            id: pane
+        initialItem: "qrc:/qml/components/LoginPanelContainer.qml"
 
-            Label
-            {
-                font.family: fontLoader.name
-                text: "piSmartHome"
-                anchors.margins: 20
-                anchors.fill: parent
-                horizontalAlignment: Label.AlignHCenter
-                verticalAlignment: Label.AlignVCenter
-                wrapMode: Label.Wrap
-            }
-        }
+        property bool loginEnabled: false
     }
 
     AboutDialogPopup

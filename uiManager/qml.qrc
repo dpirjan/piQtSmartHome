@@ -17,7 +17,6 @@
         <file>qml/components/SmartHomePanel.qml</file>
         <file>qml/components/LoginPanel.qml</file>
         <file>qml/components/WeatherPanel.qml</file>
-        <file>qml/components/UserPanel.qml</file>
         <file>qml/components/AlarmPanel.qml</file>
         <file>icons/ic_more_horiz_white_48dp.png</file>
         <file>icons/ic_more_vert_white_48dp.png</file>

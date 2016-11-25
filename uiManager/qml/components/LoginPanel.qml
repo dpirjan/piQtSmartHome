@@ -30,15 +30,21 @@ Pane
             spacing: 20
             width: parent.width
 
-            TextField
+            ComboBox
             {
                 id: usernameField
+                model: UIM.userList
                 font.family: fontLoader.name
-                placeholderText: qsTr("Username")
                 width: Math.max(implicitWidth, Math.max(implicitWidth * 2, loginPanel.availableWidth / 3))
                 anchors.left: parent.left
 
-                onAccepted: console.log("Username entered: ", text)
+                onCurrentIndexChanged:
+                {
+                    console.log("Username selected: ",  textAt(currentIndex));
+                    UIM.selectedUser = textAt(currentIndex);
+                    passwordField.text = "";
+                    pinField.text = "";
+                }
             }
 
             TextField
@@ -51,7 +57,7 @@ Pane
                 echoMode: TextInput.Password
                 inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhPreferLowercase | Qt.ImhSensitiveData | Qt.ImhNoPredictiveText
 
-                onAccepted: console.log("Password entered: ", text)
+                onAccepted: UIM.enteredPassword = text;
             }
 
             TextField
@@ -65,7 +71,7 @@ Pane
                 validator: IntValidator { bottom: 0; top: 9999; }
                 inputMethodHints: Qt.ImhDigitsOnly
 
-                onAccepted: console.log("Pin entered: ", text)
+                onAccepted: UIM.enteredPin = text;
             }
         }
     }

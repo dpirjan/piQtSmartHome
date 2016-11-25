@@ -3,11 +3,13 @@ Description=piHomeUI Service
 Requires=dbus.service
 Requires=piHomeDatabase.service
 Requires=piHomeMail.service
+Requires=piHomeLogin.service
 Requires=piHomeSensor.service
 After=dbus.service
 After=multi-user.target
 After=piHomeDatabase.service
 After=piHomeMail.service
+After=piHomeLogin.service
 After=piHomeSensor.service
 
 [Service]

@@ -44,8 +44,8 @@ Rectangle {
             appSideNavItemMouseArea.onClicked:
             {
                 console.log("Home clicked")
-                stackView.replace("qrc:/qml/components/SmartHomePanel.qml")
-
+                if(stackView.loginEnabled)
+                    stackView.replace("qrc:/qml/components/SmartHomePanel.qml")
             }
         }
 
@@ -57,7 +57,8 @@ Rectangle {
             appSideNavItemMouseArea.onClicked:
             {
                 console.log("Weather clicked")
-                stackView.replace("qrc:/qml/components/WeatherPanel.qml")
+                if(stackView.loginEnabled)
+                    stackView.replace("qrc:/qml/components/WeatherPanel.qml")
             }
         }
 
@@ -69,7 +70,8 @@ Rectangle {
             appSideNavItemMouseArea.onClicked:
             {
                 console.log("Users clicked")
-                stackView.replace("qrc:/qml/components/UserPanel.qml")
+                if(stackView.loginEnabled)
+                    stackView.replace("qrc:/qml/components/LoginPanelContainer.qml")
             }
         }
 
@@ -81,7 +83,8 @@ Rectangle {
             appSideNavItemMouseArea.onClicked:
             {
                 console.log("Alarm clicked")
-                stackView.replace("qrc:/qml/components/AlarmPanel.qml")
+                if(stackView.loginEnabled)
+                    stackView.replace("qrc:/qml/components/AlarmPanel.qml")
             }
         }
 
@@ -159,11 +162,13 @@ Rectangle {
 
             delegate: ItemDelegate
             {
-                width: parent.width
-                font.family: fontLoader.name
-                text: model.title
-                highlighted: ListView.isCurrentItem
-                onClicked:
+            width: parent.width
+            font.family: fontLoader.name
+            text: model.title
+            highlighted: ListView.isCurrentItem
+            onClicked:
+            {
+                if(stackView.loginEnabled)
                 {
                     if (appSideNavDrawerListView.currentIndex != index)
                     {
@@ -174,18 +179,19 @@ Rectangle {
                     appSideNavDrawer.close()
                 }
             }
-
-            model: ListModel
-            {
-                ListElement { title: "Menu"; source: "qrc:/qml/components/LoginPanelContainer.qml" }
-                ListElement { title: "Home"; source: "qrc:/qml/components/SmartHomePanel.qml" }
-                ListElement { title: "Weather"; source: "qrc:/qml/components/WeatherPanel.qml" }
-                ListElement { title: "Users"; source: "qrc:/qml/components/UserPanel.qml" }
-                ListElement { title: "Alarm"; source: "qrc:/qml/components/AlarmPanel.qml" }
-                ListElement { title: "About"; source: "qrc:/qml/components/AboutDialogPanel.qml" }
-            }
-
-            ScrollIndicator.vertical: ScrollIndicator { }
         }
+
+        model: ListModel
+        {
+        ListElement { title: "Menu"; source: "qrc:/qml/components/LoginPanelContainer.qml" }
+        ListElement { title: "Home"; source: "qrc:/qml/components/SmartHomePanel.qml" }
+        ListElement { title: "Weather"; source: "qrc:/qml/components/WeatherPanel.qml" }
+        ListElement { title: "Users"; source: "qrc:/qml/components/LoginPanelContainer.qml" }
+        ListElement { title: "Alarm"; source: "qrc:/qml/components/AlarmPanel.qml" }
+        ListElement { title: "About"; source: "qrc:/qml/components/AboutDialogPanel.qml" }
     }
+
+    ScrollIndicator.vertical: ScrollIndicator { }
+}
+}
 }

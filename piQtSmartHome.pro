@@ -16,5 +16,6 @@ SUBDIRS = piHomeCommon \
 
 dataManager.depends = piHomeCommon
 sensorManager.depends = dataManager
+userManager.depends = piHomeCommon
 uiManager.depends = userManager
 uiManager.depends = sensorManager

@@ -12,12 +12,13 @@ sensorInstantiator::sensorInstantiator(QObject *parent) : QObject(parent)
     m_settings = new QSettings(filePath, QSettings::NativeFormat);
 
     loadSensors();
+
+    // settings file no longer needed
+    m_settings->deleteLater();
 }
 
 sensorInstantiator::~sensorInstantiator()
 {
-    delete m_settings;
-
     for(int count=0; count<m_wiredSensorList.count(); count++)
         delete m_wiredSensorList.takeAt(count);
 

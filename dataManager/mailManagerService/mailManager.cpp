@@ -27,6 +27,9 @@ mailManager::mailManager(QObject *parent) : QObject(parent)
     loadServerCredentials();
     loadSendMailDetails();
 
+    // settings file no longer needed
+    m_settings->deleteLater();
+
     m_textStream = new QTextStream(m_socket);
 
     connect(m_socket, SIGNAL(connected()), this, SLOT(connected()));
@@ -45,7 +48,6 @@ mailManager::~mailManager()
     qDebug() << "mailManager destructor";
     delete m_textStream;
     delete m_socket;
-    delete m_settings;
 
     m_watchdog->stop();
     m_watchdog->deleteLater();

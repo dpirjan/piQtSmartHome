@@ -9,12 +9,13 @@ actuatorInstantiator::actuatorInstantiator(QObject *parent) : QObject(parent)
     m_settings = new QSettings(filePath, QSettings::NativeFormat);
 
     loadActuators();
+
+    // settings file no longer needed
+    m_settings->deleteLater();
 }
 
 actuatorInstantiator::~actuatorInstantiator()
 {
-    delete m_settings;
-
     for(int count = 0; count<m_actuatorsList.count(); count++)
         delete m_actuatorsList.takeAt(count);
 }

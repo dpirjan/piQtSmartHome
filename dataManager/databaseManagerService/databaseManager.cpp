@@ -20,8 +20,6 @@
 
 DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent)
 {
-    qDebug() << "Constructor DatabaseManager";
-
     QString settingsPath = QDir::homePath().
             append(QDir::separator()).
             append(".piHome").
@@ -30,6 +28,9 @@ DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent)
     m_settings = new QSettings(settingsPath, QSettings::NativeFormat);
 
     loadDatabaseSettings();
+
+    // settings file no longer needed
+    m_settings->deleteLater();
 
     QString dbPath = m_databaseFilePath;
     if(dbPath.endsWith(QDir::separator()))
@@ -48,7 +49,6 @@ DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent)
 
 DatabaseManager::~DatabaseManager()
 {
-    qDebug() << "Destructor DatabaseManager";
     if(m_db.isOpen())
         m_db.close();
 

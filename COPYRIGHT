@@ -27,7 +27,7 @@ responsibility for the damage made by this software on persons or hardware while
 handled(properly or not). You chose to use it on your own risk.
 
 The above copyright applies to the entire project besides the sympleCrypt class
-used in the mailManager module whose copyright is the following:
+used in the userManager module whose copyright is the following:
 
 
 "Copyright (c) 2011, Andre Somers

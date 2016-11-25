@@ -21,7 +21,9 @@ SOURCES += homeAlarmInfo.cpp \
            watchdogFunctions.cpp \
            mailManagerInterface.cpp \
            databaseManagerInterface.cpp \
-           io.cpp
+           io.cpp \
+           userManagerInterface.cpp \
+           alarmManagerInterface.cpp
 
 HEADERS += common.h \
            homeAlarmInfo.h \
@@ -31,7 +33,9 @@ HEADERS += common.h \
            watchdogFunctions.h \
            mailManagerInterface.h \
            databaseManagerInterface.h \
-           io.h
+           io.h \
+           userManagerInterface.h \
+           alarmManagerInterface.h
 
 unix {
     target.path = /usr/lib

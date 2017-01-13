@@ -13,7 +13,7 @@
 #define RF24InterruptEDGE "INT_EDGE_FALLING" //@TODO read this from settings file
 
 #ifdef WIRINGPI
-RF24 RF24Functions::m_radio(RPI_V2_GPIO_P1_15, BCM2835_SPI_CS0, BCM2835_SPI_SPEED_8MHZ);
+RF24 RF24Functions::m_radio(22, 0);
 RF24Network RF24Functions::m_network(RF24Functions::m_radio);
 RF24Mesh RF24Functions::m_mesh(RF24Functions::m_radio, RF24Functions::m_network);
 #endif
@@ -24,9 +24,11 @@ RF24Functions::RF24Functions(QObject *parent) : QObject(parent)
     m_stop = false;
 
 #ifdef WIRINGPI
-    attachInterrupt(RF24InterruptGPIO,
-                    INT_EDGE_FALLING,
-                    interruptHandler);
+    if(wiringPiISR(RF24InterruptGPIO, INT_EDGE_FALLING, RF24Functions::interruptHandler, NULL) < 0)
+        qCritical() << "Unable to setup ISR on " << RF24InterruptGPIO << " : " << strerror(errno);
+    else
+        qDebug() << "Setup interrupt on " << RF24InterruptGPIO << " was successfull!";
+
 
     // Set the nodeID to 0 for the master node
     RF24Functions::m_mesh.setNodeID(0);
@@ -44,8 +46,9 @@ RF24Functions::~RF24Functions()
     qDebug() << "RF24Functions::destructor: " << QThread::currentThreadId();
 }
 
-void RF24Functions::interruptHandler()
+void RF24Functions::interruptHandler(void *arg)
 {
+    Q_UNUSED(arg);
     QElapsedTimer timer;
     timer.start();
 #ifdef WIRINGPI

@@ -7,6 +7,7 @@
 #include "io.h"
 #include "smartHomeInfo.h"
 #include "homeAlarmInfo.h"
+#include "actuatorInfo.h"
 #include "watchdogHelper.h"
 
 #define DATABASE_MANAGER_SERVICE_NAME "org.raspberrypi.piHome.DatabaseManager"
@@ -31,6 +32,7 @@ public:
 public slots:
     Q_SCRIPTABLE bool insertHomeAlarmEntry(const HomeAlarmInfo&) const;
     Q_SCRIPTABLE bool insertSmartHomeEntry(const SmartHomeInfo&) const;
+    Q_SCRIPTABLE bool insertActuatorInfoEntry(const ActuatorInfo&) const;
     Q_SCRIPTABLE bool insertIO(const QString&,
                                const QString&,
                                const QString&,
@@ -40,8 +42,10 @@ public slots:
                                const QString&) const;
     Q_SCRIPTABLE QList<HomeAlarmInfo> getAllHomeAlarmEntries() const;
     Q_SCRIPTABLE QList<SmartHomeInfo> getAllSmartHomeEntries() const;
+    Q_SCRIPTABLE QList<ActuatorInfo> getAllActuatorInfoEntries() const;
     Q_SCRIPTABLE QList<HomeAlarmInfo> getHomeAlarmEntriesForIO(const io&) const;
     Q_SCRIPTABLE QList<SmartHomeInfo> getSmartHomeEntriesForIO(const io&) const;
+    Q_SCRIPTABLE QList<ActuatorInfo> getActuatorInfoEntriesForIO(const io&) const;
     Q_SCRIPTABLE QStringList getAllZones() const;
     Q_SCRIPTABLE QStringList getAllCategories() const;
     Q_SCRIPTABLE QList<io> getAllFromZone(const QString&) const;

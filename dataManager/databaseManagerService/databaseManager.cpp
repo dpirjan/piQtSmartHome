@@ -102,6 +102,7 @@ bool DatabaseManager::connectService()
 
     HomeAlarmInfo::registerMetaType();
     SmartHomeInfo::registerMetaType();
+    ActuatorInfo::registerMetaType();
     io::registerMetaType();
 
     if(!QDBusConnection::systemBus().registerService(
@@ -191,6 +192,23 @@ bool DatabaseManager::createDatabaseAndTable()
     else
         qDebug("Created table smarthome");
 
+    ret = query.exec("CREATE TABLE actuatorhistory "
+                     "(id integer primary key autoincrement, "
+                     "zone char(30), "
+                     "node char(30), "
+                     "category char(30), "
+                     "address char(30), "
+                     "value char(30), "
+                     "timestamp char(30))");
+    if(!ret)
+    {
+        qCritical() << "Create table actuatorhistory failed! " <<
+                       query.lastError().text();
+        return ret;
+    }
+    else
+        qDebug("Created table actuatorhistory");
+
     ret = query.exec("CREATE TABLE io "
                      "(id integer primary key autoincrement, "
                      "system char(30), "
@@ -252,6 +270,25 @@ bool DatabaseManager::insertSmartHomeEntry(const SmartHomeInfo &entry) const
     ret = query.exec();
     if(!ret)
         qCritical() << "Insert into smarthome table failed! " << query.lastError();
+
+    return ret;
+}
+
+bool DatabaseManager::insertActuatorInfoEntry(const ActuatorInfo &entry) const
+{
+    bool ret = false;
+    QSqlQuery query;
+    query.prepare("INSERT INTO actuatorhistory (zone, node, category, address, value, timestamp)"
+                  " VALUES (:zone, :node, :category, :address, :value, :timestamp)");
+    query.bindValue(":zone", entry.getZone());
+    query.bindValue(":node", entry.getNode());
+    query.bindValue(":category", entry.getCategory());
+    query.bindValue(":address", entry.getAddress());
+    query.bindValue(":value", entry.getValue());
+    query.bindValue(":timestamp", entry.getTimestamp());
+    ret = query.exec();
+    if(!ret)
+        qCritical() << "Insert into actuatorhistory table failed! " << query.lastError();
 
     return ret;
 }
@@ -354,6 +391,42 @@ QList<SmartHomeInfo> DatabaseManager::getAllSmartHomeEntries() const
     return tmpList;
 }
 
+QList<ActuatorInfo> DatabaseManager::getAllActuatorInfoEntries() const
+{
+    bool result = false;
+    int idZone, idNode, idCategory, idAddress, idValue, idTimestamp;
+    QList<ActuatorInfo> tmpList;
+    QSqlQuery query;
+
+    query.prepare("SELECT * FROM actuatorhistory");
+    result = query.exec();
+    if(!result)
+        qCritical() << "Error: " << query.lastQuery() << " err: "<< query.lastError();
+
+    idZone = query.record().indexOf("zone");
+    idNode = query.record().indexOf("node");
+    idCategory = query.record().indexOf("category");
+    idAddress = query.record().indexOf("address");
+    idValue = query.record().indexOf("value");
+    idTimestamp = query.record().indexOf("timestamp");
+
+    while(query.next())
+    {
+        ActuatorInfo tmp(query.value(idZone).toString(),
+                          query.value(idNode).toString(),
+                          query.value(idCategory).toString(),
+                          query.value(idAddress).toString(),
+                          query.value(idValue).toString(),
+                          query.value(idTimestamp).toString());
+        tmpList.append(tmp);
+    }
+
+    qDebug() << "getAllActuatorInfoEntries returned " << tmpList.count()
+             << " SmartHome entries.";
+
+    return tmpList;
+}
+
 QList<HomeAlarmInfo> DatabaseManager::getHomeAlarmEntriesForIO(const io &obj) const
 {
     bool result = false;
@@ -431,6 +504,47 @@ QList<SmartHomeInfo> DatabaseManager::getSmartHomeEntriesForIO(const io &obj) co
     }
 
     qDebug() << "Returned " << tmpList.count() << " SmartHome entries.";
+
+    return tmpList;
+}
+
+QList<ActuatorInfo> DatabaseManager::getActuatorInfoEntriesForIO(const io &obj) const
+{
+    bool result = false;
+    int idZone, idNode, idCategory, idAddress, idValue, idTimestamp;
+    QList<ActuatorInfo> tmpList;
+    QSqlQuery query;
+
+    query.prepare("SELECT * FROM actuatorhistory WHERE zone = (:zone) AND "
+                  "node = (:node) AND category = (:category) AND address = (:address)");
+    query.bindValue(":zone", obj.getZone());
+    query.bindValue(":node", obj.getNode());
+    query.bindValue(":category", obj.getCategory());
+    query.bindValue(":address", obj.getAddress());
+
+    result = query.exec();
+    if(!result)
+        qCritical() << "Error: " << query.lastQuery() << " err: "<< query.lastError();
+
+    idZone = query.record().indexOf("zone");
+    idNode = query.record().indexOf("node");
+    idCategory = query.record().indexOf("category");
+    idAddress = query.record().indexOf("address");
+    idValue = query.record().indexOf("value");
+    idTimestamp = query.record().indexOf("timestamp");
+
+    while(query.next())
+    {
+        ActuatorInfo tmp(query.value(idZone).toString(),
+                          query.value(idNode).toString(),
+                          query.value(idCategory).toString(),
+                          query.value(idAddress).toString(),
+                          query.value(idValue).toString(),
+                          query.value(idTimestamp).toString());
+        tmpList.append(tmp);
+    }
+
+    qDebug() << "Returned " << tmpList.count() << " ActuatorInfo entries.";
 
     return tmpList;
 }

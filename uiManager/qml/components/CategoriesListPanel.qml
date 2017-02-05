@@ -36,6 +36,9 @@ Pane
                     listView.highlight = highlightBar
                     console.log("Selected: ", display)
                     UIM.selectedCategory = display
+                    alarmList.visible = false
+                    smartList.visible = false
+                    actuatorList.visible = false
                     ioList.visible = true
                 }
             }

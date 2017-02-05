@@ -67,6 +67,15 @@ int main(int argc, char *argv[])
                 "ioModel",
                 uim.getIOModel());
     engine.rootContext()->setContextProperty(
+                "alarmEventsModel",
+                uim.getAlarmEventModel());
+    engine.rootContext()->setContextProperty(
+                "smartHomeEventsModel",
+                uim.getSmartHomeEventModel());
+    engine.rootContext()->setContextProperty(
+                "actuatorEventsModel",
+                uim.getActuatorEventModel());
+    engine.rootContext()->setContextProperty(
                 "UIM",
                 &uim);
     engine.load(QUrl(QLatin1String("qrc:/qml/MainPage.qml")));

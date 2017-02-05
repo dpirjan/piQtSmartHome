@@ -1,8 +1,22 @@
 #include "ioModel.h"
 #include "databaseManagerInterface.h"
+#include "sensorManagerInterface.h"
 
 ioModel::ioModel(QObject *parent) : QAbstractListModel(parent)
 {
+    m_alarmEventModel = new alarmEventModel(this);
+    m_smartHomeEventModel = new smartHomeEventModel(this);
+    m_actuatorEventModel = new actuatorEventModel(this);
+}
+
+ioModel::~ioModel()
+{
+    if(m_alarmEventModel)
+        m_alarmEventModel->deleteLater();
+    if(m_smartHomeEventModel)
+        m_smartHomeEventModel->deleteLater();
+    if(m_actuatorEventModel)
+        m_actuatorEventModel->deleteLater();
 }
 
 int ioModel::rowCount(const QModelIndex &parent) const
@@ -75,6 +89,7 @@ QHash<int, QByteArray> ioModel::roleNames() const
 void ioModel::setSelectedIOIndex(const unsigned int &io)
 {
     m_selectedIOIndex = io;
+
     qDebug() << "Selected IO index [" << io << "]"
              << m_ioList.at(io).getSystemType()
              << m_ioList.at(io).getHardwareType()
@@ -83,57 +98,65 @@ void ioModel::setSelectedIOIndex(const unsigned int &io)
              << m_ioList.at(io).getZone()
              << m_ioList.at(io).getNode()
              << m_ioList.at(io).getAddress();
+
     if(m_ioList.at(io).getType() == "Sensor")
     {
         if(m_ioList.at(io).getSystemType() == "HomeAlarm")
         {
             qDebug() << "Action for HomeAlarm sensor";
-            HomeAlarmInfo tmp(m_ioList.at(io).getZone(),
-                              m_ioList.at(io).getNode(),
-                              m_ioList.at(io).getCategory(),
-                              m_ioList.at(io).getAddress());
-            databaseManagerInterface::instance().insertHomeAlarmEntry(tmp);
-            databaseManagerInterface::instance().getHomeAlarmEntriesForIO(m_ioList.at(io));
+            m_alarmEventModel->setAlarmEventList(
+                        databaseManagerInterface::instance().getHomeAlarmEntriesForIO(m_ioList.at(io)));
         }
         if(m_ioList.at(io).getSystemType() == "SmartHome")
         {
             qDebug() << "Action for SmartHome sensor";
-            SmartHomeInfo tmp(m_ioList.at(io).getZone(),
-                              m_ioList.at(io).getNode(),
-                              m_ioList.at(io).getCategory(),
-                              m_ioList.at(io).getAddress(),
-                              QString::number(27));
-            databaseManagerInterface::instance().insertSmartHomeEntry(tmp);
-            databaseManagerInterface::instance().getSmartHomeEntriesForIO(m_ioList.at(io));
+            m_smartHomeEventModel->setSmartHomeEventList(
+                        databaseManagerInterface::instance().getSmartHomeEntriesForIO(m_ioList.at(io)));
         }
     }
+
     if(m_ioList.at(io).getType() == "Actuator")
     {
-        if(m_ioList.at(io).getSystemType() == "HomeAlarm")
-        {
-            qDebug() << "Action for HomeAlarm actuator";
-            HomeAlarmInfo tmp(m_ioList.at(io).getZone(),
-                              m_ioList.at(io).getNode(),
-                              m_ioList.at(io).getCategory(),
-                              m_ioList.at(io).getAddress());
-            databaseManagerInterface::instance().insertHomeAlarmEntry(tmp);
-            databaseManagerInterface::instance().getHomeAlarmEntriesForIO(m_ioList.at(io));
-        }
-        if(m_ioList.at(io).getSystemType() == "SmartHome")
-        {
-            qDebug() << "Action for SmartHome actuator";
-            SmartHomeInfo tmp(m_ioList.at(io).getZone(),
-                              m_ioList.at(io).getNode(),
-                              m_ioList.at(io).getCategory(),
-                              m_ioList.at(io).getAddress(),
-                              "On");
-            databaseManagerInterface::instance().insertSmartHomeEntry(tmp);
-            databaseManagerInterface::instance().getSmartHomeEntriesForIO(m_ioList.at(io));
-        }
+            qDebug() << "Action for actuator";
+            m_actuatorEventModel->setActuatorInfoEventList(
+                        databaseManagerInterface::instance().getActuatorInfoEntriesForIO(m_ioList.at(io)));
     }
+}
+
+void ioModel::setValueIO(const QString &value)
+{
+    m_value = value;
+    qDebug() << "SetValue: " << m_ioList.at(m_selectedIOIndex).getCategory()
+             << "  " << value;
+    if(m_ioList.at(m_selectedIOIndex).getType() == "Actuator")
+        sensorManagerInterface::instance().setActuatorValue(
+                    m_ioList.at(m_selectedIOIndex).getCategory(),
+                    m_ioList.at(m_selectedIOIndex).getAddress(),
+                    value);
 }
 
 unsigned int ioModel::getSelectedIOIndex() const
 {
+    qDebug() << "GetValue: " << m_selectedIOIndex;
     return m_selectedIOIndex;
+}
+
+QString ioModel::getValueIO() const
+{
+    return m_value;
+}
+
+alarmEventModel* ioModel::getAlarmEventModel() const
+{
+    return m_alarmEventModel;
+}
+
+smartHomeEventModel* ioModel::getSmartHomeEventModel() const
+{
+    return m_smartHomeEventModel;
+}
+
+actuatorEventModel* ioModel::getActuatorEventModel() const
+{
+    return m_actuatorEventModel;
 }

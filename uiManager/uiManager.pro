@@ -23,12 +23,18 @@ LIBS += -L../piHomeCommon -lpiHomeCommon
 
 HEADERS += \
     UIManager.h \
-    ioModel.h
+    ioModel.h \
+    alarmEventModel.h \
+    smartHomeEventModel.h \
+    actuatorEventModel.h
 
 SOURCES += \
     uiManagerService.cpp \
     UIManager.cpp \
-    ioModel.cpp
+    ioModel.cpp \
+    alarmEventModel.cpp \
+    smartHomeEventModel.cpp \
+    actuatorEventModel.cpp
 
 RESOURCES += qml.qrc
 

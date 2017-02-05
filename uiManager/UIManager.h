@@ -5,6 +5,9 @@
 #include <QStringListModel>
 
 #include "ioModel.h"
+#include "smartHomeEventModel.h"
+#include "alarmEventModel.h"
+#include "actuatorEventModel.h"
 #include "watchdogHelper.h"
 
 class UIManager : public QObject
@@ -30,7 +33,11 @@ public:
 
     QStringListModel* getZonesModel() const;
     QStringListModel* getCategoriesModel() const;
+
     ioModel* getIOModel() const;
+    alarmEventModel* getAlarmEventModel() const;
+    smartHomeEventModel* getSmartHomeEventModel() const;
+    actuatorEventModel* getActuatorEventModel() const;
 
 private slots:
     void zonesReceived(const QStringList&);
@@ -72,8 +79,10 @@ signals:
 
 private:
     WatchdogHelper *m_watchdog;
+
     QStringListModel *m_zonesModel;
     QStringListModel *m_categoriesModel;
+
     ioModel *m_IOModel;
 
     QString m_selectedZone;

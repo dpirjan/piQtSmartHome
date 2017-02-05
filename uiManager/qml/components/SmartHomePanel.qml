@@ -12,7 +12,7 @@ Pane
     {
         id: smartHomeTabBar
         y: 0
-        width: parent.width / 4
+        width: parent.width / 5
 
         onCurrentIndexChanged:
         {
@@ -34,12 +34,12 @@ Pane
         TabButton
         {
             font.family: fontLoader.name
-            text: qsTr("Zones")
+            text: qsTr("Zone")
         }
         TabButton
         {
             font.family: fontLoader.name
-            text: qsTr("Categories")
+            text: qsTr("Category")
         }
     }
 
@@ -66,5 +66,32 @@ Pane
         anchors.top: smartHomeTabBar.bottom
         anchors.bottom: parent.bottom
         anchors.left: smartHomeTabBar.right
+    }
+
+    AlarmListPanel
+    {
+        id: alarmList
+        visible: false
+        anchors.top: smartHomeTabBar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: ioList.right
+    }
+
+    SmartListPanel
+    {
+        id: smartList
+        visible: false
+        anchors.top: smartHomeTabBar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: ioList.right
+    }
+
+    ActuatorEventListPanel
+    {
+        id: actuatorList
+        visible: false
+        anchors.top: smartHomeTabBar.bottom
+        anchors.bottom: parent.bottom
+        anchors.left: ioList.right
     }
 }

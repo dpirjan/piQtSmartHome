@@ -6,15 +6,15 @@ import QtQuick.Controls.Universal 2.0
 
 Pane
 {
-    width: parent.width / 4
+    width: parent.width - smartHomeTabBar.width - ioList.width
     height: parent.height
 
     Component
     {
-        id: ioDelegate
+        id: smartListDelegate
         Item
         {
-            width: smartHomeTabBar.width
+            width: parent.width
             height: 40
 
             Row
@@ -22,7 +22,7 @@ Pane
                 Text
                 {
                     font.family: fontLoader.name
-                    text: '<b>IO: </b> ' + category + " " + hardware + " " + type
+                    text: '<b>Ev: </b> ' + address + " " + timestamp + " " + value
                     color: settings.style==="Material" ? Material.foreground : Universal.foreground
                 }
             }
@@ -34,30 +34,7 @@ Pane
                 {
                     listView.currentIndex = index
                     listView.highlight = highlightBar
-                    ioModel.selectedIOIndex = index
-
-                    if(type==="Sensor")
-                    {
-                        if(system==="HomeAlarm")
-                        {
-                            alarmList.visible = true
-                            smartList.visible = false
-                            actuatorList.visible = false
-                        }
-                        if(system==="SmartHome")
-                        {
-                            smartList.visible = true
-                            alarmList.visible = false
-                            actuatorList.visible = false
-                        }
-                    }
-
-                    if(type==="Actuator")
-                    {
-                            actuatorList.visible = true
-                            alarmList.visible = false
-                            smartList.visible = false
-                    }
+                    //smartHomeEventsModel.selectedIndex = index
                 }
             }
         }
@@ -70,7 +47,7 @@ Pane
         Rectangle
         {
             color: settings.style==="Material" ? Material.accent  : Universal.accent
-            width: smartHomeTabBar.width
+            width: parent.width
             height: 30
             y: listView.currentItem.y;
             Behavior on y
@@ -86,7 +63,7 @@ Pane
 
     ColumnLayout
     {
-        id: ioColumn
+        id: smartListColumn
         spacing: 40
         anchors.fill: parent
         anchors.topMargin: 10
@@ -95,8 +72,8 @@ Pane
         {
             id: listView
             anchors.fill: parent
-            model: ioModel
-            delegate: ioDelegate
+            model: smartHomeEventsModel
+            delegate: smartListDelegate
             focus: true
             clip: true
         }

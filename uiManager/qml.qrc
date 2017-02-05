@@ -26,5 +26,8 @@
         <file>qml/components/IOListPanel.qml</file>
         <file>qml/components/LoginPanelContainer.qml</file>
         <file>qml/components/AutoScroller.qml</file>
+        <file>qml/components/AlarmListPanel.qml</file>
+        <file>qml/components/SmartListPanel.qml</file>
+        <file>qml/components/ActuatorEventListPanel.qml</file>
     </qresource>
 </RCC>

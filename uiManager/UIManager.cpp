@@ -74,6 +74,30 @@ ioModel* UIManager::getIOModel() const
     return m_IOModel;
 }
 
+alarmEventModel* UIManager::getAlarmEventModel() const
+{
+    if(m_IOModel)
+        return m_IOModel->getAlarmEventModel();
+    else
+        return NULL;
+}
+
+smartHomeEventModel* UIManager::getSmartHomeEventModel() const
+{
+    if(m_IOModel)
+        return m_IOModel->getSmartHomeEventModel();
+    else
+        return NULL;
+}
+
+actuatorEventModel* UIManager::getActuatorEventModel() const
+{
+    if(m_IOModel)
+        return m_IOModel->getActuatorEventModel();
+    else
+        return NULL;
+}
+
 void UIManager::setSelectedZone(const QString &zone)
 {
     QList<io> ioList;

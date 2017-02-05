@@ -7,7 +7,7 @@
 
 int main(int argc, char *argv[])
 {
-//    qInstallMessageHandler(logHandler);
+    qInstallMessageHandler(logHandler);
     QCoreApplication app(argc, argv);
 
     app.setOrganizationName("piHome");

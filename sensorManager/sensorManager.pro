@@ -67,7 +67,8 @@ SOURCES += \
 
 DISTFILES += \
     piHomeSensor.service \
-    piHomeSensor.conf
+    piHomeSensor.conf \
+    piHomeAlarm.conf
 
 unix {
     target.path = /usr/share/pismarthome
@@ -77,7 +78,8 @@ unix {
     SYSTEMDSERVICE.path = /lib/systemd/system
     INSTALLS += SYSTEMDSERVICE
 
-    DBUSCONF.files = piHomeSensor.conf
+    DBUSCONF.files = piHomeAlarm.conf \
+                    piHomeSensor.conf
     DBUSCONF.path = /etc/dbus-1/system.d
     INSTALLS += DBUSCONF
 }

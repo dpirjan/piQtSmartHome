@@ -2,8 +2,6 @@
 
 #include "sensor.h"
 #include "wirelessSensor.h"
-#include "homeAlarmInfo.h"
-#include "smartHomeInfo.h"
 #include "databaseManagerInterface.h"
 #include "mailManagerInterface.h"
 #include "RF24Interface.h"

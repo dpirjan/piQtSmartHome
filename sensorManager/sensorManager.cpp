@@ -1,3 +1,8 @@
+#include <QDBusConnection>
+#include <QDBusError>
+
+#include <unistd.h>
+
 #include "sensorManager.h"
 
 #include "sensorInstantiator.h"
@@ -56,14 +61,91 @@ void SensorManager::init()
 //    actuator *actTmp;
 //    actTmp = actuatorInstantiator::instance().findActuator(Siren, "SPI_0");
 //    if(actTmp)
+//    {
 //        actTmp->debugActuator();
+//        actTmp->setValue("ON");
+//    }
 //    actTmp = actuatorInstantiator::instance().findActuator(Relay, "SPI_0");
 //    if(actTmp)
+//    {
 //        actTmp->debugActuator();
+//        actTmp->setValue("OFF");
+//    }
 //    actTmp = actuatorInstantiator::instance().findActuator(IR, "SPI_0");
 //    if(actTmp)
+//    {
 //        actTmp->debugActuator();
+//        actTmp->setValue("Temp 20");
+//    }
 //    actTmp = actuatorInstantiator::instance().findActuator(Pump, "SPI_0");
 //    if(actTmp)
+//    {
 //        actTmp->debugActuator();
+//        actTmp->setValue("ON");
+//    }
+//    sleep(2);
+//    actTmp = actuatorInstantiator::instance().findActuator(Siren, "SPI_0");
+//    if(actTmp)
+//    {
+//        actTmp->debugActuator();
+//        actTmp->setValue("OFF");
+//    }
+//    actTmp = actuatorInstantiator::instance().findActuator(Relay, "SPI_0");
+//    if(actTmp)
+//    {
+//        actTmp->debugActuator();
+//        actTmp->setValue("ON");
+//    }
+//    actTmp = actuatorInstantiator::instance().findActuator(IR, "SPI_0");
+//    if(actTmp)
+//    {
+//        actTmp->debugActuator();
+//        actTmp->setValue("OFF");
+//    }
+//    actTmp = actuatorInstantiator::instance().findActuator(Pump, "SPI_0");
+//    if(actTmp)
+//    {
+//        actTmp->debugActuator();
+//        actTmp->setValue("OFF");
+//    }
+}
+
+
+bool SensorManager::connectService()
+{
+    bool ret = true;
+
+    if(!QDBusConnection::systemBus().registerService(
+                SENSOR_MANAGER_SERVICE_NAME))
+    {
+        qCritical() << QDBusConnection::systemBus().lastError().message();
+        ret = false;
+    }
+
+    QDBusConnection::systemBus().registerObject(
+                SENSOR_MANAGER_SERVICE_PATH,
+                this,
+                QDBusConnection::ExportScriptableContents);
+
+    if(ret == true)
+        qDebug() << "Registered the sensor manager service to DBUS system bus";
+
+    return ret;
+}
+
+bool SensorManager::setActuatorValue(const QString &category,
+                                     const QString &address,
+                                     const QString &value)
+{
+    bool ret = false;
+    actuator *act = actuatorInstantiator::instance().findActuator(StringToType(category), address);
+    if(act)
+    {
+        qDebug() << "setActuatorValue(" << category << ", " << address << ", "
+                 << value << ")";
+        ret = true;
+        act->setValue(value);
+    }
+
+    return ret;
 }

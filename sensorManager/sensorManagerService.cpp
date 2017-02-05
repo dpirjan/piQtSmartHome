@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 
     SensorManager sm;
     sm.init();
+    sm.connectService();
     AlarmManager am;
     am.connectService();
 

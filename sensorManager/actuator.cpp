@@ -1,6 +1,7 @@
 #include <QThread>
 
 #include "actuator.h"
+#include "databaseManagerInterface.h"
 #include "RF24Interface.h"
 
 
@@ -94,4 +95,12 @@ QString actuator::getValue() const
 void actuator::setValue(const QString &value)
 {
     m_value = value;
+    // Will create an ActuatorInfo class instance and insert it into the database
+    // containing this type of events
+    ActuatorInfo event(getZone(),
+                       getNode(),
+                       typeToString(getActuatorType()),
+                       getAddress(),
+                       value);
+    databaseManagerInterface::instance().insertActuatorInfoEntry(event);
 }

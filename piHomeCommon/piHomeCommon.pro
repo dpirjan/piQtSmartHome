@@ -23,7 +23,9 @@ SOURCES += homeAlarmInfo.cpp \
            databaseManagerInterface.cpp \
            io.cpp \
            userManagerInterface.cpp \
-           alarmManagerInterface.cpp
+           alarmManagerInterface.cpp \
+           actuatorInfo.cpp \
+           sensorManagerInterface.cpp
 
 HEADERS += common.h \
            homeAlarmInfo.h \
@@ -35,7 +37,9 @@ HEADERS += common.h \
            databaseManagerInterface.h \
            io.h \
            userManagerInterface.h \
-           alarmManagerInterface.h
+           alarmManagerInterface.h \
+           actuatorInfo.h \
+           sensorManagerInterface.h
 
 unix {
     target.path = /usr/lib

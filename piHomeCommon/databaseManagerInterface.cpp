@@ -22,6 +22,7 @@ databaseManagerInterface::databaseManagerInterface(QObject *parent) : QObject(pa
 
     HomeAlarmInfo::registerMetaType();
     SmartHomeInfo::registerMetaType();
+    ActuatorInfo::registerMetaType();
     io::registerMetaType();
 }
 
@@ -104,6 +105,32 @@ void databaseManagerInterface::insertSmartHomeEntryFinished(
     call->deleteLater();
 }
 
+void databaseManagerInterface::insertActuatorInfoEntry(const ActuatorInfo &entry)
+{
+    QDBusPendingCall pCall = m_iface->asyncCall(QLatin1String("insertActuatorInfoEntry"),
+                                                qVariantFromValue(entry));
+    QDBusPendingCallWatcher *watcher = new QDBusPendingCallWatcher(pCall, this);
+
+    QObject::connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)),
+                     this, SLOT(insertActuatorInfoEntryFinished(QDBusPendingCallWatcher*)));
+}
+
+void databaseManagerInterface::insertActuatorInfoEntryFinished(
+        QDBusPendingCallWatcher *call)
+{
+    QDBusReply<bool> reply = *call;
+
+    if(reply.isValid())
+        qDebug() << "insertActuatorInfoEntry reply was: " << reply.value();
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    call->deleteLater();
+}
+
 QList<HomeAlarmInfo> databaseManagerInterface::getAllHomeAlarmEntries() const
 {
     QList<HomeAlarmInfo> tmpList;
@@ -140,6 +167,29 @@ QList<SmartHomeInfo> databaseManagerInterface::getAllSmartHomeEntries() const
         tmpList = reply.value();
         qDebug() << "getAllSmartHomeEntries reply contains " << tmpList.count()
                  << "SmartHome entries";
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
+}
+
+QList<ActuatorInfo> databaseManagerInterface::getAllActuatorInfoEntries() const
+{
+    QList<ActuatorInfo> tmpList;
+
+    QDBusReply<QList<ActuatorInfo>> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getAllActuatorInfoEntries"));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllActuatorInfoEntries reply contains " << tmpList.count()
+                 << "ActuatorInfo entries";
     }
     else
     {
@@ -188,6 +238,30 @@ QList<SmartHomeInfo> databaseManagerInterface::getSmartHomeEntriesForIO(const io
         tmpList = reply.value();
         qDebug() << "getAllSmartHomeEntries reply contains " << tmpList.count()
                  << "SmartHome entries";
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return tmpList;
+}
+
+QList<ActuatorInfo> databaseManagerInterface::getActuatorInfoEntriesForIO(const io &obj) const
+{
+    QList<ActuatorInfo> tmpList;
+
+    QDBusReply<QList<ActuatorInfo>> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getActuatorInfoEntriesForIO"),
+                QVariant::fromValue(obj));
+
+    if(reply.isValid())
+    {
+        tmpList = reply.value();
+        qDebug() << "getAllActuatorInfoEntries reply contains " << tmpList.count()
+                 << "ActuatorInfo entries";
     }
     else
     {

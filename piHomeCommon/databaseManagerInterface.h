@@ -6,6 +6,7 @@
 
 #include "homeAlarmInfo.h"
 #include "smartHomeInfo.h"
+#include "actuatorInfo.h"
 #include "io.h"
 
 class QDBusInterface;
@@ -30,6 +31,7 @@ public:
 public slots:
     void insertHomeAlarmEntry(const HomeAlarmInfo&);
     void insertSmartHomeEntry(const SmartHomeInfo&);
+    void insertActuatorInfoEntry(const ActuatorInfo&);
     void insertIO(const QString&,
                   const QString&,
                   const QString&,
@@ -39,8 +41,10 @@ public slots:
                   const QString&);
     QList<HomeAlarmInfo> getAllHomeAlarmEntries() const;
     QList<SmartHomeInfo> getAllSmartHomeEntries() const;
+    QList<ActuatorInfo> getAllActuatorInfoEntries() const;
     QList<HomeAlarmInfo> getHomeAlarmEntriesForIO(const io&) const;
     QList<SmartHomeInfo> getSmartHomeEntriesForIO(const io&) const;
+    QList<ActuatorInfo> getActuatorInfoEntriesForIO(const io&) const;
     void getAllZones();
     void getAllCategories();
     QList<io> getAllFromZone(const QString&) const;
@@ -53,6 +57,7 @@ signals:
 private slots:
     void insertHomeAlarmEntryFinished(QDBusPendingCallWatcher*);
     void insertSmartHomeEntryFinished(QDBusPendingCallWatcher*);
+    void insertActuatorInfoEntryFinished(QDBusPendingCallWatcher*);
     void insertIOFinished(QDBusPendingCallWatcher*);
     void getAllZonesFinished(QDBusPendingCallWatcher*);
     void getAllCategoriesFinished(QDBusPendingCallWatcher*);

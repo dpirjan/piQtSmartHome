@@ -9,10 +9,13 @@
 #include <cstdlib>
 #include <unistd.h>
 
+#ifdef WIRINGPI
+
+#include <wiringPi.h>
+
 #define RF24InterruptGPIO 17 //@TODO read this from settings file and take care it's BCM
 #define RF24InterruptEDGE "INT_EDGE_FALLING" //@TODO read this from settings file
 
-#ifdef WIRINGPI
 RF24 RF24Functions::m_radio(22, 0);
 RF24Network RF24Functions::m_network(RF24Functions::m_radio);
 RF24Mesh RF24Functions::m_mesh(RF24Functions::m_radio, RF24Functions::m_network);

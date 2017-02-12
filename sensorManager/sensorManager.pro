@@ -48,8 +48,7 @@ HEADERS += \
     sensorManager.h \
     RF24Interface.h \
     RF24Functions.h \
-    wiringPiInterface.h \
-    alarmManager.h
+    wiringPiInterface.h
 
 SOURCES += \
     actuator.cpp \
@@ -62,13 +61,11 @@ SOURCES += \
     sensorManager.cpp \
     RF24Interface.cpp \
     RF24Functions.cpp \
-    wiringPiInterface.cpp \
-    alarmManager.cpp
+    wiringPiInterface.cpp
 
 DISTFILES += \
     piHomeSensor.service \
-    piHomeSensor.conf \
-    piHomeAlarm.conf
+    piHomeSensor.conf
 
 unix {
     target.path = /usr/share/pismarthome
@@ -78,8 +75,7 @@ unix {
     SYSTEMDSERVICE.path = /lib/systemd/system
     INSTALLS += SYSTEMDSERVICE
 
-    DBUSCONF.files = piHomeAlarm.conf \
-                    piHomeSensor.conf
+    DBUSCONF.files = piHomeSensor.conf
     DBUSCONF.path = /etc/dbus-1/system.d
     INSTALLS += DBUSCONF
 }

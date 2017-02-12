@@ -6,12 +6,12 @@ import QtQuick.Controls.Universal 2.0
 
 Popup
 {
-    modal: true
-    focus: true
     x: (window.width - width) / 2
     y: window.height / 6
     width: Math.min(window.width, window.height) / 3 * 2
-    contentHeight: aboutColumn.height
+    height: aboutColumn.implicitHeight + topPadding + bottomPadding
+    modal: true
+    focus: true
 
     contentItem: ColumnLayout
     {

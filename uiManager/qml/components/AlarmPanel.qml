@@ -33,7 +33,7 @@ Pane
             Switch
             {
                 id: mainState
-                text: "General Mode State"
+                text: "General Mode State (Armed/Disarmed)"
 
                 checked: UIM.alarmGeneralState
                 onCheckedChanged:

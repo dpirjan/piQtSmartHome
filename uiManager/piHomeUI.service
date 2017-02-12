@@ -5,12 +5,14 @@ Requires=piHomeDatabase.service
 Requires=piHomeMail.service
 Requires=piHomeLogin.service
 Requires=piHomeSensor.service
+Requires=piHomeAlarm.service
 After=dbus.service
 After=multi-user.target
 After=piHomeDatabase.service
 After=piHomeMail.service
 After=piHomeLogin.service
 After=piHomeSensor.service
+After=piHomeAlarm.service
 
 [Service]
 User=root

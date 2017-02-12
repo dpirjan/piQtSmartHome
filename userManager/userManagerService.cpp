@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 
     app.setOrganizationName("piHome");
     app.setApplicationName("userManager");
-    qDebug() << "Login Manager";
+    qDebug() << "User Manager";
 
     QList <int> quitSignals = QList <int>()
             << SIGQUIT << SIGINT << SIGTERM << SIGHUP << SIGSEGV;

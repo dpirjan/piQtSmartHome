@@ -1,0 +1,21 @@
+[Unit]
+Description=piHomeAlarm Service
+Requires=dbus.service
+Requires=piHomeDatabase.service
+Requires=piHomeMail.service
+After=dbus.service
+After=multi-user.target
+After=piHomeDatabase.service
+After=piHomeMail.service
+
+[Service]
+User=root
+ExecStart=/usr/share/pismarthome/alarmManager
+Restart=on-failure
+RestartSec=5
+WatchdogSec=2
+Type=notify
+NotifyAccess=all/main
+
+[Install]
+WantedBy=multi-user.target

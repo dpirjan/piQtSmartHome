@@ -30,6 +30,13 @@ else
 	sudo /usr/share/pismarthome/sensorManager &
 fi;
 
+if pidof -x "alarmManager" >/dev/null;
+then
+	echo "AlarmManager already started"
+else
+	sudo /usr/share/pismarthome/alarmManager &
+fi;
+
 if pidof -x "uiManager" >/dev/null;
 then
 	echo "UIManager already started"

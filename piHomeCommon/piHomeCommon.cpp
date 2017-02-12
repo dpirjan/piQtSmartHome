@@ -11,6 +11,7 @@
 #include <QDateTime>
 #include <QFile>
 #include <QDir>
+#include <QStandardPaths>
 
 #include "piHomeCommon.h"
 
@@ -18,13 +19,14 @@ void logHandler(QtMsgType type,
                 const QMessageLogContext &context,
                 const QString &msg)
 {
-    QString logFilePath = QDir::homePath().append(QDir::separator());
-    logFilePath.append(".piHome");
-    logFilePath.append(QDir::separator());
-    logFilePath.append("logging");
-    logFilePath.append(QDir::separator());
-    logFilePath.append(QCoreApplication::applicationName());
-    logFilePath.append(".log");
+    QString logFilePath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).
+            append(QDir::separator()).
+            append(QCoreApplication::organizationName()).
+            append(QDir::separator()).
+            append("logging").
+            append(QDir::separator()).
+            append(QCoreApplication::applicationName()).
+            append(".log");
 
     QFile logFile(logFilePath);
 
@@ -80,8 +82,8 @@ void logHandler(QtMsgType type,
 void closeApplication(int sig)
 {
     qCritical() << "Close application"
-             << QCoreApplication::applicationName()
-             << "( signal =" << sig << "-" << strsignal(sig) << ")";
+                << QCoreApplication::applicationName()
+                << "( signal =" << sig << "-" << strsignal(sig) << ")";
 
     QCoreApplication::quit();
 }
@@ -98,7 +100,7 @@ void catchUnixSignal(const QList<int> &quitSignals)
 void printStackTrace(int sig)
 {
     qCritical() << "Failed application ( signal = "
-             << sig << "-" << strsignal(sig) << ")";
+                << sig << "-" << strsignal(sig) << ")";
     qCritical() << "BackTrace: ";
 
     void *addrArray[64]; // used to store backtrace symbols
@@ -146,12 +148,12 @@ void printStackTrace(int sig)
             char* realName = abi::__cxa_demangle(mangledName, 0, 0, &status);
             if(status == 0)
                 qCritical() << "[bt]: (" << counter << ")" << symbolArray[counter]
-                         << ":" << realName << "+" << offsetBegin << offsetEnd;
+                               << ":" << realName << "+" << offsetBegin << offsetEnd;
             else
                 // demangling failed. Output function name as a C function with
                 // no arguments.
                 qCritical() << "[bt]: (" << counter << ")"  << symbolArray[counter]
-                         << ":" << mangledName << "+" << offsetBegin << offsetEnd;
+                               << ":" << mangledName << "+" << offsetBegin << offsetEnd;
         }
         else
             // couldn't parse the line? print the whole line.

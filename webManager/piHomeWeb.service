@@ -1,0 +1,27 @@
+[Unit]
+Description=piHomeWeb Service
+Requires=dbus.service
+Requires=piHomeDatabase.service
+Requires=piHomeMail.service
+Requires=piHomeLogin.service
+Requires=piHomeSensor.service
+Requires=piHomeAlarm.service
+After=dbus.service
+After=multi-user.target
+After=piHomeDatabase.service
+After=piHomeMail.service
+After=piHomeLogin.service
+After=piHomeSensor.service
+After=piHomeAlarm.service
+
+[Service]
+User=root
+ExecStart=/usr/share/pismarthome/webManager
+Restart=on-failure
+RestartSec=5
+WatchdogSec=2
+Type=notify
+NotifyAccess=all/main
+
+[Install]
+WantedBy=multi-user.target

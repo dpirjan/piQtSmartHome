@@ -2,7 +2,6 @@
 #define ACTUATORINSTANTIATOR_H
 
 #include <QObject>
-#include <QSettings>
 
 #include "actuator.h"
 
@@ -33,8 +32,6 @@ public slots:
     actuator* findActuator(const IOType&, const QString &) const;
 
 private:
-    QSettings *m_settings;
-
     QList<actuator *> m_actuatorsList;
 };
 

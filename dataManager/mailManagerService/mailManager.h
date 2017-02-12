@@ -9,7 +9,6 @@
 class QTextStream;
 class QSslSocket;
 class QTcpSocket;
-class QSettings;
 
 #define MAIL_MANAGER_SERVICE_NAME "org.raspberrypi.piHome.MailManager"
 #define MAIL_MANAGER_SERVICE_PATH "/"
@@ -136,8 +135,6 @@ private:
 
     QTextStream *m_textStream;
     QTcpSocket *m_socket;
-
-    QSettings *m_settings;
 
     WatchdogHelper *m_watchdog;
 };

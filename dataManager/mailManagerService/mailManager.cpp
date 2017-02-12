@@ -5,6 +5,8 @@
 #include <QTextStream>
 #include <QDir>
 #include <QSettings>
+#include <QStandardPaths>
+#include <QCoreApplication>
 
 #include "mailManager.h"
 
@@ -17,18 +19,8 @@
 
 mailManager::mailManager(QObject *parent) : QObject(parent)
 {
-    QString settingsPath = QDir::homePath().
-            append(QDir::separator()).
-            append(".piHome").
-            append(QDir::separator()).
-            append("smtp.ini");
-    m_settings = new QSettings(settingsPath, QSettings::NativeFormat);
-
     loadServerCredentials();
     loadSendMailDetails();
-
-    // settings file no longer needed
-    m_settings->deleteLater();
 
     m_textStream = new QTextStream(m_socket);
 
@@ -57,37 +49,37 @@ bool mailManager::firstRunConfiguration()
 {
     bool returnCode = false;
 
-    QString settingsPath = QDir::homePath().
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).
             append(QDir::separator()).
-            append(".piHome").
+            append(QCoreApplication::organizationName()).
             append(QDir::separator()).
-            append("smtp.ini");
+            append(QCoreApplication::applicationName()).
+            append(".conf");
+    qDebug() << "Path: " << settingsPath;
 
     if(!QFile(settingsPath).exists())
     {
         returnCode = true;
 
-        QSettings *settings = new QSettings(settingsPath, QSettings::NativeFormat);
+        QSettings settings(settingsPath, QSettings::NativeFormat);
 
-        settings->clear();
-        settings->beginGroup("ServerSettings");
-        settings->setValue("ServerName", "smtp.mail.com");
-        settings->setValue("User", "user@mail.com");
-        settings->setValue("Password", "password"); //@TODO use encryption
-        settings->setValue("Port", 465);
-        settings->setValue("Timeout_ms","30000");
-        settings->setValue("Protocol", SSL);
-        settings->setValue("Login", Encrypted);
-        settings->endGroup();
+        settings.clear();
+        settings.beginGroup("ServerSettings");
+        settings.setValue("ServerName", "smtp.mail.com");
+        settings.setValue("User", "user@mail.com");
+        settings.setValue("Password", "password"); //@TODO use encryption
+        settings.setValue("Port", 465);
+        settings.setValue("Timeout_ms","30000");
+        settings.setValue("Protocol", SSL);
+        settings.setValue("Login", Encrypted);
+        settings.endGroup();
 
-        settings->beginGroup("SendMailSettings");
-        settings->setValue("Sender", "sender@mail.com");
-        settings->setValue("NumberOfRecipients", 2);
-        settings->setValue("Recipient_1", "recipient1@mail.com");
-        settings->setValue("Recipient_2", "recipient2@mail.com");
-        settings->endGroup();
-
-        delete settings;
+        settings.beginGroup("SendMailSettings");
+        settings.setValue("Sender", "sender@mail.com");
+        settings.setValue("NumberOfRecipients", 2);
+        settings.setValue("Recipient_1", "recipient1@mail.com");
+        settings.setValue("Recipient_2", "recipient2@mail.com");
+        settings.endGroup();
     }
 
     return returnCode;
@@ -95,14 +87,15 @@ bool mailManager::firstRunConfiguration()
 
 void mailManager::loadServerCredentials()
 {
-    m_settings->beginGroup("ServerSettings");
-    m_serverName = m_settings->value("ServerName").toString();
-    m_userName = m_settings->value("User").toString();
-    m_password = m_settings->value("Password").toString(); //@TODO use encryption
-    m_port = m_settings->value("Port").toInt();
-    m_timeout = m_settings->value("Timeout_ms").toInt();
+    QSettings settings;
+    settings.beginGroup("ServerSettings");
+    m_serverName = settings.value("ServerName").toString();
+    m_userName = settings.value("User").toString();
+    m_password = settings.value("Password").toString(); //@TODO use encryption
+    m_port = settings.value("Port").toInt();
+    m_timeout = settings.value("Timeout_ms").toInt();
 
-    switch(m_settings->value("Protocol").toInt())
+    switch(settings.value("Protocol").toInt())
     {
     case None:
         m_connection = None;
@@ -121,7 +114,7 @@ void mailManager::loadServerCredentials()
         break;
     }
 
-    switch (m_settings->value("Login").toInt())
+    switch (settings.value("Login").toInt())
     {
     case Plain:
         m_authentication = Plain;
@@ -134,18 +127,19 @@ void mailManager::loadServerCredentials()
         break;
     }
 
-    m_settings->endGroup();
+    settings.endGroup();
 }
 
 void mailManager::loadSendMailDetails()
 {
     int recipients = -1;
-    m_settings->beginGroup("SendMailSettings");
-    m_sender = m_settings->value("Sender").toString();
-    recipients = m_settings->value("NumberOfRecipients").toInt();
+    QSettings settings;
+    settings.beginGroup("SendMailSettings");
+    m_sender = settings.value("Sender").toString();
+    recipients = settings.value("NumberOfRecipients").toInt();
     for(int count = 1; count <= recipients; count++)
-        m_recipients.append(m_settings->value(QString("Recipient_").append(QString::number(count))).toString());
-    m_settings->endGroup();
+        m_recipients.append(settings.value(QString("Recipient_").append(QString::number(count))).toString());
+    settings.endGroup();
 }
 
 bool mailManager::connectService()

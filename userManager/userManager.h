@@ -10,7 +10,6 @@
 #define USER_MANAGER_SERVICE_PATH "/"
 #define USER_MANAGER_SERVICE_INT  "org.raspberrypi.piHome.UserManager.UserOperations"
 
-class QSettings;
 class UserInfo;
 
 class UserManager : public QObject
@@ -36,7 +35,6 @@ public slots:
 private:
     void loadUserSettings();
 
-    QSettings *m_settings;
     WatchdogHelper *m_watchdog;
 
     QList<UserInfo *> m_userList;

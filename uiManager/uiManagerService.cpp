@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QQuickStyle>
 #include <QDebug>
+#include <QStandardPaths>
 
 #include "piHomeCommon.h"
 #include "UIManager.h"
@@ -26,20 +27,19 @@ int main(int argc, char *argv[])
             << SIGQUIT << SIGINT << SIGTERM << SIGHUP << SIGSEGV;
     catchUnixSignal(quitSignals);
 
-    QString settingsPath = QDir::homePath().
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).
             append(QDir::separator()).
-            append(".config").
+            append(QCoreApplication::organizationName()).
             append(QDir::separator()).
-            append("piHome").
-            append(QDir::separator());
-    QFile settingsFile(settingsPath.append("uiManager.conf"));
-    if(!settingsFile.exists())
+            append(QCoreApplication::applicationName()).
+            append(".conf");
+    if(!QFile(settingsPath).exists())
     {
         qDebug() << "Application started for the first time, initializing, then quit.";
         qDebug() << "Please customize your configuration and then start again the application.";
-        //Only create an empty file
-        settingsFile.open(QIODevice::WriteOnly);
-        settingsFile.close();
+        //Only setting style as Material
+        QSettings settings(settingsPath, QSettings::NativeFormat);
+        settings.setValue("style", "Material");
         return 0;
     }
 

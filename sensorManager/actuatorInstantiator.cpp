@@ -1,17 +1,12 @@
 #include <QDir>
+#include <QStandardPaths>
 
 #include "actuatorInstantiator.h"
 #include "databaseManagerInterface.h"
 
 actuatorInstantiator::actuatorInstantiator(QObject *parent) : QObject(parent)
 {
-    QString filePath = QDir::homePath().append(QDir::separator()).append(".piHome").append(QDir::separator()).append("actuators.ini");
-    m_settings = new QSettings(filePath, QSettings::NativeFormat);
-
     loadActuators();
-
-    // settings file no longer needed
-    m_settings->deleteLater();
 }
 
 actuatorInstantiator::~actuatorInstantiator()
@@ -36,34 +31,41 @@ void actuatorInstantiator::loadActuators()
 {
     int numActuators = -1;
 
-    m_settings->beginGroup("GenericSettings");
-    numActuators = m_settings->value("NumberOfActuators").toInt();
-    m_settings->endGroup();
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).
+            append(QDir::separator()).
+            append(QCoreApplication::organizationName()).
+            append(QDir::separator()).
+            append("actuators.conf");
+    QSettings settings(settingsPath, QSettings::NativeFormat);
+
+    settings.beginGroup("GenericSettings");
+    numActuators = settings.value("NumberOfActuators").toInt();
+    settings.endGroup();
 
     for(int i = 1; i <= numActuators; i++) // for humans not machines
     {
         QString group = "Actuator";
         group.append(QString::number(i));
-        m_settings->beginGroup(group);
+        settings.beginGroup(group);
         actuator *tmp = new actuator(
-                    StringToSystemType(m_settings->value("SystemType").toString()),
-                    StringToType(m_settings->value("ActuatorType").toString()),
-                    StringToHardwareType(m_settings->value("HardwareType").toString()),
-                    m_settings->value("Zone").toString(),
-                    m_settings->value("Node").toString(),
-                    m_settings->value("Address").toString());
+                    StringToSystemType(settings.value("SystemType").toString()),
+                    StringToType(settings.value("ActuatorType").toString()),
+                    StringToHardwareType(settings.value("HardwareType").toString()),
+                    settings.value("Zone").toString(),
+                    settings.value("Node").toString(),
+                    settings.value("Address").toString());
         m_actuatorsList.append(tmp);
 
         databaseManagerInterface::instance().insertIO(
-                    m_settings->value("SystemType").toString(),
-                    m_settings->value("HardwareType").toString(),
+                    settings.value("SystemType").toString(),
+                    settings.value("HardwareType").toString(),
                     "Actuator",
-                    m_settings->value("ActuatorType").toString(),
-                    m_settings->value("Zone").toString(),
-                    m_settings->value("Node").toString(),
-                    m_settings->value("Address").toString());
+                    settings.value("ActuatorType").toString(),
+                    settings.value("Zone").toString(),
+                    settings.value("Node").toString(),
+                    settings.value("Address").toString());
 
-        m_settings->endGroup();
+        settings.endGroup();
     }
 }
 
@@ -105,74 +107,72 @@ bool actuatorInstantiator::firstRunInitActuators()
 {
     bool returnCode = false;
 
-    QString settingsPath = QDir::homePath().
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).
             append(QDir::separator()).
-            append(".piHome").
+            append(QCoreApplication::organizationName()).
             append(QDir::separator()).
-            append("actuators.ini");
+            append("actuators.conf");
 
-    qDebug() << "firstRunInitActuators()" << settingsPath << " " << QFile(settingsPath).exists();
+    qDebug() << "Path: " << settingsPath;
 
     if(!QFile(settingsPath).exists())
     {
         returnCode = true;
 
-        QSettings *settings = new QSettings(settingsPath, QSettings::NativeFormat);
+        QSettings settings(settingsPath, QSettings::NativeFormat);
 
-        settings->clear();
-        settings->beginGroup("GenericSettings");
-        settings->setValue("NumberOfActuators", 6);
-        settings->endGroup();
-        settings->beginGroup("Actuator1");
-        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", typeToString(Siren));
-        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-        settings->setValue("Zone", "Hall");
-        settings->setValue("Node", "Entrance Door");
-        settings->setValue("Address", "SPI_0");
-        settings->endGroup();
-        settings->beginGroup("Actuator2");
-        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", typeToString(Buzzer));
-        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-        settings->setValue("Zone", "Kitchen");
-        settings->setValue("Node", "Cooker");
-        settings->setValue("Address", "SPI_0");
-        settings->endGroup();
-        settings->beginGroup("Actuator3");
-        settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("ActuatorType", typeToString(Relay));
-        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-        settings->setValue("Zone", "Hall");
-        settings->setValue("Node", "Air Conditioning");
-        settings->setValue("Address", "SPI_0");
-        settings->endGroup();
-        settings->beginGroup("Actuator4");
-        settings->setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings->setValue("ActuatorType", typeToString(DoorBell));
-        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-        settings->setValue("Zone", "Hall");
-        settings->setValue("Node", "Door");
-        settings->setValue("Address", "SPI_0");
-        settings->endGroup();
-        settings->beginGroup("Actuator5");
-        settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("ActuatorType", typeToString(IR));
-        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-        settings->setValue("Zone", "Hall");
-        settings->setValue("Node", "Air Conditioning");
-        settings->setValue("Address", "SPI_0");
-        settings->endGroup();
-        settings->beginGroup("Actuator6");
-        settings->setValue("SystemType", systemTypeToString(SmartHome));
-        settings->setValue("ActuatorType", typeToString(Pump));
-        settings->setValue("HardwareType", hardwareTypeToString(Wireless));
-        settings->setValue("Zone", "Balcony");
-        settings->setValue("Node", "Plants");
-        settings->setValue("Address", "SPI_0");
-        settings->endGroup();
-
-        delete settings;
+        settings.clear();
+        settings.beginGroup("GenericSettings");
+        settings.setValue("NumberOfActuators", 6);
+        settings.endGroup();
+        settings.beginGroup("Actuator1");
+        settings.setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings.setValue("ActuatorType", typeToString(Siren));
+        settings.setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings.setValue("Zone", "Hall");
+        settings.setValue("Node", "Entrance Door");
+        settings.setValue("Address", "SPI_0");
+        settings.endGroup();
+        settings.beginGroup("Actuator2");
+        settings.setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings.setValue("ActuatorType", typeToString(Buzzer));
+        settings.setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings.setValue("Zone", "Kitchen");
+        settings.setValue("Node", "Cooker");
+        settings.setValue("Address", "SPI_0");
+        settings.endGroup();
+        settings.beginGroup("Actuator3");
+        settings.setValue("SystemType", systemTypeToString(SmartHome));
+        settings.setValue("ActuatorType", typeToString(Relay));
+        settings.setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings.setValue("Zone", "Hall");
+        settings.setValue("Node", "Air Conditioning");
+        settings.setValue("Address", "SPI_0");
+        settings.endGroup();
+        settings.beginGroup("Actuator4");
+        settings.setValue("SystemType", systemTypeToString(HomeAlarm));
+        settings.setValue("ActuatorType", typeToString(DoorBell));
+        settings.setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings.setValue("Zone", "Hall");
+        settings.setValue("Node", "Door");
+        settings.setValue("Address", "SPI_0");
+        settings.endGroup();
+        settings.beginGroup("Actuator5");
+        settings.setValue("SystemType", systemTypeToString(SmartHome));
+        settings.setValue("ActuatorType", typeToString(IR));
+        settings.setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings.setValue("Zone", "Hall");
+        settings.setValue("Node", "Air Conditioning");
+        settings.setValue("Address", "SPI_0");
+        settings.endGroup();
+        settings.beginGroup("Actuator6");
+        settings.setValue("SystemType", systemTypeToString(SmartHome));
+        settings.setValue("ActuatorType", typeToString(Pump));
+        settings.setValue("HardwareType", hardwareTypeToString(Wireless));
+        settings.setValue("Zone", "Balcony");
+        settings.setValue("Node", "Plants");
+        settings.setValue("Address", "SPI_0");
+        settings.endGroup();
     }
 
     return returnCode;

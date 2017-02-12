@@ -8,8 +8,6 @@
 
 using namespace piHome;
 
-class QSettings;
-
 class sensorInstantiator : public QObject
 {
     Q_OBJECT
@@ -36,8 +34,6 @@ public slots:
     wirelessSensor* findWirelessSensor(const IOType&, const QString&) const;
 
 private:
-    QSettings *m_settings;
-
     bool m_sendMail;
 
     QList<wiredSensor *> m_wiredSensorList;

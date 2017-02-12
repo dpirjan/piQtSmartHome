@@ -14,8 +14,6 @@
 #define DATABASE_MANAGER_SERVICE_PATH "/"
 #define DATABASE_MANAGER_SERVICE_INT  "org.raspberrypi.piHome.DatabaseManager.DatabaseOperations"
 
-class QSettings;
-
 class DatabaseManager : public QObject
 {
     Q_OBJECT
@@ -58,7 +56,6 @@ private:
     bool createDatabaseAndTable();
 
     QSqlDatabase m_db;
-    QSettings *m_settings;
 
     QString m_databaseFilePath;
     QString m_databaseFileName;

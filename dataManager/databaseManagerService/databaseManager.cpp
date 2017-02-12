@@ -15,22 +15,13 @@
 
 #include <QSettings>
 #include <QDir>
+#include <QStandardPaths>
 
 #include "databaseManager.h"
 
 DatabaseManager::DatabaseManager(QObject *parent) : QObject(parent)
 {
-    QString settingsPath = QDir::homePath().
-            append(QDir::separator()).
-            append(".piHome").
-            append(QDir::separator()).
-            append("settingsManager.ini");
-    m_settings = new QSettings(settingsPath, QSettings::NativeFormat);
-
     loadDatabaseSettings();
-
-    // settings file no longer needed
-    m_settings->deleteLater();
 
     QString dbPath = m_databaseFilePath;
     if(dbPath.endsWith(QDir::separator()))
@@ -60,29 +51,31 @@ bool DatabaseManager::firstRunConfiguration()
 {
     bool returnCode = false;
 
-    QString settingsPath = QDir::homePath().
+    QString settingsPath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).
             append(QDir::separator()).
-            append(".piHome").
+            append(QCoreApplication::organizationName()).
             append(QDir::separator()).
-            append("settingsManager.ini");
+            append(QCoreApplication::applicationName()).
+            append(".conf");
+    qDebug() << "Path: " << settingsPath;
 
     if(!QFile(settingsPath).exists())
     {
         returnCode = true;
-        QSettings *settings = new QSettings(settingsPath,
-                                            QSettings::NativeFormat);
+        QSettings settings(settingsPath, QSettings::NativeFormat);
 
         QString databaseFileName = "database.sqlite";
-        QString databaseFilePath = QDir::homePath().append(QDir::separator());
-        databaseFilePath.append(".piHome").append(QDir::separator());
+        QString databaseFilePath = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation).
+                append(QDir::separator()).
+                append(QCoreApplication::organizationName()).
+                append(QDir::separator());
+        qDebug() << databaseFilePath + databaseFileName;
 
-        settings->clear();
-        settings->beginGroup("DatabaseSettings");
-        settings->setValue("databasePath", databaseFilePath);
-        settings->setValue("databaseName", databaseFileName);
-        settings->endGroup();
-
-        delete settings;
+        settings.clear();
+        settings.beginGroup("DatabaseSettings");
+        settings.setValue("databasePath", databaseFilePath);
+        settings.setValue("databaseName", databaseFileName);
+        settings.endGroup();
     }
 
     return returnCode;
@@ -90,10 +83,11 @@ bool DatabaseManager::firstRunConfiguration()
 
 void DatabaseManager::loadDatabaseSettings()
 {
-    m_settings->beginGroup("DatabaseSettings");
-    m_databaseFilePath = m_settings->value("databasePath").toString();
-    m_databaseFileName = m_settings->value("databaseName").toString();
-    m_settings->endGroup();
+    QSettings settings;
+    settings.beginGroup("DatabaseSettings");
+    m_databaseFilePath = settings.value("databasePath").toString();
+    m_databaseFileName = settings.value("databaseName").toString();
+    settings.endGroup();
 }
 
 bool DatabaseManager::connectService()

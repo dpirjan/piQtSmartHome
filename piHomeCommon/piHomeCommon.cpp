@@ -50,7 +50,8 @@ void logHandler(QtMsgType type,
     text.append("] : ");
     text.append(msg);
 
-    switch (type) {
+    switch (type)
+    {
     case QtDebugMsg:
         text.insert(0, "[DEBUG");
         textStream << text << endl;

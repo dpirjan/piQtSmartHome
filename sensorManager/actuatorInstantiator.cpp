@@ -103,6 +103,21 @@ actuator* actuatorInstantiator::findActuator(const IOType &actuatorType,
     }
 }
 
+QList<actuator*> actuatorInstantiator::findActuators(const IOType &actuatorType) const
+{
+    QList <actuator *> retList;
+    for(int counter = 0; counter < m_actuatorsList.count(); counter++)
+    if(m_actuatorsList.at(counter)->getActuatorType() == actuatorType)
+    {
+        qDebug() << "Found " << typeToString(actuatorType)
+                 << " actuator with " << m_actuatorsList.at(counter)->getAddress()
+                 << " address on position " << counter;
+        retList.append(m_actuatorsList.at(counter));
+    }
+
+    return retList;
+}
+
 bool actuatorInstantiator::firstRunInitActuators()
 {
     bool returnCode = false;
@@ -123,7 +138,7 @@ bool actuatorInstantiator::firstRunInitActuators()
 
         settings.clear();
         settings.beginGroup("GenericSettings");
-        settings.setValue("NumberOfActuators", 6);
+        settings.setValue("NumberOfActuators", 7);
         settings.endGroup();
         settings.beginGroup("Actuator1");
         settings.setValue("SystemType", systemTypeToString(HomeAlarm));
@@ -172,6 +187,14 @@ bool actuatorInstantiator::firstRunInitActuators()
         settings.setValue("Zone", "Balcony");
         settings.setValue("Node", "Plants");
         settings.setValue("Address", "SPI_0");
+        settings.endGroup();
+        settings.beginGroup("Actuator7");
+        settings.setValue("SystemType", systemTypeToString(SmartHome));
+        settings.setValue("ActuatorType", typeToString(DoorLock));
+        settings.setValue("HardwareType", hardwareTypeToString(Wired));
+        settings.setValue("Zone", "Hall");
+        settings.setValue("Node", "Door");
+        settings.setValue("Address", "GPIO_17");
         settings.endGroup();
     }
 

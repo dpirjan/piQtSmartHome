@@ -27,14 +27,15 @@ typedef enum {
     Vibration = 0x8000, // Knock sensor
     Flood = 0x10000, // Water presence
     WaterLevel = 0x20000, // Water level
-    DoorLocked = 0x40000, // Door locked
+    DoorLockedState = 0x40000, // Door locked state provided by IR sensor
     BatteryLevel = 0x80000, // Read battery voltage on Analog
     Siren = 0x100000,
     Buzzer = 0x200000,
     Relay = 0x400000,
     DoorBell = 0x800000,
     IR = 0x1000000,
-    Pump = 0x2000000 // Water pump
+    Pump = 0x2000000, // Water pump
+    DoorLock = 0x4000000 // bolt or whatever else used for locking the door
 } IOType;
 
 inline QString systemTypeToString(const SystemType &value)
@@ -149,8 +150,8 @@ inline QString typeToString(const IOType &value)
     case WaterLevel:
         returnString = "WaterLevel";
         break;
-    case DoorLocked:
-        returnString = "DoorLocked";
+    case DoorLockedState:
+        returnString = "DoorLockedState";
         break;
     case BatteryLevel:
         returnString = "BatteryLevel";
@@ -172,6 +173,9 @@ inline QString typeToString(const IOType &value)
         break;
     case Pump:
         returnString = "Pump";
+        break;
+    case DoorLock:
+        returnString = "DoorLock";
         break;
     default:
         qDebug() << "typeToString() - Value not supported!";
@@ -234,9 +238,9 @@ inline IOType StringToType(const QString &str)
         returnValue = WaterLevel;
         found = true;
     }
-    if(str == "DoorLocked")
+    if(str == "DoorLockedState")
     {
-        returnValue = DoorLocked;
+        returnValue = DoorLockedState;
         found = true;
     }
     if(str == "BatteryLevel")
@@ -272,6 +276,11 @@ inline IOType StringToType(const QString &str)
     if(str == "Pump")
     {
         returnValue = Pump;
+        found = true;
+    }
+    if(str == "DoorLock")
+    {
+        returnValue = DoorLock;
         found = true;
     }
 

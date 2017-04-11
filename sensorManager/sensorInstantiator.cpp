@@ -189,7 +189,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings.setValue("HardwareType", hardwareTypeToString(Wired));
         settings.setValue("Zone", "Hall");
         settings.setValue("Node", "Entrance Door");
-        settings.setValue("Address", "GPIO_23");
+        settings.setValue("Address", "GPIO_4");
         settings.endGroup();
         settings.beginGroup("Sensor2");
         settings.setValue("SystemType", systemTypeToString(HomeAlarm));
@@ -197,7 +197,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings.setValue("HardwareType", hardwareTypeToString(Wired));
         settings.setValue("Zone", "Hall");
         settings.setValue("Node", "Entrance Door");
-        settings.setValue("Address", "GPIO_24");
+        settings.setValue("Address", "GPIO_5");
         settings.endGroup();
         settings.beginGroup("Sensor3");
         settings.setValue("SystemType", systemTypeToString(HomeAlarm));
@@ -205,7 +205,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings.setValue("HardwareType", hardwareTypeToString(Wired));
         settings.setValue("Zone", "Dressing");
         settings.setValue("Node", "Main");
-        settings.setValue("Address", "GPIO_25");
+        settings.setValue("Address", "GPIO_6");
         settings.endGroup();
         settings.beginGroup("Sensor4");
         settings.setValue("SystemType", systemTypeToString(HomeAlarm));
@@ -281,7 +281,7 @@ bool sensorInstantiator::firstRunInitSensors()
         settings.endGroup();
         settings.beginGroup("Sensor13");
         settings.setValue("SystemType", systemTypeToString(HomeAlarm));
-        settings.setValue("SensorType", typeToString(DoorLocked));
+        settings.setValue("SensorType", typeToString(DoorLockedState));
         settings.setValue("HardwareType", hardwareTypeToString(Wireless));
         settings.setValue("Zone", "Hall");
         settings.setValue("Node", "Entrance Door");

@@ -54,11 +54,26 @@ void LockController::service(HttpRequest &request, HttpResponse &response)
 
             if(displayedState != postState)
             {
-                // call set value and update the displayed state if operation successfully completed
-                bool tmp = sensorManagerInterface::instance().setActuatorValue(
-                            typeToString(DoorLock),
-                            lockAddress,
-                            postState);
+                bool tmp;
+                if(postState)
+                {
+                    // call set value and update the displayed state if operation successfully completed
+                    tmp = sensorManagerInterface::instance().setActuatorValue(
+                                typeToString(DoorLock),
+                                lockAddress,
+                                "Locked");
+                    if(!tmp)
+                        qCritical() << "Setting DoorLock sensor from " << lockAddress << "to \"Locked\" failed!";
+                }
+                else
+                {
+                    tmp = sensorManagerInterface::instance().setActuatorValue(
+                                typeToString(DoorLock),
+                                lockAddress,
+                                "Locked");
+                    if(!tmp)
+                        qCritical() << "Setting DoorLock sensor from " << lockAddress << "to \"Unlocked\" failed!";
+                }
 
                 displayedState = postState;
             }

@@ -29,15 +29,15 @@ int main(int argc, char *argv[])
     if(!dm.connectService())
         qFatal("Cannot register the database manager service to DBUS");
 
-    //    //Used for testing
-    //    HomeAlarmInfo entry1("Living", "Node1", "Sensor1", "2016/11/11 18:54:42");
-    //    dm.insertHomeAlarmEntry(entry1);
+//    //Used for testing
+//    HomeAlarmInfo entry1("Living", "Node1", "Contact", "GPIO_25", "2016/11/11 18:54:42");
+//    dm.insertHomeAlarmEntry(entry1);
 
-    //    HomeAlarmInfo entry2("Hall", "Node1", "Sensor12");
-    //    dm.insertHomeAlarmEntry(entry2);
+//    HomeAlarmInfo entry2("Hall", "Node1", "Contact", "GPIO_26");
+//    dm.insertHomeAlarmEntry(entry2);
 
-    //    HomeAlarmInfo entry3("Bedroom", "Node1", "Sensor17");
-    //    dm.insertHomeAlarmEntry(entry3);
+//    HomeAlarmInfo entry3("Bedroom", "Node1", "Contact", "GPIO_17");
+//    dm.insertHomeAlarmEntry(entry3);
 
     return app.exec();
 }

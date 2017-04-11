@@ -25,7 +25,7 @@ ActuatorInfo::ActuatorInfo(const QString &zone,
     m_address(address),
     m_value(value)
 {
-    m_timestamp = QDateTime::currentDateTime().toString("dd-MMM-yy hh:mm:ss.zzz");
+    m_timestamp = QDateTime::currentDateTime().toString("yyyy-MMM-dd hh:mm:ss.zzz");
     qDebug() << "ActuatorInfo Timestamp : " << m_timestamp;
 }
 

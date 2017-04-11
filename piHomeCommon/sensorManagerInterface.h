@@ -26,6 +26,9 @@ public slots:
     bool setActuatorValue(const QString&,
                           const QString&,
                           const QString&);
+    QString getActuatorValue(const QString&,
+                             const QString&);
+    QStringList checkActuator(const QString&);
 
 private:
     QDBusInterface *m_iface;

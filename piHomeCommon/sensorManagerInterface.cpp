@@ -69,3 +69,49 @@ bool sensorManagerInterface::setActuatorValue(const QString &category,
 
     return reply.value();
 }
+
+QString sensorManagerInterface::getActuatorValue(const QString &category,
+                                                 const QString &address)
+{
+    QString ret;
+    QDBusReply<QString> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("getActuatorValue"),
+                qVariantFromValue(category),
+                qVariantFromValue(address));
+
+    if(reply.isValid())
+    {
+        ret = reply.value();
+        qDebug() << "getActuatorValue reply was: " << ret;
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return ret;
+}
+
+QStringList sensorManagerInterface::checkActuator(const QString &category)
+{
+    QStringList ret;
+    QDBusReply<QStringList> reply = m_iface->call(
+                QDBus::BlockWithGui,
+                QLatin1String("checkActuator"),
+                qVariantFromValue(category));
+
+    if(reply.isValid())
+    {
+        ret = reply.value();
+        qDebug() << "checkActuator reply was: " << ret;
+    }
+    else
+    {
+        qCritical() << "DBus call error: " << m_iface->lastError();
+        qCritical() << "DBus reply error: " << reply.error();
+    }
+
+    return ret;
+}

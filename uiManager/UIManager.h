@@ -69,6 +69,10 @@ private slots:
     bool getAlarmNightState() const;
     bool getAlarmVacationState() const;
 
+    void alarmGeneralStateChangedSlot();
+    void alarmNightStateChangedSlot();
+    void alarmVacationStateChangedSlot();
+
 signals:
     void userListUpdated(); // used only to avoid warning from qml
     void validLoginUpdated();

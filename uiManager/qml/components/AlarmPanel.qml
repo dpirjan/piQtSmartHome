@@ -36,16 +36,6 @@ Pane
                 text: "General Mode State (Armed/Disarmed)"
 
                 checked: UIM.alarmGeneralState
-                onCheckedChanged:
-                {
-                    console.log("Enabled mainState changed ", checked)
-                    if(checked !== UIM.alarmGeneralState)
-                    {
-                        UIM.alarmGeneralState = checked;
-                        UIM.alarmNightState = !checked;
-                        UIM.alarmVacationState = !checked;
-                    }
-                }
             }
             Switch
             {
@@ -53,15 +43,6 @@ Pane
                 text: "Night Mode State"
 
                 checked: UIM.alarmNightState
-                onCheckedChanged:
-                {
-                    if(checked !== UIM.alarmNightState)
-                    {
-                        UIM.alarmGeneralState = !checked;
-                        UIM.alarmNightState = checked;
-                        UIM.alarmVacationState = !checked;
-                    }
-                }
             }
             Switch
             {
@@ -69,17 +50,29 @@ Pane
                 text: "Vacation Mode State"
 
                 checked: UIM.alarmVacationState
-                onCheckedChanged:
-                {
-                    if(checked !== UIM.alarmVacationState)
-                    {
-                        UIM.alarmGeneralState = !checked;
-                        UIM.alarmNightState = !checked;
-                        UIM.alarmVacationState = checked;
-                    }
-                }
             }
         }
+    }
+
+    Connections
+    {
+        ignoreUnknownSignals: true
+        target: mainState
+        onCheckedChanged: UIM.alarmGeneralState = mainState.checked
+    }
+
+    Connections
+    {
+        ignoreUnknownSignals: true
+        target: nightState
+        onCheckedChanged: UIM.alarmNightState = nightState.checked
+    }
+
+    Connections
+    {
+        ignoreUnknownSignals: true
+        target: vacationState
+        onCheckedChanged: UIM.alarmVacationState = vacationState.checked
     }
 
     Component.onCompleted:

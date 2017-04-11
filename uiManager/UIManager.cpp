@@ -45,6 +45,19 @@ void UIManager::init()
                      this,
                      SLOT(categoriesReceived(QStringList)));
 
+    QObject::connect(&AlarmManagerInterface::instance(),
+                     SIGNAL(alarmGeneralStateChanged()),
+                     this,
+                     SLOT(alarmGeneralStateChangedSlot()));
+    QObject::connect(&AlarmManagerInterface::instance(),
+                     SIGNAL(alarmNightStateChanged()),
+                     this,
+                     SLOT(alarmNightStateChangedSlot()));
+    QObject::connect(&AlarmManagerInterface::instance(),
+                     SIGNAL(alarmVacationStateChanged()),
+                     this,
+                     SLOT(alarmVacationStateChangedSlot()));
+
     databaseManagerInterface::instance().getAllZones();
     databaseManagerInterface::instance().getAllCategories();
 }
@@ -205,6 +218,24 @@ bool UIManager::getAlarmNightState() const
 bool UIManager::getAlarmVacationState() const
 {
     return AlarmManagerInterface::instance().getAlarmVacationState();
+}
+
+void UIManager::alarmGeneralStateChangedSlot()
+{
+    qDebug() << "alarmGeneralStateChangedSlot: " << AlarmManagerInterface::instance().getAlarmGeneralState();
+    emit alarmGeneralStateChanged();
+}
+
+void UIManager::alarmNightStateChangedSlot()
+{
+     qDebug() << "alarmNightStateChangedSlot: " << AlarmManagerInterface::instance().getAlarmNightState();
+     emit alarmNightStateChanged();
+}
+
+void UIManager::alarmVacationStateChangedSlot()
+{
+     qDebug() << "alarmVacationStateChangedSlot: " << AlarmManagerInterface::instance().getAlarmVacationState();
+     emit alarmVacationStateChanged();
 }
 
 void UIManager::validLoginUpdateSlot()

@@ -96,36 +96,81 @@ void AlarmManager::saveAlarmState()
 
 void AlarmManager::setAlarmGeneralState(const bool &state)
 {
-    qDebug() << m_alarmGeneralState << "/" << state;
+    if(state)
+    {
+        if(m_alarmNightState)
+        {
+            m_alarmNightState = false;
+            emit alarmNightStateChanged();
+        }
+
+        if(m_alarmVacationState)
+        {
+            m_alarmVacationState = false;
+            emit alarmVacationStateChanged();
+        }
+    }
+
     m_alarmGeneralState = state;
+
+    emit alarmGeneralStateChanged();
 }
 
 void AlarmManager::setAlarmNightState(const bool &state)
 {
-    qDebug() << m_alarmNightState << "/" << state;
+    if(state)
+    {
+        if(m_alarmGeneralState)
+        {
+            m_alarmGeneralState = false;
+            emit alarmGeneralStateChanged();
+        }
+
+        if(m_alarmVacationState)
+        {
+            m_alarmVacationState = false;
+            emit alarmVacationStateChanged();
+        }
+    }
+
     m_alarmNightState = state;
+
+    emit alarmNightStateChanged();
 }
 
 void AlarmManager::setAlarmVacationState(const bool &state)
 {
-    qDebug() << m_alarmVacationState << "/" << state;
+    if(state)
+    {
+        if(m_alarmGeneralState)
+        {
+            m_alarmGeneralState = false;
+            emit alarmGeneralStateChanged();
+        }
+
+        if(m_alarmNightState)
+        {
+            m_alarmNightState = false;
+            emit alarmNightStateChanged();
+        }
+    }
+
     m_alarmVacationState = state;
+
+    emit alarmVacationStateChanged();
 }
 
 bool AlarmManager::getAlarmGeneralState() const
 {
-    qDebug() << m_alarmGeneralState;
     return m_alarmGeneralState;
 }
 
 bool AlarmManager::getAlarmNightState() const
 {
-    qDebug() << m_alarmNightState;
     return m_alarmNightState;
 }
 
 bool AlarmManager::getAlarmVacationState() const
 {
-    qDebug() << m_alarmVacationState;
     return m_alarmVacationState;
 }

@@ -23,7 +23,9 @@ public:
     static bool firstRunConfiguration();
 
 signals:
-    Q_SCRIPTABLE void alarmEventNotification(); // @TODO update params
+    Q_SCRIPTABLE void alarmGeneralStateChanged();
+    Q_SCRIPTABLE void alarmNightStateChanged();
+    Q_SCRIPTABLE void alarmVacationStateChanged();
 
 public slots:
     Q_SCRIPTABLE void setAlarmGeneralState(const bool&);

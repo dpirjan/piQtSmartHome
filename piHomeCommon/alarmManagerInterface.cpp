@@ -42,6 +42,27 @@ bool AlarmManagerInterface::connectToDBus()
     qDebug() << "Path: " << m_iface->path();
     qDebug() << "Interface: " << m_iface->interface();
 
+    QDBusConnection::systemBus().connect(ALARM_MANAGER_SERVICE_NAME,
+                                         ALARM_MANAGER_SERVICE_PATH,
+                                         ALARM_MANAGER_SERVICE_INT,
+                                         "alarmGeneralStateChanged",
+                                         this,
+                                         SIGNAL(alarmGeneralStateChanged()));
+
+    QDBusConnection::systemBus().connect(ALARM_MANAGER_SERVICE_NAME,
+                                         ALARM_MANAGER_SERVICE_PATH,
+                                         ALARM_MANAGER_SERVICE_INT,
+                                         "alarmNightStateChanged",
+                                         this,
+                                         SIGNAL(alarmNightStateChanged()));
+
+    QDBusConnection::systemBus().connect(ALARM_MANAGER_SERVICE_NAME,
+                                         ALARM_MANAGER_SERVICE_PATH,
+                                         ALARM_MANAGER_SERVICE_INT,
+                                         "alarmVacationStateChanged",
+                                         this,
+                                         SIGNAL(alarmVacationStateChanged()));
+
     return ret;
 }
 

@@ -24,7 +24,9 @@ public:
     }
 
 signals:
-    void alarmEventNotification();
+    void alarmGeneralStateChanged();
+    void alarmNightStateChanged();
+    void alarmVacationStateChanged();
 
 public slots:
     void setAlarmGeneralState(const bool&);

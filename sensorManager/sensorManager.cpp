@@ -7,6 +7,7 @@
 
 #include "sensorInstantiator.h"
 #include "actuatorInstantiator.h"
+#include "actuator.h"
 
 SensorManager::SensorManager(QObject *parent) : QObject(parent)
 {
@@ -143,9 +144,54 @@ bool SensorManager::setActuatorValue(const QString &category,
     {
         qDebug() << "setActuatorValue(" << category << ", " << address << ", "
                  << value << ")";
-        ret = true;
         act->setValue(value);
+        ret = true;
     }
+
+    return ret;
+}
+
+QString SensorManager::getActuatorValue(const QString &category,
+                                     const QString &address)
+{
+    QString ret;
+    actuator *act = actuatorInstantiator::instance().findActuator(StringToType(category), address);
+    if(act)
+    {
+#ifdef WIRINGPI
+        ret = act->getValue();
+#else
+        //@TODO remove this code after testing is finished
+        int number = qrand();
+        if(number % 2 == 0)
+        {
+            if(category == "DoorLock")
+                ret = "Locked";
+            else
+                ret = "On";
+        }
+        else
+        {
+            if(category == "DoorLock")
+                ret = "Unlocked";
+            else
+                ret = "Off";
+        }
+#endif
+        qDebug() << "getActuatorValue(" << category << ", " << address << ", "
+                 << ret << ")";
+    }
+
+    return ret;
+}
+
+// returns the list of addresses for the actuator type specified
+QStringList SensorManager::checkActuator(const QString &category)
+{
+    QStringList ret;
+    QList<actuator *> list = actuatorInstantiator::instance().findActuators(StringToType(category));
+    for(int count = 0; count < list.count(); count++)
+        ret.append(list.at(count)->getAddress());
 
     return ret;
 }

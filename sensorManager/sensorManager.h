@@ -30,6 +30,9 @@ public slots:
     Q_SCRIPTABLE bool setActuatorValue(const QString&,
                                        const QString&,
                                        const QString&);
+    Q_SCRIPTABLE QString getActuatorValue(const QString &,
+                                       const QString &);
+    Q_SCRIPTABLE QStringList checkActuator(const QString &);
 
 private:
     QList<wiredSensor *> m_wiredSensorList;

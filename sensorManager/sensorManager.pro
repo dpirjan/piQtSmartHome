@@ -34,7 +34,6 @@ isEmpty(SYSROOT) {
         LIBS += -lrf24-bcm
         LIBS += -lrf24
         LIBS += -lrf24network
-        LIBS += -lrf24mesh
         message("$${LIBS}")
 }
 

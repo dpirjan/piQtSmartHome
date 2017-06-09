@@ -13,11 +13,17 @@
 AlarmManager::AlarmManager(QObject *parent) : QObject(parent)
 {
     loadAlarmState();
+
+    m_watchdog = new WatchdogHelper("piHomeAlarm");
+    m_watchdog->init();
 }
 
 AlarmManager::~AlarmManager()
 {
     saveAlarmState();
+
+    m_watchdog->stop();
+    m_watchdog->deleteLater();
 }
 
 bool AlarmManager::connectService()

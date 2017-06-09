@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "io.h"
+#include "watchdogHelper.h"
 
 class WebManager : public QObject
 {
@@ -14,8 +15,10 @@ public:
     virtual ~WebManager();
 
     static bool firstRunConfiguration();
-
     void loadWebServerSettings();
+
+private:
+    WatchdogHelper *m_watchdog;
 };
 
 #endif // WEBMANAGER_H

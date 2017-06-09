@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "io.h"
+#include "watchdogHelper.h"
 
 #define ALARM_MANAGER_SERVICE_NAME "org.raspberrypi.piHome.AlarmManager"
 #define ALARM_MANAGER_SERVICE_PATH "/"
@@ -43,6 +44,8 @@ private:
     bool m_alarmGeneralState;
     bool m_alarmNightState;
     bool m_alarmVacationState;
+
+    WatchdogHelper *m_watchdog;
 };
 
 #endif // ALARMMANAGER_H

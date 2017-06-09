@@ -59,7 +59,8 @@ void wirelessSensor::interrupt()
     QElapsedTimer timer;
     timer.start();
     IOType type = getSensorType();
-    if(type == Light || type == Temperature)
+    if(type == Light || type == Temperature || type == Humidity ||
+            type == BatteryLevel)
     {
         // Will create a smartHomeInfo class instance and insert it in the
         // database containing the events.

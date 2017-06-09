@@ -15,10 +15,15 @@ using namespace stefanfrings;
 WebManager::WebManager(QObject *parent) : QObject(parent)
 {
     loadWebServerSettings();
+
+    m_watchdog = new WatchdogHelper("piHomeAlarm");
+    m_watchdog->init();
 }
 
 WebManager::~WebManager()
 {
+    m_watchdog->stop();
+    m_watchdog->deleteLater();
 }
 
 bool WebManager::firstRunConfiguration()

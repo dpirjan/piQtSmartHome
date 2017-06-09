@@ -184,6 +184,75 @@ inline QString typeToString(const IOType &value)
     return returnString;
 }
 
+inline QString typeToString(const uint32_t &value)
+{
+    QString returnString;
+    switch (value)
+    {
+    case PIR:
+        returnString = "PIR";
+        break;
+    case Contact:
+        returnString = "Contact";
+        break;
+    case Light:
+        returnString = "Light";
+        break;
+    case Temperature:
+        returnString = "Temperature";
+        break;
+    case Humidity:
+        returnString = "Humidity";
+        break;
+    case CO:
+        returnString = "CO";
+        break;
+    case CH4:
+        returnString = "CH4";
+        break;
+    case Vibration:
+        returnString = "Vibration";
+        break;
+    case Flood:
+        returnString = "Flood";
+        break;
+    case WaterLevel:
+        returnString = "WaterLevel";
+        break;
+    case DoorLockedState:
+        returnString = "DoorLockedState";
+        break;
+    case BatteryLevel:
+        returnString = "BatteryLevel";
+        break;
+    case Siren:
+        returnString = "Siren";
+        break;
+    case Buzzer:
+        returnString = "Buzzer";
+        break;
+    case Relay:
+        returnString = "Relay";
+        break;
+    case DoorBell:
+        returnString = "DoorBell";
+        break;
+    case IR:
+        returnString = "IR";
+        break;
+    case Pump:
+        returnString = "Pump";
+        break;
+    case DoorLock:
+        returnString = "DoorLock";
+        break;
+    default:
+        qDebug() << "typeToString() - Value not supported!";
+        break;
+    }
+    return returnString;
+}
+
 inline IOType StringToType(const QString &str)
 {
     bool found = false;
